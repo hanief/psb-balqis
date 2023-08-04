@@ -53,9 +53,9 @@ export default function Layout({children}) {
         </header>
         <nav className="py-3 mb-4 border-bottom">
           <div className="container d-flex flex-wrap justify-content-between align-items-center">
-            <a href="/" className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+            <Link href="/" className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-            </a>
+            </Link>
             <ul className="nav">
               <li className="nav-item">
                 <Link href="/info" className="nav-link link-body-emphasis px-2">INFORMASI</Link>
@@ -96,18 +96,18 @@ export default function Layout({children}) {
             <div className="col-6 col-md">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li><a className="link-secondary text-decoration-none" href="#">0878-7195-6868</a></li>
-                <li><a className="link-secondary text-decoration-none" href="#">0853-9999-0790</a></li>
-                <li><a className="link-secondary text-decoration-none" href="#">balqisjogja.com</a></li>
+                <li>0878-7195-6868</li>
+                <li>0853-9999-0790</li>
+                <li>balqisjogja.com</li>
               </ul>
             </div>
             <div className="col-6 col-md">
               <h5>Media Sosial</h5>
               <ul className="list-unstyled text-small">
-                <li><a className="link-secondary text-decoration-none" href="#">Instagram</a></li>
-                <li><a className="link-secondary text-decoration-none" href="#">Facebook</a></li>
-                <li><a className="link-secondary text-decoration-none" href="#">Tiktok</a></li>
-                <li><a className="link-secondary text-decoration-none" href="#">Youtube</a></li>
+                <li>Instagram</li>
+                <li>Facebook</li>
+                <li>Tiktok</li>
+                <li>Youtube</li>
               </ul>
             </div>
           </div>
