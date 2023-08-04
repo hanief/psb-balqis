@@ -4,7 +4,7 @@ export default function LoginPage() {
   return (
     <div className='container'>
       <h1>Login</h1>
-      <Login />
+      <Login onSuccess={() => console.log('success')}/>
     </div>
   )
 }

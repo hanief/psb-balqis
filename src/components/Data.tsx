@@ -329,10 +329,10 @@ export default function Data({onSuccess}) {
           onChange={(e) => setIsian({ 
             ...isian,
             desa: e.target.value,
-            kodepos: wilayah.find(prov => prov.code === isian.provinsi)?.
+            kodepos: `${wilayah.find(prov => prov.code === isian.provinsi)?.
             cities.find(city => city.code === isian.kabupaten)?.
             districts.find(district => district.code === isian.kecamatan)?.
-            villages.find(village => village.code === e.target.value)?.postal,
+            villages.find(village => village.code === e.target.value)?.postal}`,
           })}
         />
         <Input
