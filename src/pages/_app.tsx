@@ -21,6 +21,11 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
+      <style jsx global>{`
+        body {
+          font-family: ${lato.style.fontFamily};
+        }
+      `}</style>
       <Layout>
         <Component {...pageProps} />
       </Layout>

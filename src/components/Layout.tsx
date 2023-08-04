@@ -1,10 +1,48 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { signOut, useSession } from 'next-auth/react'
-import { Button } from 'reactstrap'
+import { Button, Container } from 'reactstrap'
+import { useCountdown } from '@/hooks/useCountdown'
 
 export default function Layout({children}) {
   const {data: session, status} = useSession()
+  const [days, hours, minutes, seconds] = useCountdown(new Date('2023-08-15 00:00:00'))
+  
+  if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
+    return (
+      <Container className="container my-5 justify-content-center">
+        <div className="p-5 text-center bg-body-tertiary rounded-3">
+          <Image className='my-2' src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+          <h1 className="text-body-emphasis my-2">Segera hadir</h1>
+          <p className="col-lg-8 mx-auto fs-5 text-muted">
+            Pendaftaran santri baru akan dibuka dalam
+          </p>
+          <div id="countdown" className='my-2'>
+            <div className="d-flex justify-content-center gap-3">
+              <div className="countdown-item">
+                <h1 className="h2">{days}</h1>
+                <div className="countdown-item__label">Hari</div>
+              </div>
+              <div className="countdown-item">
+                <h1 className="h2">{hours}</h1>
+                <div className="countdown-item__label">Jam</div>
+              </div>
+              <div className="countdown-item">
+                <h1 className="h2">{minutes}</h1>
+                <div className="countdown-item__label">Menit</div>
+              </div>
+            </div>
+          </div>
+          <div className="d-inline-flex gap-2 my-5">
+            <Link href="https://balqisjogja.com" className="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
+              Kembali ke website Balqis
+            </Link>
+          </div>
+        </div>
+      </Container>
+    )
+  }
+
   return (
     <>
       <main className='py-3'>
