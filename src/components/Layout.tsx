@@ -104,10 +104,10 @@ export default function Layout({children}) {
             <div className="col-6 col-md">
               <h5>Media Sosial</h5>
               <ul className="list-unstyled text-small">
-                <li>Instagram</li>
-                <li>Facebook</li>
-                <li>Tiktok</li>
-                <li>Youtube</li>
+                <li><Link href="https://www.tiktok.com/@balqisjogja">Tiktok</Link></li>
+                <li><Link href="https://www.youtube.com/channel/UCNdy_xWCmuEy7uSRkKd2dsg">Youtube</Link></li>
+                <li><Link href="https://www.instagram.com/balqisjogja">Instagram</Link></li>
+                <li><Link href="https://www.facebook.com/baitulquranyogyakarta">Facebook</Link></li>
               </ul>
             </div>
           </div>
