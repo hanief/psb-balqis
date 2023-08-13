@@ -1,17 +1,20 @@
 import { Stepper } from "react-form-stepper";
 
-const CustomStepper = ({activeStep, steps}) => {
+const CustomStepper = ({activeStep, steps, setActiveStep}) => {
   return <Stepper 
     activeStep={activeStep}
     steps={steps}
     stepClassName="bg-balqis"
+    onClick={event => {
+      setActiveStep(parseInt(event.target.innerText) - 1)
+    }}
     styleConfig={{
       activeBgColor: '#2a833b',
       activeTextColor: '#fff',
-      completedBgColor: '#a10308',
+      completedBgColor: '#7cac33',
       completedTextColor: '#fff',
-      inactiveBgColor: '#e0e0e0',
-      inactiveTextColor: '#ffffff',
+      inactiveBgColor: '#f0f0f0',
+      inactiveTextColor: '#2a833b',
       size: '2em',
       circleFontSize: '1rem',
       labelFontSize: '0.875rem',

@@ -1,16 +1,16 @@
 import DataTable from "react-data-table-component"
-import { useRegistree } from "@/model/registree"
-import { Input } from "reactstrap";
+import { useRegistrations } from "@/model/registration"
+import { Button, Input } from "reactstrap";
 
 const columns = [
   {
-    name: 'Name',
-    selector: row => row.name,
+    name: 'Nama',
+    selector: row => row.nama_lengkap,
     sortable: true,
   },
   {
-    name: 'Email',
-    selector: row => row.email,
+    name: 'Tempat Lahir',
+    selector: row => row.tempat_lahir,
     sortable: true,
   },
   {
@@ -22,7 +22,32 @@ const columns = [
     }
   },
   {
+    name: 'Nilai Tahsin',
+    cell: row => {
+      return (
+        <Input type="text"/>
+      )
+    }
+  },
+  {
+    name: 'Nilai Akademik',
+    cell: row => {
+      return (
+        <Input type="text"/>
+      )
+    }
+  },
+  {
+    name: 'Nilai Pesantren',
+    cell: row => {
+      return (
+        <Input type="text"/>
+      )
+    }
+  },
+  {
     name: 'Status',
+    width: '200px',
     cell: row => {
       return (
         <Input type="select">
@@ -34,7 +59,26 @@ const columns = [
     }
   },
   {
+    name: 'Syarat penerimaan',
+    width: '200px',
+    cell: row => {
+      return (
+        <Input type="text"/>
+      )
+    }
+  },
+  {
+    name: 'Catatan Khusus',
+    width: '200px',
+    cell: row => {
+      return (
+        <Input type="text"/>
+      )
+    }
+  },
+  {
     name: 'Action',
+    width: '300px',
     cell: row => {
       return (
         <div className="d-flex gap-2">
@@ -48,13 +92,17 @@ const columns = [
 ];
 
 export default function Dashboard() {
-  const { registree } = useRegistree()
+  const { registrations } = useRegistrations()
   return (
     <div className="container">
-      <h1>Data Pendaftar</h1>
+      <div className="d-flex justify-content-between align-items-center my-2">
+        <h3 className="w-25">Data Pendaftar</h3>
+        <Button color="primary" className="me-1 w-25">Download xlsx</Button>
+        <Input type="text" placeholder="Cari"/>
+      </div>
       <DataTable
           columns={columns}
-          data={registree}
+          data={registrations}
       />
     </div>
   )

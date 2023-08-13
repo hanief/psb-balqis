@@ -1,26 +1,28 @@
-import './globals.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import type { Metadata } from 'next'
+import './globals.css'
 import type { AppProps } from 'next/app'
 import { Lato, Heebo } from 'next/font/google'
-import { SessionProvider } from 'next-auth/react'
 import Layout from '@/components/Layout'
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { SessionContextProvider } from '@supabase/auth-helpers-react'
+import { useState } from 'react'
+import {Database} from '@/lib/database.types'
 
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'] })
 const heebo = Heebo({ subsets: ['latin'], weight: ['400', '700'] })
 
-export const metadata: Metadata = {
-  title: 'PSB Balqis',
-  description: 'Penerimaan Siswa Baru Balqis',
-}
-
-export default function App({
+export default function MyApp({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { initialSession, ...pageProps },
 }: AppProps) {
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient<Database>())
+  
   return (
-    <SessionProvider session={session}>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={initialSession}
+    >
       <style jsx global>{`
         body {
           font-family: ${lato.style.fontFamily};
@@ -29,6 +31,6 @@ export default function App({
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </SessionProvider>
+    </SessionContextProvider>
   )
 }

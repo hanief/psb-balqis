@@ -6,6 +6,7 @@ export default function Input({
   value,
   isRequired,
   onChange,
+  ...props
 }: {
   label: string
   type: string
@@ -27,6 +28,7 @@ export default function Input({
         onChange={onChange}
         required={isRequired}
         aria-required={isRequired}
+        {...props}
       />
     </div>
   )

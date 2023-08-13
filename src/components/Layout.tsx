@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { signOut, useSession } from 'next-auth/react'
 import { Button, Container } from 'reactstrap'
 import { useCountdown } from '@/hooks/useCountdown'
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function Layout({children}) {
-  const {data: session, status} = useSession()
+  const user = useUser()
+  const supabaseClient = useSupabaseClient()
   const [days, hours, minutes, seconds] = useCountdown(new Date('2023-08-15 00:00:00'))
   
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
@@ -15,7 +16,7 @@ export default function Layout({children}) {
           <Image className='my-2' src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
           <h1 className="text-body-emphasis my-2">Segera hadir</h1>
           <p className="col-lg-8 mx-auto fs-5 text-muted">
-            Pendaftaran santri baru akan dibuka dalam
+            Penerimaan santri baru akan dibuka dalam
           </p>
           <div id="countdown" className='my-2'>
             <div className="d-flex justify-content-center gap-3">
@@ -45,7 +46,7 @@ export default function Layout({children}) {
 
   return (
     <>
-      <main className='py-3'>
+      <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
           <div className="container d-flex flex-wrap">
             <span>Kontak: 0878-7195-6868 / 0853-9999-0790</span>
@@ -57,22 +58,10 @@ export default function Layout({children}) {
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </Link>
             <ul className="nav">
-              <li className="nav-item">
-                <Link href="/info" className="nav-link link-body-emphasis px-2">INFORMASI</Link>
-              </li>
-              {status === 'authenticated' ? (
+              {user && (
                 <li className="nav-item">
-                  <Button color="link" onClick={() => signOut()}>Sign Out</Button>
+                  <Button color="primary" onClick={() => supabaseClient.auth.signOut()}>Sign Out</Button>
                 </li>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <Link href="/daftar" className="nav-link link-body-emphasis px-2">DAFTAR</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link href="/masuk" className="nav-link link-body-emphasis px-2">LOGIN</Link>
-                  </li>
-                </>
               )}
             </ul>
           </div>
@@ -96,8 +85,8 @@ export default function Layout({children}) {
             <div className="col-6 col-md">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li>0878-7195-6868</li>
-                <li>0853-9999-0790</li>
+                <li><Link href="https://wa.me/+6287871956868">0878-7195-6868</Link></li>
+                <li><Link href="https://wa.me/+6287871956868">0853-9999-0790</Link></li>
                 <li>balqisjogja.com</li>
               </ul>
             </div>

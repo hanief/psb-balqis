@@ -1,363 +1,424 @@
-import Input from '@/components/Input'
-import Select from '@/components/Select'
-import { Fragment, useState } from 'react'
-import wilayah from '@/data/wilayah.json'
-import { Button, Form } from 'reactstrap'
+import Select from 'react-select'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import data from '@/data/wilayah.json'
+import { Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
+import { useRegistration } from '@/model/registration'
+import { debounce } from 'lodash'
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 
-export default function Data({onSuccess}) {
-  const [isian, setIsian] = useState({
-    jalurPendaftaran: '',
-    jalurBeasiswa: '',
-    jalurBeasiswaPrestasi: '',
-    buktiBeasiswa: [{
-      nama: '',
-      tingkat: '',
-      tahun: '',
-      bukti: '',
-    }],
-    jalurBeasiswaKhusus: '',
-    namaLengkap: '',
-    nomorHandphone: '',
-    tempatLahir: '',
-    tanggalLahir: '',
-    jenisKelamin: '',
-    asalSekolah: '',
-    namaAyah: '',
-    nomorHpAyah: '',
-    namaIbu: '',
-    nomorHpIbu: '',
-    namaWali: '',
-    nomorHpWali: '',
-    alamat: '',
-    provinsi: '',
-    kabupaten: '',
-    kecamatan: '',
-    desa: '',
-    kodepos: '',
-  })
+interface Wilayah {
+  code: string
+  province: string
+  slug: string
+  cities: {
+    code: string
+    city: string
+    slug: string
+    districts: {
+      code: string
+      district: string
+      slug: string
+      villages: {
+        code: string
+        postal: number
+        village: string
+        slug: string
+        latitude: number
+        longitude: number
+        elevation: number
+        geometry: boolean
+      }[]
+    }[]
+  }[]
+}
+
+const provinces: Wilayah[] = data as Wilayah[]
+
+const jalurPendaftaranOptions = [
+  { value: 'reguler', label: 'Jalur Mandiri' },
+  { value: 'beasiswa', label: 'Jalur Beasiswa' },
+]
+
+const jenisKelaminOptions = [
+  { value: 'laki-laki', label: 'Laki-laki' },
+  { value: 'perempuan', label: 'Perempuan' },
+]
+
+const jalurBeasiswaOptions = [
+  { value: 'prestasi', label: 'Prestasi' },
+  { value: 'khusus', label: 'Khusus' },
+  { value: 'alumni', label: 'Alumni' },
+]
+
+const jalurBeasiswaPrestasiOptions = [
+  { value: 'tiga besar', label: 'Peringkat 3 besar kelas' },
+  { value: 'hafidz 15 juz', label: 'Hafidz 15 Juz (SMP)' },
+  { value: 'hafidz 30 juz', label: 'Hafidz 30 Juz (SMA)' },
+  { value: 'tiga besar lomba', label: 'Juara 3 besar Lomba MTQ/OSN/Olimpiade semua cabang' },
+]
+
+const jalurBeasiswaKhususOptions = [
+  { value: 'dhuafa', label: 'Dhuafa berprestasi' },
+  { value: 'yatimpiatu', label: 'Yatim & Piatu' },
+]
   
+export default function Data({onSuccess}) {
+  const {registration, isLoading, updateRegistrationData} = useRegistration()
+  const [isian, setIsian] = useState(null)
+  const [bukti, setBukti] = useState([{
+    nama: '',
+    tingkat: '',
+    tahun: '',
+    berkas: []
+  }])
+
+  const kabupatens = useMemo(() => provinces.find(province => province.code === isian?.provinsi)?.cities, [isian?.provinsi])
+  const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === isian?.kabupaten)?.districts, [kabupatens, isian?.kabupaten])
+  const desas = useMemo(() => kecamatans?.find(kecamatan => kecamatan.code === isian?.kecamatan)?.villages, [kecamatans, isian?.kecamatan])
+
+  const saveData = useCallback(updateRegistrationData, [])
+
+  const handleUpdateIsian = useMemo(() => debounce(saveData, 1000), [saveData])
+
+  useEffect(() => {
+    if (isLoading) return
+    if (!registration) return
+
+    if (!isian) {
+      const {id, user_id, created_at, updated_at, ...rest} = registration
+      setIsian(rest)
+    }
+  }, [isLoading, registration])
+
+  function handleFieldChange(key, value) {
+    const updatedData = {[key]: value}
+    setIsian({ ...isian, ...updatedData})
+    handleUpdateIsian(updatedData)
+  }
+
+  function handleMultipleFieldChange(changes) {
+    const updatedData = {}
+    changes.forEach(change => {
+      updatedData[change.key] = change.value
+    })
+    setIsian({ ...isian, ...updatedData})
+    handleUpdateIsian(updatedData)
+  }
+
   return (
-    <div>
-      <h1>Pendaftaran Siswa Baru</h1>
-      <Form>
-        <Select
-          options={[
-            { value: 'reguler', label: 'Jalur Reguler' },
-            { value: 'beasiswa', label: 'Jalur Beasiswa' },
-          ]}
-          label="Jalur Pendaftaran"
-          placeholder='Pilih Jalur Pendaftaran'
-          isRequired={true}
-          id="jalurPendaftaran"
-          value={isian.jalurPendaftaran}
-          onChange={(e) => setIsian({ ...isian, jalurPendaftaran: e.target.value })}
-        />
-        {isian.jalurPendaftaran === 'beasiswa' && (
-          <>
-            <Select
-              options={[
-                { value: 'prestasi', label: 'Prestasi' },
-                { value: 'khusus', label: 'Khusus' },
-                { value: 'alumni', label: 'Alumni' },
-              ]}
-              label="Pilihan Beasiswa"
-              placeholder='Pilih Jalur Beasiswa'
-              id="jalurBeasiswa"
-              value={isian.jalurBeasiswa}
-              onChange={e => {
-                setIsian({
-                  ...isian, 
-                  jalurBeasiswa: e.target.value ,
-                  buktiBeasiswa: [
-                    ...isian.buktiBeasiswa,
-                  ]}
-                )}
-              }
-            />
-            {isian.jalurBeasiswa === 'prestasi' && (
-              <>
+    <Col>
+      <Row className='row-cols-1 row-cols-md-2 g-4'>
+        <Col>
+          <Card>
+            <CardBody>
+              <CardTitle tag="h5" className='mb-4'>Jalur Pendaftaran</CardTitle>
+              <FormGroup>
+                <Label for='jalur_pendaftaran'>Tipe Pendaftaran</Label>
                 <Select
-                  options={[
-                    { value: 'tigaBesar', label: 'Peringkat 3 besar kelas' },
-                    { value: 'hafidz15juz', label: 'Hafidz 15 Juz (SMP)' },
-                    { value: 'hafidz30juz', label: 'Hafidz 30 Juz (SMA)' },
-                    { value: 'tigaBesarLomba', label: 'Juara 3 besar Lomba MTQ/OSN/Olimpiade semua cabang' },
-                  ]}
-                  label="Pilihan Beasiswa Prestasi"
-                  placeholder='Pilih Jalur Beasiswa Prestasi'
-                  id="jalurBeasiswaPrestasi"
-                  value={isian.jalurBeasiswaPrestasi}
-                  onChange={(e) => setIsian({ ...isian, jalurBeasiswaPrestasi: e.target.value })}
+                  options={jalurPendaftaranOptions}
+                  placeholder='Pilih Jalur Pendaftaran'
+                  required={true}
+                  id="jalur_pendaftaran"
+                  isSearchable={false}
+                  name="jalur_pendaftaran"
+                  value={jalurPendaftaranOptions.find(o => o.value === isian?.jalur_pendaftaran)}
+                  onChange={option => handleFieldChange('jalur_pendaftaran', option.value)}
                 />
-                {isian.buktiBeasiswa.map((bukti, index) => (
-                  <Fragment key={index}>
-                    <Input 
-                      label="Nama Prestasi"
-                      type="text"
-                      id="namaPrestasi"
-                      placeholder="Nama Prestasi"
-                      isRequired={true}
-                      value={bukti.nama}
-                      onChange={(e) => setIsian({ ...isian, buktiBeasiswa: [
-                        ...isian.buktiBeasiswa.slice(0, index), 
-                        { ...bukti, nama: e.target.value },
-                        ...isian.buktiBeasiswa.slice(index + 1)
-                      ]})}
+              </FormGroup>
+              {isian?.jalur_pendaftaran === 'beasiswa' && (
+                <>
+                  <FormGroup>
+                    <Label for='jalur_beasiswa'>Tipe Beasiswa</Label>
+                    <Select
+                      options={jalurBeasiswaOptions}
+                      placeholder='Pilih Jalur Beasiswa'
+                      id="jalur_beasiswa"
+                      value={jalurBeasiswaOptions.find(jalur => jalur.value === isian?.jalur_beasiswa)}
+                      onChange={option => handleFieldChange('jalur_beasiswa', option.value)}
                     />
-                    <Input 
-                      label="Tingkat Prestasi"
-                      type="text"
-                      id="tingkatPrestasi"
-                      placeholder="Tingkat Prestasi"
-                      isRequired={true}
-                      value={bukti.tingkat}
-                      onChange={(e) => setIsian({ ...isian, buktiBeasiswa: [
-                        ...isian.buktiBeasiswa.slice(0, index), 
-                        { ...bukti, tingkat: e.target.value },
-                        ...isian.buktiBeasiswa.slice(index + 1)
-                      ]})}
+                  </FormGroup>
+                  {isian?.jalur_beasiswa === 'prestasi' && (
+                    <>
+                      <FormGroup>
+                        <Label for='jalur_beasiswa_prestasi'>Tipe Prestasi</Label>
+                        <Select
+                          options={jalurBeasiswaPrestasiOptions}
+                          placeholder='Pilih Jalur Beasiswa Prestasi'
+                          id="jalur_beasiswa_prestasi"
+                          value={jalurBeasiswaPrestasiOptions.find(jalur => jalur.value === isian?.jalur_beasiswa_prestasi)}
+                          onChange={option => handleFieldChange('jalur_beasiswa_prestasi', option.value)}
+                        />
+                      </FormGroup>
+                      {bukti?.map((bukti, index) => (
+                        <Fragment key={index}>
+                          <FormGroup>
+                            <Label for="nama_prestasi">Detail Prestasi</Label>
+                            <Input
+                              className='mb-1'
+                              type="text"
+                              id="nama_prestasi"
+                              placeholder="Nama Prestasi"
+                              required={true}
+                              value={bukti.nama}
+                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
+                                ...isian?.bukti_beasiswa.slice(0, index), 
+                                { ...bukti, nama: e.target.value },
+                                ...isian?.bukti_beasiswa.slice(index + 1)
+                              ]})}
+                            />
+                            <Input 
+                              className='mb-1'
+                              label="Tingkat Prestasi"
+                              type="text"
+                              id="tingkatPrestasi"
+                              placeholder="Tingkat (cth: Provinsi, Nasional)"
+                              isRequired={true}
+                              value={bukti.tingkat}
+                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
+                                ...isian?.bukti_beasiswa.slice(0, index), 
+                                { ...bukti, tingkat: e.target.value },
+                                ...isian?.bukti_beasiswa.slice(index + 1)
+                              ]})}
+                            />
+                            <Input 
+                              className='mb-1'
+                              label="Tahun Prestasi"
+                              type="text"
+                              id="tahunPrestasi"
+                              placeholder="Tahun"
+                              isRequired={true}
+                              value={bukti.tahun}
+                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
+                                ...isian?.bukti_beasiswa.slice(0, index), 
+                                { ...bukti, tahun: e.target.value },
+                                ...isian?.bukti_beasiswa.slice(index + 1)
+                              ]})}
+                            />
+                          </FormGroup>
+                          <FormGroup>
+                            <Label for="bukti_prestasi">Upload Bukti (Sertifikat, Ijazah, dll)</Label>
+                            <Input 
+                              className='mb-1'
+                              label="Bukti Prestasi"
+                              type="file"
+                              id="buktiPrestasi"
+                              placeholder="Bukti Prestasi"
+                              isRequired={true}
+                              value={bukti.berkas}
+                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
+                                ...isian?.bukti_beasiswa.slice(0, index), 
+                                { ...bukti, bukti: e.target.value },
+                                ...isian?.bukti_beasiswa.slice(index + 1)
+                              ]})}
+                            />
+                          </FormGroup>
+                          
+                        </Fragment>
+                      ))}
+                    </>
+                  )}
+                  {isian?.jalur_beasiswa === 'khusus' && (
+                    <Select
+                      options={jalurBeasiswaKhususOptions}
+                      placeholder='Pilih Jalur Beasiswa Khusus'
+                      id="jalur_beasiswa_khusus"
+                      value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === isian?.jalur_beasiswa_khusus)}
+                      onChange={option => handleFieldChange('jalur_beasiswa_khusus', option.value)}
                     />
-                    <Input 
-                      label="Tahun Prestasi"
-                      type="text"
-                      id="tahunPrestasi"
-                      placeholder="Tingkat Prestasi"
-                      isRequired={true}
-                      value={bukti.tahun}
-                      onChange={(e) => setIsian({ ...isian, buktiBeasiswa: [
-                        ...isian.buktiBeasiswa.slice(0, index), 
-                        { ...bukti, tahun: e.target.value },
-                        ...isian.buktiBeasiswa.slice(index + 1)
-                      ]})}
-                    />
-                    <Input 
-                      label="Bukti Prestasi"
-                      type="file"
-                      id="buktiPrestasi"
-                      placeholder="Bukti Prestasi"
-                      isRequired={true}
-                      value={bukti.bukti}
-                      onChange={(e) => setIsian({ ...isian, buktiBeasiswa: [
-                        ...isian.buktiBeasiswa.slice(0, index), 
-                        { ...bukti, bukti: e.target.value },
-                        ...isian.buktiBeasiswa.slice(index + 1)
-                      ]})}
-                    />
-                  </Fragment>
-                ))}
-              </>
-            )}
-            {isian.jalurBeasiswa === 'khusus' && (
-              <Select
-                options={[
-                  { value: 'dhuafa', label: 'Dhuafa berprestasi' },
-                  { value: 'yatimpiatu', label: 'Yatim & Piatu' },
-                ]}
-                label="Pilihan Beasiswa Khusus"
-                placeholder='Pilih Jalur Beasiswa Khusus'
-                id="jalurBeasiswaKhusus"
-                value={isian.jalurBeasiswaKhusus}
-                onChange={(e) => setIsian({ ...isian, jalurBeasiswaKhusus: e.target.value })}
+                  )}
+                </>
+              )}
+            </CardBody>
+          </Card>
+        </Col>  
+        <Col>
+          <Card>
+            <CardBody>
+              <CardTitle tag="h5" className='mb-4'>Data Anak</CardTitle>
+              <FormGroup>
+                  <Label for='nama_lengkap'>Nama Lengkap</Label>
+                  <Input
+                    type="text"
+                    id="nama_lengkap"
+                    placeholder="cth: Fulan bin Fulan"
+                    required={true}
+                    value={isian?.nama_lengkap}
+                    onChange={event => handleFieldChange('nama_lengkap', event.target.value)}
+                  />
+              </FormGroup>
+              <FormGroup>
+                <Label for='jenis_kelamin'>Jenis Kelamin</Label>                
+                <Select
+                  options={jenisKelaminOptions}
+                  placeholder='Pilih Jenis Kelamin'
+                  isSearchable={false}
+                  required={true}
+                  id="jenis_kelamin"
+                  value={jenisKelaminOptions.find(o => o.value === isian?.jenis_kelamin)}
+                  onChange={event => handleFieldChange('jenis_kelamin', event.value)}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for='tempat_lahir'>Tempat dan Tanggal Lahir</Label>
+                <div className='d-flex justify-content-between gap-2'>
+                  <Input
+                    type="text"
+                    id="tempat_lahir"
+                    placeholder="Tempat Lahir"
+                    required={true}
+                    value={isian?.tempat_lahir}
+                    onChange={event => handleFieldChange('tempat_lahir', event.target.value)}
+                  />
+                  <Input
+                    type="date"
+                    id="tanggal_lahir"
+                    placeholder="Tanggal Lahir"
+                    required={true}
+                    value={isian?.tanggal_lahir}
+                    onChange={event => handleFieldChange('tanggal_lahir', event.target.value)}
+                  />
+                </div>
+            </FormGroup>
+            <FormGroup>
+              <Label for='asal_sekolah'>Asal Sekolah</Label>
+              <Input
+                type="text"
+                id="asal_sekolah"
+                placeholder="Asal Sekolah"
+                required={true}
+                value={isian?.asal_sekolah}
+                onChange={event => handleFieldChange('asal_sekolah', event.target.value)}
               />
-            )}
-          </>
-        )}
-        <Input 
-          label="Nama Lengkap"
-          type="text"
-          id="namaLengkap"
-          placeholder="Nama Lengkap"
-          isRequired={true}
-          value={isian.namaLengkap}
-          onChange={e => setIsian({ ...isian, namaLengkap: e.target.value })}
-        />
-        <Input
-          label="Nomor Handphone"
-          type="text"
-          id="nomorHandphone"
-          placeholder="Nomor Handphone"
-          isRequired={true}
-          value={isian.nomorHandphone}
-          onChange={e => setIsian({ ...isian, nomorHandphone: e.target.value })}
-        />
-        <Input
-          label="Tempat Lahir"
-          type="text"
-          id="tempatLahir"
-          placeholder="Tempat Lahir"
-          isRequired={true}
-          value={isian.tempatLahir}
-          onChange={(e) => setIsian({ ...isian, tempatLahir: e.target.value })}
-        />
-        <Input
-          label="Tanggal Lahir"
-          type="date"
-          id="tanggalLahir"
-          placeholder="Tanggal Lahir"
-          isRequired={true}
-          value={isian.tanggalLahir}
-          onChange={(e) => setIsian({ ...isian, tanggalLahir: e.target.value })}
-        />
-        <Select
-          options={[
-            { value: 'lakilaki', label: 'Laki-laki' },
-            { value: 'perempuan', label: 'Perempuan' },
-          ]}
-          label="Jenis Kelamin"
-          placeholder='Pilih Jenis Kelamin'
-          isRequired={true}
-          id="jenisKelamin"
-          value={isian.jenisKelamin}
-          onChange={(e) => setIsian({ ...isian, jenisKelamin: e.target.value })}
-        />
-        <Input
-          label="Asal Sekolah"
-          type="text"
-          id="asalSekolah"
-          placeholder="Asal Sekolah"
-          isRequired={true}
-          value={isian.asalSekolah}
-          onChange={(e) => setIsian({ ...isian, asalSekolah: e.target.value})}
-        />
-        <Input
-          label="Nama Ayah"
-          type="text"
-          id="namaAyah"
-          placeholder="Nama Ayah"
-          isRequired={true}
-          value={isian.namaAyah}
-          onChange={(e) => setIsian({ ...isian, namaAyah: e.target.value})}
-        />
-        <Input
-          label="Nomor HP Ayah"
-          type="text"
-          id="nomorHpAyah"
-          placeholder="Nomor HP Ayah"
-          value={isian.nomorHpAyah}
-          onChange={(e) => setIsian({ ...isian, nomorHpAyah: e.target.value})}
-
-        />
-        <Input
-          label="Nama Ibu"
-          type="text"
-          id="namaIbu"
-          placeholder="Nama Ibu"
-          isRequired={true}
-          value={isian.namaIbu}
-          onChange={(e) => setIsian({ ...isian, namaIbu: e.target.value})}
-        />
-        <Input
-          label="Nomor HP Ibu"
-          type="text"
-          id="nomorHpIbu"
-          placeholder="Nomor HP Ibu"
-          value={isian.nomorHpIbu}
-          onChange={(e) => setIsian({ ...isian, nomorHpIbu: e.target.value})}
-        />
-        <Input
-          label="Nama Wali"
-          type="text"
-          id="namaWali"
-          placeholder="Nama Wali"
-          value={isian.namaWali}
-          onChange={(e) => setIsian({ ...isian, namaWali: e.target.value})}
-        />
-        <Input
-          label="Nomor HP Wali"
-          type="text"
-          id="nomorHpWali"
-          placeholder="Nomor HP Wali"
-          value={isian.nomorHpWali}
-          onChange={(e) => setIsian({ ...isian, nomorHpWali: e.target.value})}
-        />
-        <Input
-          label="Alamat"
-          type="text"
-          id="alamat"
-          placeholder="Jalan, RT/RW, Desa/Kelurahan"
-          value={isian.alamat}
-          onChange={(e) => setIsian({ ...isian, alamat: e.target.value})}
-        />
-        <Select
-          label="Provinsi"
-          id="provinsi"
-          placeholder="Pilih Provinsi"
-          value={isian.provinsi}
-          options={wilayah.map((provinsi) => ({
-            value: provinsi.code,
-            label: provinsi.province,
-          }))}
-          onChange={(e) => setIsian({ ...isian, provinsi: e.target.value})}
-        />
-        <Select
-          label="Kabupaten"
-          id="kabupaten"
-          placeholder="Pilih Kabupaten"
-          value={isian.kabupaten}
-          options={wilayah.find(prov => prov.code === isian.provinsi)?.
-            cities.map((kabupaten) => ({
-            value: kabupaten.code,
-            label: kabupaten.city,
-          }))}
-          onChange={(e) => setIsian({ ...isian, kabupaten: e.target.value})}
-        />
-        <Select
-          label="Kecamatan"
-          id="kecamatan"
-          placeholder="Pilih Kecamatan"
-          value={isian.kecamatan}
-          options={wilayah.find(prov => prov.code === isian.provinsi)?.
-            cities.find(city => city.code === isian.kabupaten)?.
-            districts.map((kecamatan) => ({
-            value: kecamatan.code,
-            label: kecamatan.district,
-          }))}
-          onChange={(e) => setIsian({ ...isian, kecamatan: e.target.value})}
-        />
-        <Select
-          label="Desa/Kelurahan"
-          id="desa"
-          placeholder="Pilih Desa/Kelurahan"
-          value={isian.desa}
-          options={wilayah.find(prov => prov.code === isian.provinsi)?.
-            cities.find(city => city.code === isian.kabupaten)?.
-            districts.find(district => district.code === isian.kecamatan)?.
-            villages.map((desa) => ({
-              value: desa.code,
-              label: desa.village,
-          }))}
-          onChange={(e) => setIsian({ 
-            ...isian,
-            desa: e.target.value,
-            kodepos: `${wilayah.find(prov => prov.code === isian.provinsi)?.
-            cities.find(city => city.code === isian.kabupaten)?.
-            districts.find(district => district.code === isian.kecamatan)?.
-            villages.find(village => village.code === e.target.value)?.postal}`,
-          })}
-        />
-        <Input
-          label="Kode Pos"
-          type="text"
-          id="kodepos"
-          placeholder="Isi Kode Pos"
-          value={isian.kodepos}
-          onChange={(e) => setIsian({ ...isian, kodepos: e.target.value})}
-        />
-
-        <Button
-          block
-          size='lg'
-          color="primary"
-          type="submit" 
-          onClick={e => {
-            e.preventDefault()
-            console.log('saving', isian)
-            onSuccess()
-          }}
-        >
-          Simpan
-        </Button>
-      </Form>
-    </div>
+            </FormGroup>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col>
+          <Card>
+            <CardBody>
+              <CardTitle tag="h5" className='mb-4'>Data Orang Tua/Wali Santri</CardTitle>
+              <FormGroup>
+                <Label for='nama_ayah'>Ayah / Wali 1</Label>
+                <Row>
+                  <Col lg="6">
+                    <Input
+                      className='mb-2'
+                      type="text"
+                      id="nama_ayah"
+                      placeholder='Nama Lengkap'
+                      value={isian?.nama_ayah}
+                      onChange={event => handleFieldChange('nama_ayah', event.target.value)}
+                    />
+                  </Col>
+                  <Col lg="6">
+                    <Input
+                      type="text"
+                      id="nomor_hp_ayah"
+                      placeholder="Nomor HP (cth: +6281234567890)"
+                      value={isian?.nomor_hp_ayah}
+                      onChange={event => handleFieldChange('nomor_hp_ayah', event.target.value)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+              <FormGroup>
+                <Label for='asal_sekolah'>Ibu / Wali 2</Label>
+                <Row>
+                  <Col lg="6">
+                    <Input
+                      className='mb-2'
+                      type="text"
+                      id="nama_ibu"
+                      placeholder='Nama Lengkap'
+                      value={isian?.nama_ibu}
+                      onChange={event => handleFieldChange('nama_ibu', event.target.value)}
+                    />
+                  </Col>
+                  <Col lg="6">
+                    <Input
+                      type="text"
+                      id="nomor_hp_ibu"
+                      placeholder="Nomor HP (cth: +6281234567890)"
+                      value={isian?.nomor_hp_ibu}
+                      onChange={event => handleFieldChange('nomor_hp_ibu', event.target.value)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col>
+          <Card>
+            <CardBody>
+              <CardTitle tag="h5" className='mb-4'>Alamat Tempat Tinggal</CardTitle>
+                <Input
+                  className='mb-2'
+                  label="Alamat"
+                  type="text"
+                  id="alamat"
+                  placeholder="Jalan, RT/RW, Desa/Kelurahan"
+                  value={isian?.alamat}
+                  onChange={event => handleFieldChange('alamat', event.target.value)}
+                />
+                <Select
+                  className='mb-2'
+                  id="provinsi"
+                  placeholder="Pilih Provinsi"
+                  options={provinces}
+                  getOptionValue={option => option.code}
+                  getOptionLabel={option => option.province}
+                  value={provinces.find(prov => prov.code === isian?.provinsi)}
+                  onChange={option => handleFieldChange('provinsi', option.code)}
+                />
+                <Select
+                  className='mb-2'
+                  id="kabupaten"
+                  placeholder="Pilih Kabupaten"
+                  options={kabupatens}
+                  value={kabupatens?.find(kabupaten => kabupaten.code === isian?.kabupaten)}
+                  getOptionValue={option => option.code}
+                  getOptionLabel={option => option.city}
+                  onChange={option => handleFieldChange('kabupaten', option.code)}
+                />
+                <Select
+                  className='mb-2'
+                  id="kecamatan"
+                  placeholder="Pilih Kecamatan"
+                  value={kecamatans?.find(kecamatan => kecamatan.code === isian?.kecamatan)}
+                  options={kecamatans}
+                  getOptionValue={option => option.code}
+                  getOptionLabel={option => option.district}
+                  onChange={option => handleFieldChange('kecamatan', option.code)}
+                />
+                <Select
+                  className='mb-2'
+                  id="desa"
+                  placeholder="Pilih Desa/Kelurahan"
+                  value={desas?.find(kelurahan => kelurahan.code === isian?.desa)}
+                  options={desas}
+                  getOptionValue={option => option.code}
+                  getOptionLabel={option => option.village}
+                  onChange={option => {
+                    handleMultipleFieldChange([
+                      {key: 'desa', value: option.code},
+                      {key: 'kodepos', value: `${desas.find(village => village.code === option.code)?.postal}`}
+                    ])
+                  }}
+                />
+                <Input
+                  className='mb-2'
+                  label="Kode Pos"
+                  type="text"
+                  id="kodepos"
+                  placeholder="Kode Pos"
+                  value={isian?.kodepos}
+                  onChange={event => handleFieldChange('kodepos', event.target.value)}
+                /> 
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Col>
   )
 }

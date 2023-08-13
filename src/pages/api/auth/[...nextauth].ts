@@ -1,6 +1,6 @@
-import NextAuth, { NextAuthOptions, User }  from "next-auth"
+import NextAuth, { NextAuthOptions }  from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { supabase } from "@/supabase"
+import { supabase } from "@/lib/supabase"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,7 +15,6 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const {email, password} = credentials
 
-        console.log('login', email, password)
 
         // const { data, error } = await supabase.auth.signInWithPassword({
         //   email,
@@ -23,7 +22,12 @@ export const authOptions: NextAuthOptions = {
         // })
 
         // if (!error) {
-        //   console.log('login', data.user)
+        //   const { data, error } = await supabase.auth.signUp({
+        //     email,
+        //     password,
+        //   })
+
+
         //   return {
         //     id: data?.user?.id,
         //     name: data?.user?.email,
@@ -33,21 +37,17 @@ export const authOptions: NextAuthOptions = {
         //   console.log('login', error)
         // }
         
-        return {
-          id: '12345',
-          name: '12345',
-        }
+        return null
       }
     })
   ],
   pages: {
-    signIn: '/'
-  },
-  theme: {
-    colorScheme: 'light'
-  },
+    signIn: '/daftar'
+  }
 }
 
-const handler = NextAuth(authOptions)
+const authHandler = NextAuth(authOptions)
 
-export default handler
+export default async function handler(...params: any[]) {
+  await authHandler(...params)
+}

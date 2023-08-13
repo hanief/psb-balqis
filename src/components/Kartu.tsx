@@ -1,34 +1,37 @@
 import { Button } from "reactstrap";
+import Image from 'next/image'
+import { useRef } from "react";
+import domtoimage from 'dom-to-image'
 
 export default function Kartu({ onSuccess }) {
+  const ref = useRef(null)
+
   return (
     <>
       <h1>Kartu Pendaftaran</h1>
-      <p>Ini adalah kartu pendaftaran siswa</p>
       <p>Kartu ini mohon disimpan sebagai bukti pendaftaran dan kartu tes</p>
 
-      <div className="card">
+      <div className="card my-2">
         <div className="card-body">
-          <h5 className="card-title">Kartu Pendaftaran</h5>
-          <p className="card-text">Nama: Ahmad</p>
-          <p className="card-text">NISN: 1234567890</p>
-          <p className="card-text">Tanggal Lahir: 1 Januari 2000</p>
-          <p className="card-text">Jenis Kelamin: Laki-laki</p>
-          <p className="card-text">Alamat: Jl. P. Mangkubumi, Karangijo Kulon, Ponjong, Gunungkidul, D.I Yogyakarta 55892</p>
-          <p className="card-text">Asal Sekolah: SMP Negeri 1 Ponjong</p>
-          <p className="card-text">Jurusan: IPA</p>
-          <p className="card-text">Pilihan Kelas: X MIPA 1</p>
-          <p className="card-text">Tanggal Daftar: 1 Januari 2021</p>
-          <p className="card-text">Status: Menunggu Pembayaran</p>
-
-          <Button color="primary">Download</Button>
-
+          <div ref={ref}>
+            <Image className='my-2' src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+            <h4 className="card-title">Kartu Pendaftaran</h4>
+            <p className="card-text"><strong>Nama:</strong> Ahmad</p>
+            <p className="card-text"><strong>Tanggal Lahir:</strong> 1 Januari 2000</p>
+            <p className="card-text"><strong>Jenis Kelamin:</strong> Laki-laki</p>
+          </div>
         </div>
       </div>
 
-      <Button block color='primary' className='m-1' onClick={onSuccess}>
-        Lanjut
-      </Button>
+      <Button block color="primary" onClick={() => {
+            domtoimage.toJpeg(ref?.current, { quality: 0.95, bgcolor: '#fff'})
+            .then(function (dataUrl) {
+                var link = document.createElement('a');
+                link.download = 'ahmad.jpeg';
+                link.href = dataUrl;
+                link.click();
+            });
+          }}>Download</Button>
     </>
   )
 }
