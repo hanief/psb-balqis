@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import './globals.css'
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 import type { AppProps } from 'next/app'
 import { Lato, Heebo } from 'next/font/google'
 import Layout from '@/components/Layout'

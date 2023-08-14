@@ -64,10 +64,28 @@ export function useRegistration() {
     })
   }
 
+  async function uploadBuktiPrestasi(file) {
+    const fileNameSplit = file?.name?.split('.')
+    const fileExtension = fileNameSplit[fileNameSplit.length-1]
+    
+    mutate(async () => {
+      await supabase
+        .storage
+        .from('proofs')
+        .upload(`prestasi/${data?.id}.${fileExtension}`, file, {
+          cacheControl: '3600',
+          upsert: false
+        })
+
+      return data
+    })
+  }
+
   return {
     registration: data,
     createRegistrationData,
     updateRegistrationData,
+    uploadBuktiPrestasi,
     ...rest
   }
 }

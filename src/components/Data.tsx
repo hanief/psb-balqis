@@ -1,7 +1,7 @@
 import Select from 'react-select'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import data from '@/data/wilayah.json'
-import { Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
 import { useRegistration, useAccomplishments } from '@/model/registration'
 import { debounce } from 'lodash'
 import { getRandomInteger } from '@/utils'
@@ -61,9 +61,9 @@ const jalurBeasiswaKhususOptions = [
   
 export default function Data({onSuccess}) {
   const user = useUser()
-  const {registration: remoteRegistration, isLoading, updateRegistrationData} = useRegistration()
+  const {registration: remoteRegistration, isLoading, updateRegistrationData, uploadBuktiPrestasi} = useRegistration()
   // const {accomplishments: remoteAccomplishments, updateAccomplishments} = useAccomplishments()
-  const [registration, setRegistration] = useState(null)
+  const [registration, setRegistration] = useState({})
   const [accomplishments, setAccomplishments] = useState([
     {
       id: '',
@@ -185,21 +185,26 @@ export default function Data({onSuccess}) {
                       onChange={event => handleRegistrationFieldChange('tahun_prestasi', event.target.value)}
                     />
                   </FormGroup>
-                  {/* <FormGroup>
-                        <Label for="bukti_prestasi">Upload Bukti (Sertifikat, Ijazah, dll)</Label>
-                        <Input 
-                          className='mb-1'
-                          type="file"
-                          id="buktiPrestasi"
-                          placeholder="Bukti Prestasi"
-                          value={bukti.berkas}
-                          onChange={(e) => setRegistration({ ...registration, bukti_beasiswa: [
-                            ...registration?.bukti_beasiswa.slice(0, index), 
-                            { ...bukti, bukti: e.target.value },
-                            ...registration?.bukti_beasiswa.slice(index + 1)
-                          ]})}
-                        />
-                      </FormGroup> */}
+                  {registration?.bukti_prestasi ? (
+                    <FormGroup>
+                      <Label for="bukti_prestasi">Bukti Prestasi (Sertifikat, Ijazah, dll)</Label>
+                      <p>{registration?.bukti_prestasi}</p>
+                      <Button color="danger" onClick={() => console.log('hapus berkas')}>Hapus berkas bukti</Button>
+                    </FormGroup>
+                  ) : (
+                    <FormGroup>
+                      {/* <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
+                      <Input 
+                        className='mb-1'
+                        type="file"
+                        id="bukti_prestasi"
+                        placeholder="Bukti Prestasi"
+                        onChange={event => {
+                          uploadBuktiPrestasi(event.target.files[0])
+                        }}
+                      /> */}
+                    </FormGroup>
+                  )}
                 </>
               )}
               {registration?.jalur_pendaftaran === 'khusus' && (

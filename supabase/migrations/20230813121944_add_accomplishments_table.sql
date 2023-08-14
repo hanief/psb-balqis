@@ -1,6 +1,8 @@
 alter table if exists public.registrations add nama_prestasi text;
 alter table if exists public.registrations add tahun_prestasi text;
 alter table if exists public.registrations add tingkat_prestasi text;
+alter table if exists public.registrations add bukti_prestasi text;
+alter table if exists public.registrations add progress_status text default 'data';
 
 -- create table accomplishments (
 --   id bigint primary key generated always as identity,

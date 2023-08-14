@@ -2,7 +2,7 @@ import Login from '@/components/Login'
 import Data from '@/components/Data'
 import Bayar from '@/components/Bayar'
 import dynamic from 'next/dynamic'
-import { use, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import Kartu from '@/components/Kartu'
 import Tes from '@/components/Tes'
@@ -11,6 +11,7 @@ import DaftarUlang from '@/components/DaftarUlang'
 import type { Metadata } from 'next'
 import Head from 'next/head'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useRegistration } from '@/model/registration'
 
 export const metadata: Metadata = {
   title: 'PSB Balqis',
@@ -22,9 +23,11 @@ const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
 })
 
 export default function DaftarPage() {
+  const {registration} = useRegistration()
+
   const supabaseClient = useSupabaseClient()
   const user = useUser()
-  
+
   const [steps, setSteps] = useState([
     {
       label: 'Isi Data',
@@ -46,13 +49,24 @@ export default function DaftarPage() {
       active: false,
       completed: false,
     },
-    {
-      label: 'Daftar Ulang',
-      active: false,
-      completed: false,
-    },
   ])
   const [activeStep, setActiveStep] = useState(0)
+  
+  useEffect(() => {
+    console.log('registration', registration)
+
+    if (registration) {
+      if (registration.progress_status === 'data') {
+        setActiveStep(0)
+      } else if (registration.progress_status === 'pembayaran') {
+        setActiveStep(1)
+      } else if (registration.progress_status === 'tes') {
+        setActiveStep(2)
+      } else if (registration.progress_status === 'pengumuman') {
+        setActiveStep(3)
+      } 
+    }
+  }, [registration])
 
   if (!user) {
     return (

@@ -6,12 +6,15 @@ const CustomStepper = ({activeStep, steps, setActiveStep}) => {
     steps={steps}
     stepClassName="bg-balqis"
     onClick={event => {
-      setActiveStep(parseInt(event.target.innerText) - 1)
+      const currentStep = parseInt(event.target.innerText)
+      if (currentStep <= 3) {
+        setActiveStep(currentStep - 1)
+      }
     }}
     styleConfig={{
-      activeBgColor: '#2a833b',
+      activeBgColor: '#7cac33',
       activeTextColor: '#fff',
-      completedBgColor: '#7cac33',
+      completedBgColor: '#2a833b',
       completedTextColor: '#fff',
       inactiveBgColor: '#f0f0f0',
       inactiveTextColor: '#2a833b',

@@ -3,11 +3,12 @@ import Image from 'next/image'
 import { Button, Container } from 'reactstrap'
 import { useCountdown } from '@/hooks/useCountdown'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useProfile } from '@/model/profiles'
 
 export default function Layout({children}) {
-  const user = useUser()
+  const { user, profile } = useProfile()
   const supabaseClient = useSupabaseClient()
-  const [days, hours, minutes, seconds] = useCountdown(new Date('2023-08-15 00:00:00'))
+  const [days, hours, minutes, seconds] = useCountdown(new Date('2023-08-15 12:00:00'))
   
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
@@ -49,7 +50,7 @@ export default function Layout({children}) {
       <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
           <div className="container d-flex flex-wrap">
-            <span>Kontak: 0878-7195-6868 / 0853-9999-0790</span>
+            <span>Kontak Whatsapp: <Link className='text-light' href="https://wa.me/+6287871956868">0878-7195-6868</Link> / <Link className='text-light' href="https://wa.me/+6281228594844">0812-2859-4844</Link></span>
           </div>
         </header>
         <nav className="py-3 mb-4 border-bottom">
@@ -58,9 +59,22 @@ export default function Layout({children}) {
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </Link>
             <ul className="nav">
-              {user && (
+              {user ? (
+                <>
+                  {profile?.is_admin && (
+                    <li className="nav-item">
+                      <Link className="btn btn-outline-secondary me-2" href="/dasbor">Dasbor</Link>
+                    </li>
+                  )}
+                  <li className="nav-item">
+                    <Button color="success" onClick={() => supabaseClient.auth.signOut()}>Sign Out</Button>
+                  </li>
+                </>
+              ) : (
                 <li className="nav-item">
-                  <Button color="primary" onClick={() => supabaseClient.auth.signOut()}>Sign Out</Button>
+                  <Link className="btn btn-success me-2" href="/masuk">
+                    <strong>Masuk</strong>
+                  </Link>
                 </li>
               )}
             </ul>
@@ -85,9 +99,9 @@ export default function Layout({children}) {
             <div className="col-6 col-md">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li><Link href="https://wa.me/+6287871956868">0878-7195-6868</Link></li>
-                <li><Link href="https://wa.me/+6287871956868">0853-9999-0790</Link></li>
-                <li>balqisjogja.com</li>
+                <li><Link href="https://wa.me/+6287871956868">WA CS1: 0878-7195-6868</Link></li>
+                <li><Link href="https://wa.me/+6281228594844">WA CS2: 0812-2859-4844</Link></li>
+                <li><Link href="https://balqisjogja.com">https://balqisjogja.com</Link></li>
               </ul>
             </div>
             <div className="col-6 col-md">

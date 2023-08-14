@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -6,16 +6,20 @@ export async function middleware(req: NextRequest) {
   // We need to create a response and hand it to the supabase client to be able to modify the response headers.
   const res = NextResponse.next()
   // Create authenticated Supabase Client.
-  const supabase = createMiddlewareClient({ req, res })
+  const supabase = createMiddlewareSupabaseClient({ req, res })
   // Check if we have a session
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  // Check auth condition
-  if (session?.user.email?.endsWith('@gmail.com')) {
-    // Authentication successful, forward request to protected route.
-    return res
+  if (session) {
+    const {data: profile} = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
+    
+    // Check auth condition
+    if (profile?.is_admin) {
+      // Authentication successful, forward request to protected route.
+      return res
+    }
   }
 
   // Auth condition not met, redirect to home page.
@@ -26,5 +30,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: '/middleware-protected/:path*',
+  matcher: '/dasbor',
 }

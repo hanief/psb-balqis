@@ -13,14 +13,14 @@ export default function Login({ onSuccess }) {
   const handleSignIn = async (event) => {
     event.preventDefault()
 
-    const { error } = await supabaseClient.auth.signInWithPassword({
-      email,
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: `${email}@utama.app`,
       password
     })
 
     if (error) {
       const { error } = await supabaseClient.auth.signUp({
-        email,
+        email: `${email}@utama.app`,
         password
       })
 
@@ -30,7 +30,13 @@ export default function Login({ onSuccess }) {
     }
 
     if (!error) {
-      router.push('/daftar')
+      const {data: profile} = await supabaseClient.from('profiles').select('*').eq('id', data?.user.id).single()
+      
+      if (profile?.is_admin) {
+        router.push('/dasbor')
+      } else {
+        router.push('/daftar')
+      }
     }
   }
 
@@ -45,12 +51,11 @@ export default function Login({ onSuccess }) {
   ) : (
     <Form>
       <FormGroup>
-        <Label for="email">Email</Label>
+        <Label for="email">Nomor Handphone</Label>
         <Input 
-          label="Email" 
-          type="email" 
+          type="tel" 
           id="email" 
-          placeholder='nama@contoh.com' 
+          placeholder='+628123456789' 
           onChange={event => setEmail(event.target.value)}
           value={email} 
         />
@@ -65,9 +70,10 @@ export default function Login({ onSuccess }) {
           onChange={event => setPassword(event.target.value)}
           value={password}
         />
+        <Label for="password"><small>Jika sudah punya akun sebelumnya, masukkan password akun tersebut. Jika belum memiliki akun silakan masukkan password yang anda inginkan di kolom di bawah ini</small></Label>
       </FormGroup>
       <Button block color='primary' className='me-1' onClick={handleSignIn}>
-        Masuk / Daftar
+        Masuk
       </Button>
     </Form>
   )

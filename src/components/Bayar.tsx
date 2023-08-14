@@ -5,14 +5,17 @@ export default function Bayar({onSuccess}) {
     <>
       <Card>
         <CardBody>
-          <h2 className="card-title">Informasi Pembayaran</h2>
+          <h2 className="card-title">Biaya Pendaftaran</h2>
           <p className="card-text">
-            Pembayaran dapat dilakukan melalui transfer ke rekening berikut:
+            Mohon melakukan pembayaran sebesar <strong>Rp. 250.000</strong> untuk biaya pendaftaran.
+          </p>
+          <p>
+             Pembayaran dapat dilakukan melalui transfer ke rekening berikut:
           </p>
           <ul className="list-unstyled">
-            <li><strong>Bank BNI Syariah</strong></li>
-            <li>No. Rekening: 1234567890</li>
-            <li>Atas Nama: Balqis Jogja</li>
+            <li>Bank: <strong>Bank Syariah Indonesia (BSI)</strong></li>
+            <li>No. Rekening: <strong>7088404267</strong></li>
+            <li>Atas Nama: <strong>Yayasan Baitul Qur&apos;an Yogyakarta</strong></li>
           </ul>
 
           <p className="card-text">
