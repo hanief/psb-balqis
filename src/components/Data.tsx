@@ -2,9 +2,10 @@ import Select from 'react-select'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import data from '@/data/wilayah.json'
 import { Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
-import { useRegistration } from '@/model/registration'
+import { useRegistration, useAccomplishments } from '@/model/registration'
 import { debounce } from 'lodash'
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
+import { getRandomInteger } from '@/utils'
+import { useUser } from '@supabase/auth-helpers-react'
 
 interface Wilayah {
   code: string
@@ -36,18 +37,14 @@ const provinces: Wilayah[] = data as Wilayah[]
 
 const jalurPendaftaranOptions = [
   { value: 'reguler', label: 'Jalur Mandiri' },
-  { value: 'beasiswa', label: 'Jalur Beasiswa' },
+  { value: 'prestasi', label: 'Jalur Beasiswa - Prestasi' },
+  { value: 'khusus', label: 'Jalur Beasiswa - Khusus' },
+  { value: 'alumni', label: 'Jalur Beasiswa - Alumni' },
 ]
 
 const jenisKelaminOptions = [
   { value: 'laki-laki', label: 'Laki-laki' },
   { value: 'perempuan', label: 'Perempuan' },
-]
-
-const jalurBeasiswaOptions = [
-  { value: 'prestasi', label: 'Prestasi' },
-  { value: 'khusus', label: 'Khusus' },
-  { value: 'alumni', label: 'Alumni' },
 ]
 
 const jalurBeasiswaPrestasiOptions = [
@@ -63,47 +60,71 @@ const jalurBeasiswaKhususOptions = [
 ]
   
 export default function Data({onSuccess}) {
-  const {registration, isLoading, updateRegistrationData} = useRegistration()
-  const [isian, setIsian] = useState(null)
-  const [bukti, setBukti] = useState([{
-    nama: '',
-    tingkat: '',
-    tahun: '',
-    berkas: []
-  }])
+  const user = useUser()
+  const {registration: remoteRegistration, isLoading, updateRegistrationData} = useRegistration()
+  // const {accomplishments: remoteAccomplishments, updateAccomplishments} = useAccomplishments()
+  const [registration, setRegistration] = useState(null)
+  const [accomplishments, setAccomplishments] = useState([
+    {
+      id: '',
+      registration_id: remoteRegistration?.id,
+      user_id: 0,
+      nama: '',
+      tingkat: '',
+      tahun: '',
+    }
+  ])
+  const [bukti, setBukti] = useState([
+    {
+      id: '',
+      registration_id: '',
+      filename: '',
+      accomplisment_id: ''
+    }
+  ])
 
-  const kabupatens = useMemo(() => provinces.find(province => province.code === isian?.provinsi)?.cities, [isian?.provinsi])
-  const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === isian?.kabupaten)?.districts, [kabupatens, isian?.kabupaten])
-  const desas = useMemo(() => kecamatans?.find(kecamatan => kecamatan.code === isian?.kecamatan)?.villages, [kecamatans, isian?.kecamatan])
+  const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
+  const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
+  const desas = useMemo(() => kecamatans?.find(kecamatan => kecamatan.code === registration?.kecamatan)?.villages, [kecamatans, registration?.kecamatan])
 
-  const saveData = useCallback(updateRegistrationData, [])
+  const saveRegistrationData = useCallback(updateRegistrationData, [])
+  const handleUpdateRegistration = useMemo(() => debounce(saveRegistrationData, 1000), [saveRegistrationData])
 
-  const handleUpdateIsian = useMemo(() => debounce(saveData, 1000), [saveData])
+  // const saveAccomplishmentData = useCallback(updateAccomplishments, [])
+  // const handleUpdateAccomplishments = useMemo(() => debounce(saveAccomplishmentData, 1000), [saveAccomplishmentData])
 
   useEffect(() => {
     if (isLoading) return
-    if (!registration) return
+    if (!remoteRegistration) return
 
-    if (!isian) {
-      const {id, user_id, created_at, updated_at, ...rest} = registration
-      setIsian(rest)
+    if (!registration) {
+      const {id, user_id, created_at, updated_at, ...rest} = remoteRegistration
+      setRegistration(rest)
     }
-  }, [isLoading, registration])
+  }, [isLoading, remoteRegistration])
 
-  function handleFieldChange(key, value) {
+  function handleRegistrationFieldChange(key, value) {
     const updatedData = {[key]: value}
-    setIsian({ ...isian, ...updatedData})
-    handleUpdateIsian(updatedData)
+    setRegistration({ ...registration, ...updatedData})
+    handleUpdateRegistration(updatedData)
   }
 
-  function handleMultipleFieldChange(changes) {
+  function handleMultipleRegistrationFieldChange(changes) {
     const updatedData = {}
     changes.forEach(change => {
       updatedData[change.key] = change.value
     })
-    setIsian({ ...isian, ...updatedData})
-    handleUpdateIsian(updatedData)
+    setRegistration({ ...registration, ...updatedData})
+    handleUpdateRegistration(updatedData)
   }
+
+  // function handleAccomplishmentFieldChange(accomplishment, key, value) {
+  //   const updatedData = {[key]: value, registration_id: remoteRegistration?.id, user_id: user?.id}
+  //   const updatedAccomplishment = {...accomplishment, ...updatedData}
+  //   const updatedAccomplishments = [updatedAccomplishment]
+  //   setAccomplishments(updatedAccomplishments)
+  //   handleUpdateAccomplishments(updatedAccomplishments, remoteRegistration)
+  // }
 
   return (
     <Col>
@@ -121,112 +142,74 @@ export default function Data({onSuccess}) {
                   id="jalur_pendaftaran"
                   isSearchable={false}
                   name="jalur_pendaftaran"
-                  value={jalurPendaftaranOptions.find(o => o.value === isian?.jalur_pendaftaran)}
-                  onChange={option => handleFieldChange('jalur_pendaftaran', option.value)}
+                  value={jalurPendaftaranOptions.find(o => o.value === registration?.jalur_pendaftaran)}
+                  onChange={option => handleRegistrationFieldChange('jalur_pendaftaran', option.value)}
                 />
               </FormGroup>
-              {isian?.jalur_pendaftaran === 'beasiswa' && (
+              {registration?.jalur_pendaftaran === 'prestasi' && (
                 <>
                   <FormGroup>
-                    <Label for='jalur_beasiswa'>Tipe Beasiswa</Label>
+                    <Label for='jalur_beasiswa_prestasi'>Tipe Prestasi</Label>
                     <Select
-                      options={jalurBeasiswaOptions}
-                      placeholder='Pilih Jalur Beasiswa'
-                      id="jalur_beasiswa"
-                      value={jalurBeasiswaOptions.find(jalur => jalur.value === isian?.jalur_beasiswa)}
-                      onChange={option => handleFieldChange('jalur_beasiswa', option.value)}
+                      options={jalurBeasiswaPrestasiOptions}
+                      placeholder='Pilih Jalur Beasiswa Prestasi'
+                      id="jalur_beasiswa_prestasi"
+                      value={jalurBeasiswaPrestasiOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_prestasi)}
+                      onChange={option => handleRegistrationFieldChange('jalur_beasiswa_prestasi', option.value)}
                     />
                   </FormGroup>
-                  {isian?.jalur_beasiswa === 'prestasi' && (
-                    <>
-                      <FormGroup>
-                        <Label for='jalur_beasiswa_prestasi'>Tipe Prestasi</Label>
-                        <Select
-                          options={jalurBeasiswaPrestasiOptions}
-                          placeholder='Pilih Jalur Beasiswa Prestasi'
-                          id="jalur_beasiswa_prestasi"
-                          value={jalurBeasiswaPrestasiOptions.find(jalur => jalur.value === isian?.jalur_beasiswa_prestasi)}
-                          onChange={option => handleFieldChange('jalur_beasiswa_prestasi', option.value)}
-                        />
-                      </FormGroup>
-                      {bukti?.map((bukti, index) => (
-                        <Fragment key={index}>
-                          <FormGroup>
-                            <Label for="nama_prestasi">Detail Prestasi</Label>
-                            <Input
-                              className='mb-1'
-                              type="text"
-                              id="nama_prestasi"
-                              placeholder="Nama Prestasi"
-                              required={true}
-                              value={bukti.nama}
-                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
-                                ...isian?.bukti_beasiswa.slice(0, index), 
-                                { ...bukti, nama: e.target.value },
-                                ...isian?.bukti_beasiswa.slice(index + 1)
-                              ]})}
-                            />
-                            <Input 
-                              className='mb-1'
-                              label="Tingkat Prestasi"
-                              type="text"
-                              id="tingkatPrestasi"
-                              placeholder="Tingkat (cth: Provinsi, Nasional)"
-                              isRequired={true}
-                              value={bukti.tingkat}
-                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
-                                ...isian?.bukti_beasiswa.slice(0, index), 
-                                { ...bukti, tingkat: e.target.value },
-                                ...isian?.bukti_beasiswa.slice(index + 1)
-                              ]})}
-                            />
-                            <Input 
-                              className='mb-1'
-                              label="Tahun Prestasi"
-                              type="text"
-                              id="tahunPrestasi"
-                              placeholder="Tahun"
-                              isRequired={true}
-                              value={bukti.tahun}
-                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
-                                ...isian?.bukti_beasiswa.slice(0, index), 
-                                { ...bukti, tahun: e.target.value },
-                                ...isian?.bukti_beasiswa.slice(index + 1)
-                              ]})}
-                            />
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="bukti_prestasi">Upload Bukti (Sertifikat, Ijazah, dll)</Label>
-                            <Input 
-                              className='mb-1'
-                              label="Bukti Prestasi"
-                              type="file"
-                              id="buktiPrestasi"
-                              placeholder="Bukti Prestasi"
-                              isRequired={true}
-                              value={bukti.berkas}
-                              onChange={(e) => setIsian({ ...isian, bukti_beasiswa: [
-                                ...isian?.bukti_beasiswa.slice(0, index), 
-                                { ...bukti, bukti: e.target.value },
-                                ...isian?.bukti_beasiswa.slice(index + 1)
-                              ]})}
-                            />
-                          </FormGroup>
-                          
-                        </Fragment>
-                      ))}
-                    </>
-                  )}
-                  {isian?.jalur_beasiswa === 'khusus' && (
-                    <Select
-                      options={jalurBeasiswaKhususOptions}
-                      placeholder='Pilih Jalur Beasiswa Khusus'
-                      id="jalur_beasiswa_khusus"
-                      value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === isian?.jalur_beasiswa_khusus)}
-                      onChange={option => handleFieldChange('jalur_beasiswa_khusus', option.value)}
+                  <FormGroup>
+                    <Label for="nama_prestasi">Detail Prestasi</Label>
+                    <Input
+                      className='mb-1'
+                      type="text"
+                      id="nama_prestasi"
+                      placeholder="Nama Prestasi"
+                      value={registration?.nama_prestasi}
+                      onChange={event => handleRegistrationFieldChange('nama_prestasi', event.target.value)}
                     />
-                  )}
+                    <Input 
+                      className='mb-1'
+                      type="text"
+                      id="tingkat_prestasi"
+                      placeholder="Tingkat (cth: Provinsi, Nasional)"
+                      value={registration?.tingkat_prestasi}    
+                      onChange={event => handleRegistrationFieldChange('tingkat_prestasi', event.target.value)}
+                    />
+                    <Input 
+                      className='mb-1'
+                      type="text"
+                      id="tahun_prestasi"
+                      placeholder="Tahun (cth: 2020)"
+                      value={registration?.tahun_prestasi}   
+                      onChange={event => handleRegistrationFieldChange('tahun_prestasi', event.target.value)}
+                    />
+                  </FormGroup>
+                  {/* <FormGroup>
+                        <Label for="bukti_prestasi">Upload Bukti (Sertifikat, Ijazah, dll)</Label>
+                        <Input 
+                          className='mb-1'
+                          type="file"
+                          id="buktiPrestasi"
+                          placeholder="Bukti Prestasi"
+                          value={bukti.berkas}
+                          onChange={(e) => setRegistration({ ...registration, bukti_beasiswa: [
+                            ...registration?.bukti_beasiswa.slice(0, index), 
+                            { ...bukti, bukti: e.target.value },
+                            ...registration?.bukti_beasiswa.slice(index + 1)
+                          ]})}
+                        />
+                      </FormGroup> */}
                 </>
+              )}
+              {registration?.jalur_pendaftaran === 'khusus' && (
+                <Select
+                  options={jalurBeasiswaKhususOptions}
+                  placeholder='Pilih Jalur Beasiswa Khusus'
+                  id="jalur_beasiswa_khusus"
+                  value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_khusus)}
+                  onChange={option => handleRegistrationFieldChange('jalur_beasiswa_khusus', option.value)}
+                />
               )}
             </CardBody>
           </Card>
@@ -234,7 +217,7 @@ export default function Data({onSuccess}) {
         <Col>
           <Card>
             <CardBody>
-              <CardTitle tag="h5" className='mb-4'>Data Anak</CardTitle>
+              <CardTitle tag="h5" className='mb-4'>Data Calon Santri</CardTitle>
               <FormGroup>
                   <Label for='nama_lengkap'>Nama Lengkap</Label>
                   <Input
@@ -242,8 +225,8 @@ export default function Data({onSuccess}) {
                     id="nama_lengkap"
                     placeholder="cth: Fulan bin Fulan"
                     required={true}
-                    value={isian?.nama_lengkap}
-                    onChange={event => handleFieldChange('nama_lengkap', event.target.value)}
+                    value={registration?.nama_lengkap}
+                    onChange={event => handleRegistrationFieldChange('nama_lengkap', event.target.value)}
                   />
               </FormGroup>
               <FormGroup>
@@ -254,8 +237,8 @@ export default function Data({onSuccess}) {
                   isSearchable={false}
                   required={true}
                   id="jenis_kelamin"
-                  value={jenisKelaminOptions.find(o => o.value === isian?.jenis_kelamin)}
-                  onChange={event => handleFieldChange('jenis_kelamin', event.value)}
+                  value={jenisKelaminOptions.find(o => o.value === registration?.jenis_kelamin)}
+                  onChange={event => handleRegistrationFieldChange('jenis_kelamin', event.value)}
                 />
               </FormGroup>
               <FormGroup>
@@ -266,16 +249,16 @@ export default function Data({onSuccess}) {
                     id="tempat_lahir"
                     placeholder="Tempat Lahir"
                     required={true}
-                    value={isian?.tempat_lahir}
-                    onChange={event => handleFieldChange('tempat_lahir', event.target.value)}
+                    value={registration?.tempat_lahir}
+                    onChange={event => handleRegistrationFieldChange('tempat_lahir', event.target.value)}
                   />
                   <Input
                     type="date"
                     id="tanggal_lahir"
                     placeholder="Tanggal Lahir"
                     required={true}
-                    value={isian?.tanggal_lahir}
-                    onChange={event => handleFieldChange('tanggal_lahir', event.target.value)}
+                    value={registration?.tanggal_lahir}
+                    onChange={event => handleRegistrationFieldChange('tanggal_lahir', event.target.value)}
                   />
                 </div>
             </FormGroup>
@@ -286,8 +269,8 @@ export default function Data({onSuccess}) {
                 id="asal_sekolah"
                 placeholder="Asal Sekolah"
                 required={true}
-                value={isian?.asal_sekolah}
-                onChange={event => handleFieldChange('asal_sekolah', event.target.value)}
+                value={registration?.asal_sekolah}
+                onChange={event => handleRegistrationFieldChange('asal_sekolah', event.target.value)}
               />
             </FormGroup>
             </CardBody>
@@ -306,8 +289,8 @@ export default function Data({onSuccess}) {
                       type="text"
                       id="nama_ayah"
                       placeholder='Nama Lengkap'
-                      value={isian?.nama_ayah}
-                      onChange={event => handleFieldChange('nama_ayah', event.target.value)}
+                      value={registration?.nama_ayah}
+                      onChange={event => handleRegistrationFieldChange('nama_ayah', event.target.value)}
                     />
                   </Col>
                   <Col lg="6">
@@ -315,8 +298,8 @@ export default function Data({onSuccess}) {
                       type="text"
                       id="nomor_hp_ayah"
                       placeholder="Nomor HP (cth: +6281234567890)"
-                      value={isian?.nomor_hp_ayah}
-                      onChange={event => handleFieldChange('nomor_hp_ayah', event.target.value)}
+                      value={registration?.nomor_hp_ayah}
+                      onChange={event => handleRegistrationFieldChange('nomor_hp_ayah', event.target.value)}
                     />
                   </Col>
                 </Row>
@@ -330,8 +313,8 @@ export default function Data({onSuccess}) {
                       type="text"
                       id="nama_ibu"
                       placeholder='Nama Lengkap'
-                      value={isian?.nama_ibu}
-                      onChange={event => handleFieldChange('nama_ibu', event.target.value)}
+                      value={registration?.nama_ibu}
+                      onChange={event => handleRegistrationFieldChange('nama_ibu', event.target.value)}
                     />
                   </Col>
                   <Col lg="6">
@@ -339,8 +322,8 @@ export default function Data({onSuccess}) {
                       type="text"
                       id="nomor_hp_ibu"
                       placeholder="Nomor HP (cth: +6281234567890)"
-                      value={isian?.nomor_hp_ibu}
-                      onChange={event => handleFieldChange('nomor_hp_ibu', event.target.value)}
+                      value={registration?.nomor_hp_ibu}
+                      onChange={event => handleRegistrationFieldChange('nomor_hp_ibu', event.target.value)}
                     />
                   </Col>
                 </Row>
@@ -358,8 +341,8 @@ export default function Data({onSuccess}) {
                   type="text"
                   id="alamat"
                   placeholder="Jalan, RT/RW, Desa/Kelurahan"
-                  value={isian?.alamat}
-                  onChange={event => handleFieldChange('alamat', event.target.value)}
+                  value={registration?.alamat}
+                  onChange={event => handleRegistrationFieldChange('alamat', event.target.value)}
                 />
                 <Select
                   className='mb-2'
@@ -368,39 +351,39 @@ export default function Data({onSuccess}) {
                   options={provinces}
                   getOptionValue={option => option.code}
                   getOptionLabel={option => option.province}
-                  value={provinces.find(prov => prov.code === isian?.provinsi)}
-                  onChange={option => handleFieldChange('provinsi', option.code)}
+                  value={provinces.find(prov => prov.code === registration?.provinsi)}
+                  onChange={option => handleRegistrationFieldChange('provinsi', option.code)}
                 />
                 <Select
                   className='mb-2'
                   id="kabupaten"
                   placeholder="Pilih Kabupaten"
                   options={kabupatens}
-                  value={kabupatens?.find(kabupaten => kabupaten.code === isian?.kabupaten)}
+                  value={kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)}
                   getOptionValue={option => option.code}
                   getOptionLabel={option => option.city}
-                  onChange={option => handleFieldChange('kabupaten', option.code)}
+                  onChange={option => handleRegistrationFieldChange('kabupaten', option.code)}
                 />
                 <Select
                   className='mb-2'
                   id="kecamatan"
                   placeholder="Pilih Kecamatan"
-                  value={kecamatans?.find(kecamatan => kecamatan.code === isian?.kecamatan)}
+                  value={kecamatans?.find(kecamatan => kecamatan.code === registration?.kecamatan)}
                   options={kecamatans}
                   getOptionValue={option => option.code}
                   getOptionLabel={option => option.district}
-                  onChange={option => handleFieldChange('kecamatan', option.code)}
+                  onChange={option => handleRegistrationFieldChange('kecamatan', option.code)}
                 />
                 <Select
                   className='mb-2'
                   id="desa"
                   placeholder="Pilih Desa/Kelurahan"
-                  value={desas?.find(kelurahan => kelurahan.code === isian?.desa)}
+                  value={desas?.find(kelurahan => kelurahan.code === registration?.desa)}
                   options={desas}
                   getOptionValue={option => option.code}
                   getOptionLabel={option => option.village}
                   onChange={option => {
-                    handleMultipleFieldChange([
+                    handleMultipleRegistrationFieldChange([
                       {key: 'desa', value: option.code},
                       {key: 'kodepos', value: `${desas.find(village => village.code === option.code)?.postal}`}
                     ])
@@ -412,8 +395,8 @@ export default function Data({onSuccess}) {
                   type="text"
                   id="kodepos"
                   placeholder="Kode Pos"
-                  value={isian?.kodepos}
-                  onChange={event => handleFieldChange('kodepos', event.target.value)}
+                  value={registration?.kodepos}
+                  onChange={event => handleRegistrationFieldChange('kodepos', event.target.value)}
                 /> 
             </CardBody>
           </Card>
