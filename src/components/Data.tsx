@@ -63,25 +63,25 @@ export default function Data({onSuccess}) {
   const user = useUser()
   const {registration: remoteRegistration, isLoading, updateRegistrationData, uploadBuktiPrestasi} = useRegistration()
   // const {accomplishments: remoteAccomplishments, updateAccomplishments} = useAccomplishments()
-  const [registration, setRegistration] = useState({})
-  const [accomplishments, setAccomplishments] = useState([
-    {
-      id: '',
-      registration_id: remoteRegistration?.id,
-      user_id: 0,
-      nama: '',
-      tingkat: '',
-      tahun: '',
-    }
-  ])
-  const [bukti, setBukti] = useState([
-    {
-      id: '',
-      registration_id: '',
-      filename: '',
-      accomplisment_id: ''
-    }
-  ])
+  const [registration, setRegistration] = useState(null)
+  // const [accomplishments, setAccomplishments] = useState([
+  //   {
+  //     id: '',
+  //     registration_id: remoteRegistration?.id,
+  //     user_id: 0,
+  //     nama: '',
+  //     tingkat: '',
+  //     tahun: '',
+  //   }
+  // ])
+  // const [bukti, setBukti] = useState([
+  //   {
+  //     id: '',
+  //     registration_id: '',
+  //     filename: '',
+  //     accomplisment_id: ''
+  //   }
+  // ])
 
   const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
   const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])

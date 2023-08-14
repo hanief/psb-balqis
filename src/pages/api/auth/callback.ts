@@ -1,11 +1,11 @@
 import { NextApiHandler } from 'next'
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 
 const handler: NextApiHandler = async (req, res) => {
   const { code } = req.query
 
   if (code) {
-    const supabase = createPagesServerClient({ req, res })
+    const supabase = createServerSupabaseClient({ req, res })
     await supabase.auth.exchangeCodeForSession(String(code))
   }
 

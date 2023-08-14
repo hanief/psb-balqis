@@ -6,7 +6,8 @@ const CustomStepper = ({activeStep, steps, setActiveStep}) => {
     steps={steps}
     stepClassName="bg-balqis"
     onClick={event => {
-      const currentStep = parseInt(event.target.innerText)
+      const input = event.target as HTMLElement
+      const currentStep = parseInt(input.innerText)
       if (currentStep <= 3) {
         setActiveStep(currentStep - 1)
       }
