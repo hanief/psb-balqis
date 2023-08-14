@@ -53,8 +53,6 @@ export default function DaftarPage() {
   const [activeStep, setActiveStep] = useState(0)
   
   useEffect(() => {
-    console.log('registration', registration)
-
     if (registration) {
       if (registration.progress_status === 'data') {
         setActiveStep(0)
