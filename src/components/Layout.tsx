@@ -50,7 +50,7 @@ export default function Layout({children}) {
       <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
           <div className="container d-flex flex-wrap">
-            <span>Kontak Whatsapp: <Link className='text-light' href="https://wa.me/+6287871956868">0878-7195-6868</Link> / <Link className='text-light' href="https://wa.me/+6281228594844">0812-2859-4844</Link></span>
+            <span>Kontak (Whatsapp): <Link className='text-light' href="https://wa.me/+6287871956868">0878-7195-6868</Link> / <Link className='text-light' href="https://wa.me/+6281228594844">0812-2859-4844</Link></span>
           </div>
         </header>
         <nav className="py-3 mb-4 border-bottom">
@@ -84,11 +84,11 @@ export default function Layout({children}) {
       </main>
       <footer className="py-3 bg-light container-fluid">
         <div className="container">
-          <div className="row">
-            <div className="col-12 col-md">
+          <div className="row gap-1">
+            <div className="col-md-12 col-md">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </div>
-            <div className="col-6 col-md">
+            <div className="col-md-6 col-md">
               <h5>Alamat</h5>
               <ul className="list-unstyled text-small">
                 <li>Jl. P. Mangkubumi, Karangijo Kulon</li>
@@ -96,21 +96,21 @@ export default function Layout({children}) {
                 <li>D.I Yogyakarta 55892</li>
               </ul>
             </div>
-            <div className="col-6 col-md">
+            <div className="col-md-6 col-md">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li><Link href="https://wa.me/+6287871956868">WA CS1: 0878-7195-6868</Link></li>
-                <li><Link href="https://wa.me/+6281228594844">WA CS2: 0812-2859-4844</Link></li>
-                <li><Link href="https://balqisjogja.com">https://balqisjogja.com</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://wa.me/+6287871956868">WA CS1: 0878-7195-6868</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://wa.me/+6281228594844">WA CS2: 0812-2859-4844</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://balqisjogja.com">https://balqisjogja.com</Link></li>
               </ul>
             </div>
-            <div className="col-6 col-md">
+            <div className="col-md-6 col-md">
               <h5>Media Sosial</h5>
               <ul className="list-unstyled text-small">
-                <li><Link href="https://www.tiktok.com/@balqisjogja">Tiktok</Link></li>
-                <li><Link href="https://www.youtube.com/channel/UCNdy_xWCmuEy7uSRkKd2dsg">Youtube</Link></li>
-                <li><Link href="https://www.instagram.com/balqisjogja">Instagram</Link></li>
-                <li><Link href="https://www.facebook.com/baitulquranyogyakarta">Facebook</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.tiktok.com/@balqisjogja">Tiktok</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.youtube.com/channel/UCNdy_xWCmuEy7uSRkKd2dsg">Youtube</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.instagram.com/balqisjogja">Instagram</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.facebook.com/baitulquranyogyakarta">Facebook</Link></li>
               </ul>
             </div>
           </div>

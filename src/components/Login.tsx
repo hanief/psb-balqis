@@ -66,11 +66,11 @@ export default function Login({ onSuccess }) {
           label="Password"
           type="password"
           id="password"
-          placeholder='Buat password baru'
+          placeholder='Password'
           onChange={event => setPassword(event.target.value)}
           value={password}
         />
-        <Label for="password"><small>Jika sudah punya akun sebelumnya, masukkan password akun tersebut. Jika belum memiliki akun silakan masukkan password yang anda inginkan di kolom di bawah ini</small></Label>
+        <Label for="password"><small>Jika sudah punya akun sebelumnya, masukkan password akun tersebut. Jika belum memiliki akun silakan masukkan password yang anda inginkan di kolom password</small></Label>
       </FormGroup>
       <Button block color='primary' className='me-1' onClick={handleSignIn}>
         Masuk
