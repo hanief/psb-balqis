@@ -8,13 +8,14 @@ export default function Home() {
   return (
     <Container className="container my-5">
       <Head>
-        <title>PSB Balqis Jogja - Beranda</title>
+          <title>Penerimaan Santri Baru BALQIS Jogja - Beranda</title>
+          <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
       </Head>
       <Row>
         <Col>
           <Carousel></Carousel>
         </Col>
-        <Col md="4">
+        <Col md="6" lg="4">
           <div className="p-5 text-center bg-body-tertiary rounded-3">
             <h1 className="text-body-emphasis">Penerimaan Santri Baru</h1>
             <p className="col-lg-8 mx-auto fs-5 text-muted">

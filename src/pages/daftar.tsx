@@ -65,7 +65,7 @@ export default function DaftarPage() {
       <Container>
         <Head>
           <title>PSB Balqis Jogja - Pendaftaran</title>
-          <meta name="description" content="Penerimaan Santri Baru Balqis Jogja"/>
+          <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
         </Head>
         <Row className='justify-content-center mb-6'>
           <Col sm="6">
