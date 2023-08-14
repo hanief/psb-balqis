@@ -10,6 +10,7 @@ import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider } from '@supabase/auth-helpers-react'
 import { useState } from 'react'
 import {Database} from '@/lib/database.types'
+import { Analytics } from '@vercel/analytics/react'
 
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'] })
 const heebo = Heebo({ subsets: ['latin'], weight: ['400', '700'] })
@@ -32,6 +33,7 @@ export default function MyApp({
       `}</style>
       <Layout>
         <Component {...pageProps} />
+        <Analytics />
       </Layout>
     </SessionContextProvider>
   )
