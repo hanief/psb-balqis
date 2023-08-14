@@ -8,15 +8,9 @@ import Kartu from '@/components/Kartu'
 import Tes from '@/components/Tes'
 import Pengumuman from '@/components/Pengumuman'
 import DaftarUlang from '@/components/DaftarUlang'
-import type { Metadata } from 'next'
 import Head from 'next/head'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRegistration } from '@/model/registration'
-
-export const metadata: Metadata = {
-  title: 'PSB Balqis',
-  description: 'Penerimaan Santri Baru Balqis',
-}
 
 const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
   ssr: false,
