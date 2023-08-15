@@ -94,15 +94,15 @@ export default function DaftarPage() {
         <Col className='d-flex justify-content-between my-2'>
           {activeStep > 0 && (
             <Button color="success" onClick={() => setActiveStep(activeStep - 1)}>
-              <i className='bi bi-arrow-left me-2'></i><span className='d-sm-none d-md-block'>Kembali</span>
+              <i className='bi bi-arrow-left'></i><span className='d-none d-md-block ms-1'>Kembali</span>
             </Button>
           )}
-          <h2 className='d-sm-none d-md-block'>{steps[activeStep]?.label}</h2>
+          <h2 className=''>{steps[activeStep]?.label}</h2>
           <Button
             color={activeStep > getProgressIndex() ? "secondary" : "success"}
             disabled={activeStep > getProgressIndex()}
             onClick={() => setActiveStep(activeStep + 1)}>
-            <span className='d-sm-none d-md-block'>{activeStep === 0 && 'Simpan & '}Lanjutkan</span><i className='bi bi-arrow-right ms-2'></i>
+            <span className='d-none d-md-block me-1'>{activeStep === 0 && 'Simpan & '}Lanjutkan</span><i className='bi bi-arrow-right'></i>
           </Button>
         </Col>
       </Row>
