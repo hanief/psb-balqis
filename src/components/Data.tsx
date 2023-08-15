@@ -38,7 +38,7 @@ const provinces: Wilayah[] = data as Wilayah[]
 const jalurPendaftaranOptions = [
   { value: 'reguler', label: 'Jalur Reguler' },
   { value: 'prestasi', label: 'Jalur Beasiswa - Prestasi' },
-  { value: 'khusus', label: 'Jalur Beasiswa - Afirmasi' },
+  { value: 'afirmasi', label: 'Jalur Beasiswa - Afirmasi' },
   { value: 'alumni', label: 'Jalur Beasiswa - Alumni' },
 ]
 
@@ -174,14 +174,13 @@ export default function Data({onSuccess}) {
                     />
                   </FormGroup>
                   {registration?.bukti_prestasi ? (
-                    <FormGroup>
-                      <Label for="bukti_prestasi">Bukti Prestasi (Sertifikat, Ijazah, dll)</Label>
+                    <div className='d-flex justify-content-between'>
                       <p>{registration?.bukti_prestasi}</p>
                       <Button color="danger" onClick={() => console.log('hapus berkas')}>Hapus berkas bukti</Button>
-                    </FormGroup>
+                    </div>
                   ) : (
                     <FormGroup>
-                      {/* <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
+                      <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
                       <Input 
                         className='mb-1'
                         type="file"
@@ -190,19 +189,48 @@ export default function Data({onSuccess}) {
                         onChange={event => {
                           uploadBuktiPrestasi(event.target.files[0])
                         }}
-                      /> */}
+                      />
                     </FormGroup>
                   )}
                 </>
               )}
-              {registration?.jalur_pendaftaran === 'khusus' && (
-                <Select
-                  options={jalurBeasiswaKhususOptions}
-                  placeholder='Pilih Jalur Beasiswa Khusus'
-                  id="jalur_beasiswa_khusus"
-                  value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_khusus)}
-                  onChange={option => handleRegistrationFieldChange('jalur_beasiswa_khusus', option.value)}
-                />
+              {registration?.jalur_pendaftaran === 'afirmasi' && (
+                <>
+                  <FormGroup>
+                    <Label for="jalur_beasiswa_khusus">Jenis Beasiswa Afirmasi</Label>
+                    <Select
+                      options={jalurBeasiswaKhususOptions}
+                      placeholder='Pilih Jalur Beasiswa Afirmasi'
+                      id="jalur_beasiswa_khusus"
+                      value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_khusus)}
+                      onChange={option => handleRegistrationFieldChange('jalur_beasiswa_khusus', option.value)}
+                    />
+                  </FormGroup>
+                  
+                  {registration?.bukti_prestasi ? (
+                    <div className='d-flex justify-content-between'>
+                      <p>{registration?.bukti_prestasi}</p>
+                      <Button color="danger" onClick={() => console.log('hapus berkas')}>Hapus berkas bukti</Button>
+                    </div>
+                  ) : (
+                    <FormGroup>
+                      {registration?.jalur_beasiswa_khusus === 'dhuafa' ? (
+                        <Label for="bukti_prestasi">Upload Bukti Prestasi (Sertifikat, Ijazah, dll)</Label>
+                      ) : (
+                        <Label for="bukti_prestasi">Upload SK Yatim Piatu dari sekolah</Label>
+                      )}                   
+                      <Input 
+                        className='mb-1'
+                        type="file"
+                        id="bukti_prestasi"
+                        placeholder="Bukti Prestasi"
+                        onChange={event => {
+                          uploadBuktiPrestasi(event.target.files[0])
+                        }}
+                      />
+                    </FormGroup>
+                  )}
+                </>
               )}
             </CardBody>
           </Card>
