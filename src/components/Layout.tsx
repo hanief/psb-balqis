@@ -21,7 +21,7 @@ export default function Layout({children}) {
         <div className="p-5 text-center bg-success-subtle rounded-3">
           <Image className='my-2' src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
           <h1 className="display-1 my-4">Segera hadir</h1>
-          <p className="col-lg-8 mx-auto fs-5 text-muted">
+          {/* <p className="col-lg-8 mx-auto fs-5 text-muted">
             Penerimaan santri baru akan dibuka dalam
           </p>
           <div id="countdown" className='my-2'>
@@ -39,7 +39,7 @@ export default function Layout({children}) {
                 <div className="countdown-item__label">Menit</div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="d-inline-flex gap-2 my-5">
             <Link href="https://balqisjogja.com" className="d-inline-flex align-items-center btn btn-primary btn-lg px-4" type="button">
               <i className="bi bi-box-arrow-up-right me-2"></i>Kembali ke website Balqis
