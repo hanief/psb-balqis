@@ -59,8 +59,9 @@ export default function DaftarPage() {
 
   function getProgressIndex() {
     if (!registration) return 0
+    const index = progressStatus.findIndex(progress => progress === registration?.progress_status)
 
-    return progressStatus.findIndex(progress => progress === registration?.progress_status)
+    return index < 0 ? 0 : index
   }
 
   if (!user) {
@@ -87,18 +88,27 @@ export default function DaftarPage() {
       </Head>
       <Row>
         <Col>
-          <StepperComponent activeStep={activeStep} setActiveStep={setActiveStep} steps={steps}/>
+          <StepperComponent
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            steps={steps}
+            isClickable={false}
+          />
         </Col>
       </Row>
       <Row>
         <Col className='d-flex justify-content-between my-2'>
           {activeStep > 0 && (
-            <Button color="success" onClick={() => setActiveStep(activeStep - 1)}>
+            <Button
+              className="d-flex align-items-center"
+              color="success"
+              onClick={() => setActiveStep(activeStep - 1)}>
               <i className='bi bi-arrow-left'></i><span className='d-none d-md-block ms-1'>Kembali</span>
             </Button>
           )}
           <h2 className=''>{steps[activeStep]?.label}</h2>
           <Button
+            className="d-flex align-items-center"
             color={activeStep > getProgressIndex() ? "secondary" : "success"}
             disabled={activeStep > getProgressIndex()}
             onClick={() => setActiveStep(activeStep + 1)}>

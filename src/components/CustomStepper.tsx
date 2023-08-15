@@ -1,15 +1,17 @@
 import { Stepper } from "react-form-stepper";
 
-const CustomStepper = ({activeStep, steps, setActiveStep}) => {
+const CustomStepper = ({activeStep, steps, setActiveStep, isClickable}) => {
   return <Stepper 
     activeStep={activeStep}
     steps={steps}
     stepClassName="bg-balqis"
     onClick={event => {
-      const input = event.target as HTMLElement
-      const currentStep = parseInt(input.innerText)
-      if (currentStep <= 3) {
-        setActiveStep(currentStep - 1)
+      if (isClickable) {
+        const input = event.target as HTMLElement
+        const currentStep = parseInt(input.innerText)
+        if (currentStep <= 3) {
+          setActiveStep(currentStep - 1)
+        }
       }
     }}
     styleConfig={{

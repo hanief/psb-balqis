@@ -1,8 +1,8 @@
 import Select from 'react-select'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import data from '@/data/wilayah.json'
-import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
-import { useRegistration, useAccomplishments } from '@/model/registration'
+import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import { useRegistration, useAccomplishments, useProof } from '@/model/registration'
 import { debounce } from 'lodash'
 import { getRandomInteger } from '@/utils'
 import { useUser } from '@supabase/auth-helpers-react'
@@ -61,13 +61,41 @@ const jalurBeasiswaPrestasiOptions = [
 
 const jalurBeasiswaKhususOptions = [
   { value: 'dhuafa', label: 'Dhuafa berprestasi' },
-  { value: 'yatimpiatu', label: 'Yatim & Piatu' },
+  { value: 'yatim', label: 'Yatim & Piatu' },
 ]
   
 export default function Data({onSuccess}) {
   const user = useUser()
-  const {registration: remoteRegistration, isLoading, updateRegistrationData, uploadBuktiPrestasi} = useRegistration()
-  const [registration, setRegistration] = useState(null)
+  const {registration: remoteRegistration, mutate: mutateRegistration, isLoading, updateRegistrationData} = useRegistration()
+  const {proofs, uploadBukti, deleteBukti, isUploading} = useProof(remoteRegistration?.id)
+  const [registration, setRegistration] = useState({
+    jenjang: '',
+    jalur_pendaftaran: '',
+    jalur_beasiswa_prestasi: '',
+    nama_prestasi: '',
+    tingkat_prestasi: '',
+    tahun_prestasi: '',
+    alamat: '',
+    provinsi: '',
+    kabupaten: '',
+    kecamatan: '',
+    desa: '',
+    kodepos: '',
+    bukti_prestasi: '',
+    bukti_dhuafa: '',
+    bukti_yatim: '',
+    bukti_pembayaran: '',
+    jalur_beasiswa_khusus: '',
+    nama_lengkap: '',
+    jenis_kelamin: '',
+    tempat_lahir: '',
+    tanggal_lahir: '',
+    asal_sekolah: '',
+    nama_ayah: '',
+    nomor_hp_ayah: '',
+    nama_ibu: '',
+    nomor_hp_ibu: '',
+  })
 
   const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
   const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
@@ -80,11 +108,14 @@ export default function Data({onSuccess}) {
     if (isLoading) return
     if (!remoteRegistration) return
 
-    if (!registration) {
-      const {id, user_id, created_at, updated_at, ...rest} = remoteRegistration
-      setRegistration(rest)
-    }
-  }, [isLoading, remoteRegistration])
+    const newRegData = registration
+    Object.keys(newRegData).forEach(key => {
+      if (!newRegData[key]) {
+        newRegData[key] = remoteRegistration[key]
+      }
+    })
+    setRegistration(newRegData)
+  }, [remoteRegistration])
 
   function handleRegistrationFieldChange(key, value) {
     const updatedData = {[key]: value}
@@ -176,21 +207,53 @@ export default function Data({onSuccess}) {
                   {registration?.bukti_prestasi ? (
                     <div className='d-flex justify-content-between'>
                       <p>{registration?.bukti_prestasi}</p>
-                      <Button color="danger" onClick={() => console.log('hapus berkas')}>Hapus berkas bukti</Button>
+                      <Button
+                        color="danger" 
+                        onClick={() => {
+                          const updatedBukti = {bukti_prestasi: ''}
+                          const newRegistration = {...remoteRegistration, ...updatedBukti}
+                          mutateRegistration(newRegistration)
+                          setRegistration({...registration, ...updatedBukti})
+                          deleteBukti('prestasi')
+                        }}>
+                          Hapus berkas bukti
+                      </Button>
                     </div>
                   ) : (
-                    <FormGroup>
-                      <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
-                      <Input 
-                        className='mb-1'
-                        type="file"
-                        id="bukti_prestasi"
-                        placeholder="Bukti Prestasi"
-                        onChange={event => {
-                          uploadBuktiPrestasi(event.target.files[0])
-                        }}
-                      />
-                    </FormGroup>
+                    <>
+                    {isUploading ? (
+                      <>
+                        <Spinner>
+                          Uploading...
+                        </Spinner>
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <FormGroup>
+                        <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
+                        <Input 
+                          className='mb-1'
+                          type="file"
+                          id="bukti_prestasi"
+                          placeholder="Bukti Prestasi"
+                          accept="image/*,.pdf"
+                          onChange={event => {
+                            const file = event.target.files[0]
+                            const type = 'prestasi'
+                            const fileNameSplit = file?.name?.split('.')
+                            const fileExtension = fileNameSplit[fileNameSplit.length-1]
+                            const path = `${type}/${remoteRegistration?.id}.${fileExtension}`
+
+                            const updatedBukti = {bukti_prestasi: ''}
+                            const newRegistration = {...remoteRegistration, ...updatedBukti}
+                            mutateRegistration(newRegistration)
+
+                            uploadBukti(file, type)
+                          }}
+                        />
+                      </FormGroup>
+                    )}
+                    </>
                   )}
                 </>
               )}
@@ -207,9 +270,9 @@ export default function Data({onSuccess}) {
                     />
                   </FormGroup>
                   
-                  {registration?.bukti_prestasi ? (
+                  {registration?.bukti_dhuafa || registration?.bukti_yatim ? (
                     <div className='d-flex justify-content-between'>
-                      <p>{registration?.bukti_prestasi}</p>
+                      <p>{registration?.jalur_beasiswa_khusus === 'dhuafa' ? registration?.bukti_dhuafa : registration?.bukti_yatim}</p>
                       <Button color="danger" onClick={() => console.log('hapus berkas')}>Hapus berkas bukti</Button>
                     </div>
                   ) : (
@@ -224,8 +287,19 @@ export default function Data({onSuccess}) {
                         type="file"
                         id="bukti_prestasi"
                         placeholder="Bukti Prestasi"
+                        accept="image/*,.pdf"
                         onChange={event => {
-                          uploadBuktiPrestasi(event.target.files[0])
+                          const file = event.target.files[0]
+                          const type = registration?.jalur_beasiswa_khusus
+                          const fileNameSplit = file?.name?.split('.')
+                          const fileExtension = fileNameSplit[fileNameSplit.length-1]
+                          const path = `${type}/${remoteRegistration?.id}.${fileExtension}`
+
+                          const updatedBukti = {[`bukti_${registration?.jalur_beasiswa_khusus}`]: ''}
+                          const newRegistration = {...remoteRegistration, ...updatedBukti}
+                          mutateRegistration(newRegistration)
+
+                          uploadBukti(file, type)
                         }}
                       />
                     </FormGroup>

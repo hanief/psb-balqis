@@ -1,5 +1,6 @@
 import useSWR from "swr"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useState } from "react"
 
 export function useRegistrations() {
   const user = useUser()
@@ -22,12 +23,12 @@ export function useRegistration() {
   const supabase = useSupabaseClient()
 
   const {data, mutate, ...rest} = useSWR(user && `/registrations/${user?.id}`, async () => {
-    const {data, error} = await supabase
+    const {data} = await supabase
       .from("registrations")
       .select()
       .eq("user_id", user?.id)
       .limit(1)
-
+    
     return data?.length > 0 ? data[0] : []
   })
 
@@ -48,7 +49,7 @@ export function useRegistration() {
   async function updateRegistrationData(newData) {
     const updatedData = {...data, ...newData}
 
-    mutate(async () => {
+    return mutate(async () => {
       await supabase
         .from("registrations")
         .update(newData)
@@ -60,47 +61,73 @@ export function useRegistration() {
     })
   }
 
-  async function uploadBuktiPrestasi(file) {
-    const fileNameSplit = file?.name?.split('.')
-    const fileExtension = fileNameSplit[fileNameSplit.length-1]
-    
-    mutate(async () => {
-      await supabase
-        .storage
-        .from('proofs')
-        .upload(`prestasi/${data?.id}.${fileExtension}`, file, {
-          cacheControl: '3600',
-          upsert: false
-        })
-
-      return data
-    })
-  }
-
   return {
     registration: data,
     createRegistrationData,
     updateRegistrationData,
-    uploadBuktiPrestasi,
+    mutate,
     ...rest
   }
 }
 
-export function useProof() {
-  const user = useUser()
+export function useProof(registration_id) {
   const supabase = useSupabaseClient()
-
-  const {data, mutate, ...rest} = useSWR(user && `/proofs/${user?.id}`, async () => {
-  const {data} = await supabase
+  const [isUploading, setIsUploading] = useState(false)
+  
+  const {data, mutate, ...rest} = useSWR(registration_id && `/proofs/${registration_id}`, async () => {
+    const {data} = await supabase
+      .storage
       .from("proofs")
-      .select()
-      .eq("user_id", user?.id)
+      .list('prestasi', {
+        limit: 10,
+        search: `${registration_id}`
+      })
 
     return data
   })
 
+  async function uploadBukti(file, type) {
+    setIsUploading(true)
+    const fileNameSplit = file?.name?.split('.')
+    const fileExtension = fileNameSplit[fileNameSplit.length-1]
+    const path = `${type}/${registration_id}.${fileExtension}`
+
+    const response = await supabase
+      .storage
+      .from('proofs')
+      .upload(path, file, {
+        cacheControl: '3600',
+        upsert: true
+      })
+
+    const updatedData = {
+      [`bukti_${type}`]: path,
+      'progress_status': type === 'pembayaran' ? 'pembayaran' : 'data'
+    }
+    
+    await supabase.from('registrations')
+      .update(updatedData)
+      .eq('id', registration_id)
+
+    setIsUploading(false)
+
+    return response
+  }
+
+  async function deleteBukti(type) {
+    const updatedData = {[`bukti_${type}`]: ''}
+
+    return await supabase.from('registrations')
+      .update(updatedData)
+      .eq('id', registration_id)
+  }
+
   return {
-    proofs: data
+    proofs: data,
+    uploadBukti,
+    deleteBukti,
+    isUploading,
+    ...rest
   }
 }
 
