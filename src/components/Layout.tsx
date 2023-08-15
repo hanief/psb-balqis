@@ -55,9 +55,9 @@ export default function Layout({children}) {
       <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
           <div className="container d-flex flex-wrap align-items-center">
-            <span className='me-2'>CS:</span>
-            <Link className='btn btn-link no-underline text-light btn-sm me-2' href="https://wa.me/+6287871956868"><i className='bi-whatsapp me-1'></i>087871956868</Link>
-            <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844"><i className='bi-whatsapp me-1'></i>081228594844</Link>
+            <span className=''><i className='bi-whatsapp'></i></span>
+            <Link className='btn btn-link no-underline text-light btn-sm me-1' href="https://wa.me/+6287871956868">087871956868</Link>/
+            <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
           </div>
         </header>
         <nav className="py-3 mb-4 border-bottom">
