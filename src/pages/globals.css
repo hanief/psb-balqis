@@ -89,3 +89,7 @@
 .bd-mode-toggle {
   z-index: 1500;
 }
+
+.no-underline {
+  text-decoration: none !important;
+}

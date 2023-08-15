@@ -54,10 +54,10 @@ export default function Layout({children}) {
     <>
       <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
-          <div className="container d-flex flex-wrap">
-            <span>
-              <i className='bi bi-whatsapp'></i> : <Link className='text-light' href="https://wa.me/+6287871956868">0878-7195-6868</Link> / <Link className='text-light' href="https://wa.me/+6281228594844">0812-2859-4844</Link>
-            </span>
+          <div className="container d-flex flex-wrap align-items-center">
+            <span className='me-2'>CS:</span>
+            <Link className='btn btn-outline-light text-light btn-sm me-2' href="https://wa.me/+6287871956868"><i className='bi-whatsapp me-1'></i>087871956868</Link>
+            <Link className='btn btn-outline-light text-light btn-sm' href="https://wa.me/+6281228594844"><i className='bi-whatsapp me-1'></i>081228594844</Link>
           </div>
         </header>
         <nav className="py-3 mb-4 border-bottom">
@@ -103,18 +103,18 @@ export default function Layout({children}) {
             <Col md="6" lg="4">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>CS1: 0878-7195-6868</Link></li>
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://wa.me/+6281228594844"><i className='bi bi-whatsapp me-1'></i>CS2: 0812-2859-4844</Link></li>
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://balqisjogja.com"><i className='bi bi-box-arrow-up-right me-1'></i>https://balqisjogja.com</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>CS1: 087871956868</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://wa.me/+6281228594844"><i className='bi bi-whatsapp me-1'></i>CS2: 081228594844</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://balqisjogja.com"><i className='bi bi-box-arrow-up-right me-1'></i>https://balqisjogja.com</Link></li>
               </ul>
             </Col>
             <Col md="6" lg="4">
               <h5>Media Sosial</h5>
               <ul className="list-unstyled text-small">
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.tiktok.com/@balqisjogja"><i className='bi bi-tiktok me-1'></i>Tiktok</Link></li>
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.youtube.com/channel/UCNdy_xWCmuEy7uSRkKd2dsg"><i className='bi bi-youtube me-1'></i>Youtube</Link></li>
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.instagram.com/balqisjogja"><i className='bi bi-instagram me-1'></i>Instagram</Link></li>
-                <li><Link className='link-secondary link-underline-opacity-25' href="https://www.facebook.com/baitulquranyogyakarta"><i className='bi bi-facebook me-1'></i>Facebook</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://www.tiktok.com/@balqisjogja"><i className='bi bi-tiktok me-1'></i>Tiktok</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://www.youtube.com/channel/UCNdy_xWCmuEy7uSRkKd2dsg"><i className='bi bi-youtube me-1'></i>Youtube</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://www.instagram.com/balqisjogja"><i className='bi bi-instagram me-1'></i>Instagram</Link></li>
+                <li><Link className='link-secondary link-underline-opacity-0' href="https://www.facebook.com/baitulquranyogyakarta"><i className='bi bi-facebook me-1'></i>Facebook</Link></li>
               </ul>
             </Col>
           </Row>

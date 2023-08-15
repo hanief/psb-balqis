@@ -28,11 +28,7 @@ export function useRegistration() {
       .eq("user_id", user?.id)
       .limit(1)
 
-    if (data?.length === 0) {
-      await createRegistrationData({'user_id': user?.id})
-    }
-
-    return data[0]
+    return data?.length > 0 ? data[0] : []
   })
 
   async function createRegistrationData(newData) {

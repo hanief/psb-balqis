@@ -36,10 +36,15 @@ interface Wilayah {
 const provinces: Wilayah[] = data as Wilayah[]
 
 const jalurPendaftaranOptions = [
-  { value: 'reguler', label: 'Jalur Mandiri' },
+  { value: 'reguler', label: 'Jalur Reguler' },
   { value: 'prestasi', label: 'Jalur Beasiswa - Prestasi' },
-  { value: 'khusus', label: 'Jalur Beasiswa - Khusus' },
+  { value: 'khusus', label: 'Jalur Beasiswa - Afirmasi' },
   { value: 'alumni', label: 'Jalur Beasiswa - Alumni' },
+]
+
+const jenjangOptions = [
+  { value: 'smp', label: "SMP IT Baitul Qur'an Yogyakarta" },
+  { value: 'sma', label: "SMA IT Baitul Qur'an Yogyakarta" },
 ]
 
 const jenisKelaminOptions = [
@@ -49,8 +54,8 @@ const jenisKelaminOptions = [
 
 const jalurBeasiswaPrestasiOptions = [
   { value: 'tiga besar', label: 'Peringkat 3 besar kelas' },
-  { value: 'hafidz 15 juz', label: 'Hafidz 15 Juz (SMP)' },
-  { value: 'hafidz 30 juz', label: 'Hafidz 30 Juz (SMA)' },
+  { value: 'hafidz 15 juz', label: 'Hafidz 15 Juz (Pendaftar SMP)' },
+  { value: 'hafidz 30 juz', label: 'Hafidz 30 Juz (Pendaftar SMA)' },
   { value: 'tiga besar lomba', label: 'Juara 3 besar Lomba MTQ/OSN/Olimpiade semua cabang' },
 ]
 
@@ -62,26 +67,7 @@ const jalurBeasiswaKhususOptions = [
 export default function Data({onSuccess}) {
   const user = useUser()
   const {registration: remoteRegistration, isLoading, updateRegistrationData, uploadBuktiPrestasi} = useRegistration()
-  // const {accomplishments: remoteAccomplishments, updateAccomplishments} = useAccomplishments()
   const [registration, setRegistration] = useState(null)
-  // const [accomplishments, setAccomplishments] = useState([
-  //   {
-  //     id: '',
-  //     registration_id: remoteRegistration?.id,
-  //     user_id: 0,
-  //     nama: '',
-  //     tingkat: '',
-  //     tahun: '',
-  //   }
-  // ])
-  // const [bukti, setBukti] = useState([
-  //   {
-  //     id: '',
-  //     registration_id: '',
-  //     filename: '',
-  //     accomplisment_id: ''
-  //   }
-  // ])
 
   const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
   const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
@@ -89,9 +75,6 @@ export default function Data({onSuccess}) {
 
   const saveRegistrationData = useCallback(updateRegistrationData, [])
   const handleUpdateRegistration = useMemo(() => debounce(saveRegistrationData, 1000), [saveRegistrationData])
-
-  // const saveAccomplishmentData = useCallback(updateAccomplishments, [])
-  // const handleUpdateAccomplishments = useMemo(() => debounce(saveAccomplishmentData, 1000), [saveAccomplishmentData])
 
   useEffect(() => {
     if (isLoading) return
@@ -118,14 +101,6 @@ export default function Data({onSuccess}) {
     handleUpdateRegistration(updatedData)
   }
 
-  // function handleAccomplishmentFieldChange(accomplishment, key, value) {
-  //   const updatedData = {[key]: value, registration_id: remoteRegistration?.id, user_id: user?.id}
-  //   const updatedAccomplishment = {...accomplishment, ...updatedData}
-  //   const updatedAccomplishments = [updatedAccomplishment]
-  //   setAccomplishments(updatedAccomplishments)
-  //   handleUpdateAccomplishments(updatedAccomplishments, remoteRegistration)
-  // }
-
   return (
     <Col>
       <Row className='row-cols-1 row-cols-md-2 g-4'>
@@ -134,7 +109,20 @@ export default function Data({onSuccess}) {
             <CardBody>
               <CardTitle tag="h5" className='mb-4'>Jalur Pendaftaran</CardTitle>
               <FormGroup>
-                <Label for='jalur_pendaftaran'>Tipe Pendaftaran</Label>
+                <Label for='jenjang'>Jenjang Sekolah</Label>
+                <Select
+                  options={jenjangOptions}
+                  placeholder='Pilih Jenjang Sekolah'
+                  required={true}
+                  id="jenjang"
+                  isSearchable={false}
+                  name="jenjang"
+                  value={jenjangOptions.find(o => o.value === registration?.jenjang)}
+                  onChange={option => handleRegistrationFieldChange('jenjang', option.value)}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for='jalur_pendaftaran'>Jenis Pendaftaran</Label>
                 <Select
                   options={jalurPendaftaranOptions}
                   placeholder='Pilih Jalur Pendaftaran'
@@ -149,7 +137,7 @@ export default function Data({onSuccess}) {
               {registration?.jalur_pendaftaran === 'prestasi' && (
                 <>
                   <FormGroup>
-                    <Label for='jalur_beasiswa_prestasi'>Tipe Prestasi</Label>
+                    <Label for='jalur_beasiswa_prestasi'>Jenis Prestasi</Label>
                     <Select
                       options={jalurBeasiswaPrestasiOptions}
                       placeholder='Pilih Jalur Beasiswa Prestasi'
@@ -172,7 +160,7 @@ export default function Data({onSuccess}) {
                       className='mb-1'
                       type="text"
                       id="tingkat_prestasi"
-                      placeholder="Tingkat (cth: Provinsi, Nasional)"
+                      placeholder="Tingkat (cth: Kabupaten, Provinsi, Nasional)"
                       value={registration?.tingkat_prestasi}    
                       onChange={event => handleRegistrationFieldChange('tingkat_prestasi', event.target.value)}
                     />
@@ -228,7 +216,7 @@ export default function Data({onSuccess}) {
                   <Input
                     type="text"
                     id="nama_lengkap"
-                    placeholder="cth: Fulan bin Fulan"
+                    placeholder="cth: Ahmad Fulan"
                     required={true}
                     value={registration?.nama_lengkap}
                     onChange={event => handleRegistrationFieldChange('nama_lengkap', event.target.value)}

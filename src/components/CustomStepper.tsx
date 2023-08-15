@@ -13,12 +13,12 @@ const CustomStepper = ({activeStep, steps, setActiveStep}) => {
       }
     }}
     styleConfig={{
-      activeBgColor: '#7cac33',
+      activeBgColor: '#e44600',
       activeTextColor: '#fff',
       completedBgColor: '#2a833b',
       completedTextColor: '#fff',
       inactiveBgColor: '#f0f0f0',
-      inactiveTextColor: '#2a833b',
+      inactiveTextColor: '#000',
       size: '2em',
       circleFontSize: '1rem',
       labelFontSize: '0.875rem',

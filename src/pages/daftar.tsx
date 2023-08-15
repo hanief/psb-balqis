@@ -2,8 +2,8 @@ import Login from '@/components/Login'
 import Data from '@/components/Data'
 import Bayar from '@/components/Bayar'
 import dynamic from 'next/dynamic'
-import { use, useEffect, useState } from 'react'
-import { Col, Container, Row } from 'reactstrap'
+import { use, useEffect, useMemo, useState } from 'react'
+import { Button, Card, Col, Container, Row } from 'reactstrap'
 import Kartu from '@/components/Kartu'
 import Tes from '@/components/Tes'
 import Pengumuman from '@/components/Pengumuman'
@@ -21,44 +21,47 @@ export default function DaftarPage() {
 
   const supabaseClient = useSupabaseClient()
   const user = useUser()
-
-  const [steps, setSteps] = useState([
+  const [activeStep, setActiveStep] = useState(0)
+  const progressStatus = [
+    'data',
+    'pembayaran',
+    'tes',
+    'pengumuman'
+  ]
+  const steps = useMemo(() => [
     {
       label: 'Isi Data',
       active: true,
-      completed: false,
+      completed: activeStep > 0,
     },
     {
       label: 'Pembayaran',
       active: false,
-      completed: false,
+      completed: activeStep > 1,
     },
     {
       label: 'Tes Masuk',
       active: false,
-      completed: false,
+      completed: activeStep > 2,
     },
     {
       label: 'Pengumuman',
       active: false,
-      completed: false,
+      completed: activeStep > 3,
     },
-  ])
-  const [activeStep, setActiveStep] = useState(0)
-  
+  ], [activeStep])
+
   useEffect(() => {
-    if (registration) {
-      if (registration.progress_status === 'data') {
-        setActiveStep(0)
-      } else if (registration.progress_status === 'pembayaran') {
-        setActiveStep(1)
-      } else if (registration.progress_status === 'tes') {
-        setActiveStep(2)
-      } else if (registration.progress_status === 'pengumuman') {
-        setActiveStep(3)
-      } 
+    if (registration && activeStep === 0) {
+      setActiveStep(getProgressIndex())
     }
   }, [registration])
+
+  function getProgressIndex() {
+    if (!registration) return 0
+
+    return progressStatus.findIndex(progress => progress === registration?.progress_status)
+  }
 
   if (!user) {
     return (
@@ -85,6 +88,22 @@ export default function DaftarPage() {
       <Row>
         <Col>
           <StepperComponent activeStep={activeStep} setActiveStep={setActiveStep} steps={steps}/>
+        </Col>
+      </Row>
+      <Row>
+        <Col className='d-flex justify-content-between my-2'>
+          {activeStep > 0 && (
+            <Button color="success" onClick={() => setActiveStep(activeStep - 1)}>
+              <i className='bi bi-arrow-left me-2'></i>Kembali
+            </Button>
+          )}
+          <h2 className=''>{steps[activeStep]?.label}</h2>
+          <Button
+            color={activeStep > getProgressIndex() ? "secondary" : "success"}
+            disabled={activeStep > getProgressIndex()}
+            onClick={() => setActiveStep(activeStep + 1)}>
+            {activeStep === 0 && 'Simpan & '}Lanjutkan<i className='bi bi-arrow-right ms-2'></i>
+          </Button>
         </Col>
       </Row>
       <Row className='justify-content-center mb-6'>

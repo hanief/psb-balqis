@@ -8,7 +8,9 @@ export default function Brosur() {
           <i className="bi bi-download me-1"></i>Download Brosur
         </Link>
       </div>
-      <embed src="brosur_psb_2024.pdf" width="100%" height="1200px" />
+      <object data="brosur_psb_2024.pdf" type="application/pdf" width="100%" height="600px">
+        <embed src="brosur_psb_2024.pdf" width="100%" height="600px"/> 
+      </object>
     </div>
   )
 }
