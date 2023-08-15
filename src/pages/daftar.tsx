@@ -22,30 +22,29 @@ export default function DaftarPage() {
   const supabaseClient = useSupabaseClient()
   const user = useUser()
   const [activeStep, setActiveStep] = useState(0)
-  const progressStatus = [
-    'data',
-    'pembayaran',
-    'tes',
-    'pengumuman'
-  ]
+
   const steps = useMemo(() => [
     {
       label: 'Isi Data',
+      slug: 'data',
       active: true,
       completed: activeStep > 0,
     },
     {
       label: 'Pembayaran',
+      slug: 'pembayaran',
       active: false,
       completed: activeStep > 1,
     },
     {
       label: 'Tes Masuk',
+      slug: 'tes',
       active: false,
       completed: activeStep > 2,
     },
     {
       label: 'Pengumuman',
+      slug: 'pengumuman',
       active: false,
       completed: activeStep > 3,
     },
@@ -59,7 +58,7 @@ export default function DaftarPage() {
 
   function getProgressIndex() {
     if (!registration) return 0
-    const index = progressStatus.findIndex(progress => progress === registration?.progress_status)
+    const index = steps.findIndex(step => step.slug === registration?.progress_status)
 
     return index < 0 ? 0 : index
   }
@@ -110,7 +109,7 @@ export default function DaftarPage() {
           <Button
             className="d-flex align-items-center"
             color={activeStep > getProgressIndex() ? "secondary" : "success"}
-            disabled={activeStep > getProgressIndex()}
+            disabled={activeStep > getProgressIndex() }
             onClick={() => setActiveStep(activeStep + 1)}>
             <span className='d-none d-md-block me-1'>{activeStep === 0 && 'Simpan & '}Lanjutkan</span><i className='bi bi-arrow-right'></i>
           </Button>

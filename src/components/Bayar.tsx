@@ -2,8 +2,7 @@ import { useProof, useRegistration } from "@/model/registration";
 import { Button, Card, CardBody, FormGroup, Input, Label, Spinner } from "reactstrap";
 
 export default function Bayar({onSuccess}) {
-  const {registration, mutate: mutateRegistration, updateRegistrationData} = useRegistration()
-  const {isUploading, uploadBukti, deleteBukti} = useProof(registration?.id)
+  const {registration, isUploading, uploadBukti, deleteBukti} = useRegistration()
   
   return (
     <>
@@ -17,9 +16,6 @@ export default function Bayar({onSuccess}) {
               <Button
                 color="danger" 
                 onClick={() => {
-                  const updatedBukti = {bukti_pembayaran: ''}
-                  const newRegistration = {...registration, ...updatedBukti}
-                  mutateRegistration(newRegistration)
                   deleteBukti('pembayaran')
                 }}>
                   Hapus bukti pembayaran
@@ -63,13 +59,6 @@ export default function Bayar({onSuccess}) {
                       const file = event.target.files[0]
                       const type = 'pembayaran'
                       uploadBukti(file, type)
-                      const fileNameSplit = file?.name?.split('.')
-                      const fileExtension = fileNameSplit[fileNameSplit.length-1]
-                      const path = `${type}/${registration?.id}.${fileExtension}`
-
-                      const updatedBukti = {bukti_pembayaran: ''}
-                      const newRegistration = {...registration, ...updatedBukti}
-                      mutateRegistration(newRegistration)
                     }}
                   />
                 </FormGroup>

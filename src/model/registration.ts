@@ -22,6 +22,8 @@ export function useRegistration() {
   const user = useUser()
   const supabase = useSupabaseClient()
 
+  const [isUploading, setIsUploading] = useState(false)
+
   const {data, mutate, ...rest} = useSWR(user && `/registrations/${user?.id}`, async () => {
     const {data} = await supabase
       .from("registrations")
@@ -29,7 +31,7 @@ export function useRegistration() {
       .eq("user_id", user?.id)
       .limit(1)
     
-    return data?.length > 0 ? data[0] : []
+    return data?.length > 0 ? data[0] : null
   })
 
   async function createRegistrationData(newData) {
@@ -61,11 +63,70 @@ export function useRegistration() {
     })
   }
 
+  async function uploadBukti(file, type) {
+    setIsUploading(true)
+
+    const fileNameSplit = file?.name?.split('.')
+    const fileExtension = fileNameSplit[fileNameSplit.length-1]
+    const path = `${type}/${data?.id}.${fileExtension}`
+
+    const updatedData = {
+      [`bukti_${type}`]: path
+    }
+
+    const updatedReg = {
+      ...data,
+      ...updatedData
+    }
+
+    const response = mutate(async () => {
+      await supabase
+        .storage
+        .from('proofs')
+        .upload(path, file, {
+          cacheControl: '3600',
+          upsert: true
+        })
+      
+      await supabase.from('registrations')
+        .update(updatedData)
+        .eq('id', data?.id)
+
+      return updatedReg
+    }, {
+      optimisticData: updatedReg
+    })
+
+    setIsUploading(false)
+
+    return response
+  }
+
+  async function deleteBukti(type) {
+    const updatedData = {[`bukti_${type}`]: ''}
+    const updatedReg = {
+      ...data,
+      ...updatedData
+    }
+
+    return mutate(async () => {
+      await supabase.from('registrations')
+        .update(updatedData)
+        .eq('id', data?.id)
+
+      return updatedReg
+    }, {
+      optimisticData: updatedReg
+    })
+  }
+
   return {
     registration: data,
     createRegistrationData,
     updateRegistrationData,
-    mutate,
+    isUploading,
+    uploadBukti,
+    deleteBukti,
     ...rest
   }
 }
@@ -86,46 +147,8 @@ export function useProof(registration_id) {
     return data
   })
 
-  async function uploadBukti(file, type) {
-    setIsUploading(true)
-    const fileNameSplit = file?.name?.split('.')
-    const fileExtension = fileNameSplit[fileNameSplit.length-1]
-    const path = `${type}/${registration_id}.${fileExtension}`
-
-    const response = await supabase
-      .storage
-      .from('proofs')
-      .upload(path, file, {
-        cacheControl: '3600',
-        upsert: true
-      })
-
-    const updatedData = {
-      [`bukti_${type}`]: path,
-      'progress_status': type === 'pembayaran' ? 'pembayaran' : 'data'
-    }
-    
-    await supabase.from('registrations')
-      .update(updatedData)
-      .eq('id', registration_id)
-
-    setIsUploading(false)
-
-    return response
-  }
-
-  async function deleteBukti(type) {
-    const updatedData = {[`bukti_${type}`]: ''}
-
-    return await supabase.from('registrations')
-      .update(updatedData)
-      .eq('id', registration_id)
-  }
-
   return {
     proofs: data,
-    uploadBukti,
-    deleteBukti,
     isUploading,
     ...rest
   }

@@ -1,7 +1,7 @@
 import Select from 'react-select'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import data from '@/data/wilayah.json'
-import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, InputGroup, Label, Row, Spinner } from 'reactstrap'
 import { useRegistration, useAccomplishments, useProof } from '@/model/registration'
 import { debounce } from 'lodash'
 import { getRandomInteger } from '@/utils'
@@ -66,8 +66,7 @@ const jalurBeasiswaKhususOptions = [
   
 export default function Data({onSuccess}) {
   const user = useUser()
-  const {registration: remoteRegistration, mutate: mutateRegistration, isLoading, updateRegistrationData} = useRegistration()
-  const {proofs, uploadBukti, deleteBukti, isUploading} = useProof(remoteRegistration?.id)
+  const {registration: remoteRegistration, uploadBukti, deleteBukti, isUploading, isLoading, updateRegistrationData} = useRegistration()
   const [registration, setRegistration] = useState({
     jenjang: '',
     jalur_pendaftaran: '',
@@ -205,20 +204,19 @@ export default function Data({onSuccess}) {
                     />
                   </FormGroup>
                   {registration?.bukti_prestasi ? (
-                    <div className='d-flex justify-content-between'>
-                      <p>{registration?.bukti_prestasi}</p>
-                      <Button
-                        color="danger" 
-                        onClick={() => {
-                          const updatedBukti = {bukti_prestasi: ''}
-                          const newRegistration = {...remoteRegistration, ...updatedBukti}
-                          mutateRegistration(newRegistration)
-                          setRegistration({...registration, ...updatedBukti})
-                          deleteBukti('prestasi')
-                        }}>
-                          Hapus berkas bukti
-                      </Button>
-                    </div>
+                    <FormGroup>
+                      <Label for="bukti_prestasi">Bukti Prestasi</Label>
+                      <InputGroup>
+                        <Input type="text" disabled value={registration?.bukti_prestasi}></Input>
+                        <Button
+                          color="danger" 
+                          onClick={() => {
+                            deleteBukti('prestasi')
+                          }}>
+                            Hapus
+                        </Button>
+                      </InputGroup>
+                    </FormGroup>
                   ) : (
                     <>
                     {isUploading ? (
@@ -240,13 +238,6 @@ export default function Data({onSuccess}) {
                           onChange={event => {
                             const file = event.target.files[0]
                             const type = 'prestasi'
-                            const fileNameSplit = file?.name?.split('.')
-                            const fileExtension = fileNameSplit[fileNameSplit.length-1]
-                            const path = `${type}/${remoteRegistration?.id}.${fileExtension}`
-
-                            const updatedBukti = {bukti_prestasi: ''}
-                            const newRegistration = {...remoteRegistration, ...updatedBukti}
-                            mutateRegistration(newRegistration)
 
                             uploadBukti(file, type)
                           }}
@@ -270,38 +261,42 @@ export default function Data({onSuccess}) {
                     />
                   </FormGroup>
                   
-                  {registration?.bukti_dhuafa || registration?.bukti_yatim ? (
-                    <div className='d-flex justify-content-between'>
-                      <p>{registration?.jalur_beasiswa_khusus === 'dhuafa' ? registration?.bukti_dhuafa : registration?.bukti_yatim}</p>
-                      <Button color="danger" onClick={() => console.log('hapus berkas')}>Hapus berkas bukti</Button>
-                    </div>
+                  {(registration?.jalur_beasiswa_khusus === 'dhuafa' && registration?.bukti_dhuafa) || (registration?.jalur_beasiswa_khusus === 'yatim' && registration?.bukti_yatim) ? (
+                    <FormGroup>
+                      <Label for="bukti_prestasi">Berkas Bukti</Label>
+                      <InputGroup>
+                        <Input type="text" disabled value={registration?.jalur_beasiswa_khusus === 'dhuafa' ? registration?.bukti_dhuafa : registration?.bukti_yatim}></Input>
+                        <Button
+                          color="danger" 
+                          onClick={() => {
+                            deleteBukti(registration?.jalur_beasiswa_khusus)
+                          }}>
+                            Hapus
+                        </Button>
+                      </InputGroup>
+                    </FormGroup>
                   ) : (
                     <FormGroup>
-                      {registration?.jalur_beasiswa_khusus === 'dhuafa' ? (
+                      {registration?.jalur_beasiswa_khusus === 'dhuafa' && (
                         <Label for="bukti_prestasi">Upload Bukti Prestasi (Sertifikat, Ijazah, dll)</Label>
-                      ) : (
+                      )}
+                      {registration?.jalur_beasiswa_khusus === 'yatim' && (
                         <Label for="bukti_prestasi">Upload SK Yatim Piatu dari sekolah</Label>
-                      )}                   
-                      <Input 
-                        className='mb-1'
-                        type="file"
-                        id="bukti_prestasi"
-                        placeholder="Bukti Prestasi"
-                        accept="image/*,.pdf"
-                        onChange={event => {
-                          const file = event.target.files[0]
-                          const type = registration?.jalur_beasiswa_khusus
-                          const fileNameSplit = file?.name?.split('.')
-                          const fileExtension = fileNameSplit[fileNameSplit.length-1]
-                          const path = `${type}/${remoteRegistration?.id}.${fileExtension}`
-
-                          const updatedBukti = {[`bukti_${registration?.jalur_beasiswa_khusus}`]: ''}
-                          const newRegistration = {...remoteRegistration, ...updatedBukti}
-                          mutateRegistration(newRegistration)
-
-                          uploadBukti(file, type)
-                        }}
-                      />
+                      )}
+                      {registration?.jalur_beasiswa_khusus && (
+                        <Input 
+                          className='mb-1'
+                          type="file"
+                          id="bukti_prestasi"
+                          placeholder="Bukti Prestasi"
+                          accept="image/*,.pdf"
+                          onChange={event => {
+                            const file = event.target.files[0]
+                            const type = registration?.jalur_beasiswa_khusus
+                            uploadBukti(file, type)
+                          }}
+                        />
+                      )}
                     </FormGroup>
                   )}
                 </>
