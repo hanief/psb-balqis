@@ -2,6 +2,7 @@ import DataTable from "react-data-table-component"
 import { useRegistrations } from "@/model/registration"
 import { Button, Card, CardBody, Col, Input, InputGroup, Row } from "reactstrap";
 import { useState } from "react";
+import Head from "next/head";
 
 export default function Dashboard() {
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -14,12 +15,14 @@ export default function Dashboard() {
     name: 'No',
     selector: (row, index) => index + 1,
     sortable: false,
+    width: '50px',
   },
   {
     id: 'nama_lengkap',
     name: 'Nama',
     selector: row => row.nama_lengkap,
     sortable: true,
+    minWidth: '200px',
   },
   {
     id: 'tanggal_lahir',
@@ -82,6 +85,9 @@ const customStyles = {
 
   return (
     <div className="container">
+      <Head>
+        <title>Dashboard PSB Balqis</title>
+      </Head>
       <Row>
         <Col>
         </Col>
