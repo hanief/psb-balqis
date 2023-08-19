@@ -57,7 +57,7 @@ export default function Dashboard() {
     cell: row => {
       if (!row.bukti_pembayaran) return '-'
       return (
-        <Button color="primary" onClick={() => downloadFile(row.bukti_pembayaran)}>
+        <Button color="primary" onClick={() => downloadFile(row.nama_lengkap, row.bukti_pembayaran)}>
           <i className="bi-download me-1"></i>Download
         </Button>
       )
