@@ -24,9 +24,23 @@ export function useRegistrations({keyword}) {
     return data
   }
 
+  async function downloadFile(fileName) {
+    const { data, error } = await supabase
+      .storage
+      .from('proofs')
+      .download(fileName)
+
+      var blob=new Blob([data]);
+      var link=document.createElement('a');
+      link.href=window.URL.createObjectURL(blob);
+      link.download=fileName;
+      link.click()
+  }
+
   return {
     registrations: data,
     getAsCSV,
+    downloadFile,
     ...rest
   }
 }

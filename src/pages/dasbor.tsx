@@ -3,7 +3,12 @@ import { useRegistrations } from "@/model/registration"
 import { Button, Card, CardBody, Col, Input, InputGroup, Row } from "reactstrap";
 import { useState } from "react";
 
-const columns = [
+export default function Dashboard() {
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [keyword, setKeyword] = useState('')
+  const { registrations, getAsCSV, downloadFile } = useRegistrations({keyword})
+  
+  const columns = [
   {
     id: 'number',
     name: 'No',
@@ -46,6 +51,18 @@ const columns = [
     selector: row => row.nomor_hp_ibu,
     sortable: true,
   },
+  {
+    id: 'bukti_pembayaran',
+    name: 'Bukti Pembayaran',
+    cell: row => {
+      if (!row.bukti_pembayaran) return '-'
+      return (
+        <Button color="primary" onClick={() => downloadFile(row.bukti_pembayaran)}>
+          <i className="bi-download me-1"></i>Download
+        </Button>
+      )
+    }
+  },
 ];
 
 const customStyles = {
@@ -62,11 +79,7 @@ const customStyles = {
   },
 };
 
-export default function Dashboard() {
-  const [searchKeyword, setSearchKeyword] = useState('')
-  const [keyword, setKeyword] = useState('')
-  const { registrations, getAsCSV } = useRegistrations({keyword})
-  
+
   return (
     <div className="container">
       <Row>
