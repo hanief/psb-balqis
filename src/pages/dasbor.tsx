@@ -15,7 +15,7 @@ export default function Dashboard() {
     name: 'No',
     selector: (row, index) => index + 1,
     sortable: false,
-    width: '50px',
+    width: '60px',
   },
   {
     id: 'nama_lengkap',
@@ -23,6 +23,18 @@ export default function Dashboard() {
     selector: row => row.nama_lengkap,
     sortable: true,
     minWidth: '200px',
+  },
+  {
+    id: 'jalur_pendaftaran',
+    name: 'Jalur',
+    selector: row => row.jalur_pendaftaran,
+    sortable: true,
+  },
+  {
+    id: 'jenis_kelamin',
+    name: 'Jenis Kelamin',
+    selector: row => row.jenis_kelamin,
+    sortable: true,
   },
   {
     id: 'tanggal_lahir',
