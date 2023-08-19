@@ -1,45 +1,66 @@
 import DataTable from "react-data-table-component"
 import { useRegistrations } from "@/model/registration"
-import { Button, Col, Input, InputGroup, Row } from "reactstrap";
+import { Button, Card, CardBody, Col, Input, InputGroup, Row } from "reactstrap";
 import { useState } from "react";
 
 const columns = [
   {
+    id: 'number',
+    name: 'No',
+    selector: (row, index) => index + 1,
+    sortable: false,
+  },
+  {
+    id: 'nama_lengkap',
     name: 'Nama',
     selector: row => row.nama_lengkap,
     sortable: true,
   },
   {
-    name: 'Tempat Lahir',
-    selector: row => row.tempat_lahir,
-    sortable: true,
-  },
-  {
+    id: 'tanggal_lahir',
     name: 'Tanggal Lahir',
     selector: row => row.tanggal_lahir,
     sortable: true,
   },
   {
+    id: 'nama_ayah',
     name: 'Nama Ayah / Wali 1',
     selector: row => row.nama_ayah,
     sortable: true,
   },
   {
+    id: 'nomor_hp_ayah',
     name: 'HP Ayah / Wali 1',
     selector: row => row.nomor_hp_ayah,
     sortable: true,
   },
   {
+    id: 'nama_ibu',
     name: 'Nama Ibu / Wali 2',
     selector: row => row.nama_ibu,
     sortable: true,
   },
   {
+    id: 'nomor_hp_ibu',
     name: 'HP Ibu / Wali 2',
     selector: row => row.nomor_hp_ibu,
     sortable: true,
   },
 ];
+
+const customStyles = {
+  head: {
+    style: {
+      fontWeight: 'bold',
+      fontSize: '1em',
+    },
+  },
+  rows: {
+    style: {
+      fontSize: '1em'
+    },
+  },
+};
 
 export default function Dashboard() {
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -77,13 +98,21 @@ export default function Dashboard() {
           </div>
         </Col>
       </Row>
-      <Row>
+      <Row className="my-2">
         <Col>
-        <DataTable
-          theme="default"
-          columns={columns}
-          data={registrations}
-        />
+          <Card>
+            <CardBody>
+              <DataTable
+                theme="default"
+                columns={columns}
+                data={registrations}
+                customStyles={customStyles}
+                pagination
+                striped
+                highlightOnHover
+              />
+            </CardBody>
+          </Card>
         </Col>
       </Row>
       
