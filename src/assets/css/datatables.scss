@@ -1,0 +1,392 @@
+@import 'variables.scss';
+
+table.dataTable {
+  // table width & collapse border
+  width: 100% !important;
+  border-collapse: collapse !important;
+  &.table-responsive:not(.datatables-ajax) {
+    display: block; // For responsive data-table of BS5
+  }
+  td,
+  th {
+    padding: $table-cell-padding-y 1.5rem;
+    vertical-align: middle;
+  }
+//   // thead {
+//   //   // Sorting Icons Change
+//   //   .sorting,
+//   //   .sorting_asc,
+//   //   .sorting_desc {
+//   //     padding-right: inherit;
+//   //     &:before {
+//   //       background-image: url(str-replace(str-replace($chevron-up, 'currentColor', $table-head-color), '#', '%23'));
+//   //       background-repeat: no-repeat;
+//   //       background-position: center;
+//   //       background-size: 12px;
+//   //       color: $body-color;
+//   //       width: 14px;
+//   //       height: 14px;
+//   //       content: '';
+//   //       right: 0.3rem;
+//   //       top: 0.5rem;
+//   //     }
+//   //     &:after {
+//   //       background-image: url(str-replace(str-replace($chevron-down, 'currentColor', $table-head-color), '#', '%23'));
+//   //       background-repeat: no-repeat;
+//   //       background-position: center;
+//   //       background-size: 12px;
+//   //       color: $body-color;
+//   //       width: 14px;
+//   //       height: 14px;
+//   //       content: '';
+//   //       right: 0.3rem;
+//   //       top: 1.3rem;
+//   //     }
+//   //   }
+//   // }
+// }
+
+
+// Custom responsive style for BS5
+// Responsive table area '+' icon position
+table.dataTable.dtr-column > tbody > tr > td.control:before,
+table.dataTable.dtr-column > tbody > tr > th.control:before {
+  line-height: 0.8em;
+}
+
+// // To scroll within datatable area
+// @media screen and (max-width: 1399.98px) {
+//   table.dataTable.table-responsive {
+//     display: block;
+//   }
+// }
+
+// Modal table style
+.modal.dtr-bs-modal {
+  .modal-body {
+    padding: 0;
+  }
+  .table {
+    tr:last-child > td {
+      border-bottom: 0;
+    }
+  }
+}
+
+// // data table search, labels and
+// div.dataTables_wrapper {
+//   // data table search, labels
+//   div.dataTables_filter,
+//   div.dataTables_length {
+//     label {
+//       margin-top: 1rem;
+//       margin-bottom: 0.5rem;
+//     }
+//     // for datatable length select
+//     select {
+//       background-position: calc(100% - 3px) 11px, calc(100% - 20px) 13px, 100% 0;
+//       // padding: 0 0.8rem;
+//       width: 5rem;
+//       margin: 0 0.5rem;
+//     }
+//   }
+//   div.dataTables_filter input {
+//     margin-left: 0.75rem;
+//   }
+
+//   // pagination
+//   div.dataTables_paginate {
+//     ul.pagination {
+//       margin-top: 1rem;
+//       margin-bottom: 1.5rem;
+//     }
+//   }
+
+//   // info text color
+//   .dataTables_info {
+//     padding-top: 1.25rem !important;
+//     color: $text-muted;
+//   }
+// }
+
+// // row grouping
+// tr.group {
+//   // row grouping color
+//   background-color: $table-row-group-bg;
+// }
+
+// @media only screen and (max-width: 992px) {
+//   table.dataTable {
+//     &.table-responsive.datatables-ajax {
+//       display: block; // For responsive data-table of BS5
+//     }
+//   }
+// }
+// // pagination in center
+// @media only screen and (max-width: 768px) {
+//   div.dataTables_wrapper {
+//     div.dataTables_paginate {
+//       ul.pagination {
+//         justify-content: center;
+//       }
+//     }
+//   }
+
+//   div.dataTables_wrapper div.dataTables_info {
+//     white-space: inherit;
+//   }
+//   // small screen button spacing in bottom
+//   div.dt-buttons {
+//     justify-content: center;
+//     margin-top: 1rem;
+//     button {
+//       margin-bottom: 0.5rem;
+//     }
+//   }
+// }
+// // @include media-breakpoint-down(sm) {
+// //   .dtr-bs-modal {
+// //     .modal-body {
+// //       padding-left: 0;
+// //       padding-right: 0;
+// //       overflow-x: scroll;
+// //     }
+// //     .table.dtr-details {
+// //       margin: 0 auto 1rem;
+// //       td {
+// //         padding-left: 0;
+// //         padding-right: 0;
+// //       }
+// //       tr td:first-child {
+// //         padding-left: 0.75rem;
+// //       }
+// //     }
+// //   }
+// //   div.dataTables_wrapper {
+// //     overflow: scroll;
+// //   }
+}
+
+.react-dataTable {
+  border-radius: 0;
+  .rdt_TableHead {
+    .rdt_TableHeadRow {
+      background-color: $table-head-bg;
+      border-top: 1px solid;
+      border-color: $border-color;
+      min-height: 0;
+      height: 44px;
+
+      .rdt_TableCol {
+        padding: 0.72rem 1.5rem;
+        .rdt_TableCol_Sortable {
+          color: $body-color;
+          font-weight: bold;
+          font-size: 0.857rem;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          &:hover {
+            opacity: 1;
+          }
+          span {
+            margin-left: 0.35rem;
+          }
+        }
+        &:first-child {
+          .form-check {
+            transform: translateX(-10px);
+          }
+        }
+      }
+    }
+  }
+
+  .rdt_TableBody {
+    .rdt_TableRow {
+      color: $body-color;
+      .rdt_TableCell {
+        min-height: 55px;
+        padding: 0.72rem 1.5rem;
+
+        .column-action {
+          svg {
+            stroke: $body-color;
+          }
+
+          .dropdown-item:hover {
+            svg {
+              stroke: $primary;
+            }
+          }
+
+          .dropdown-item:active {
+            svg {
+              stroke: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .react-paginate {
+    &.separated-pagination {
+      .page-item:first-child .page-link,
+      .page-item:last-child .page-link {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &.roles-table {
+    .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol:first-child .form-check {
+      transform: translateX(0);
+    }
+    .rdt_TableBody .rdt_TableRow .rdt_TableCell:first-child .form-check {
+      transform: translateX(10px);
+    }
+  }
+
+  &.react-dataTable-selectable-rows {
+    .rdt_TableHead {
+      .rdt_TableHeadRow {
+        .rdt_TableCol:not(:first-child) {
+          padding-left: 0.2rem;
+        }
+      }
+    }
+  }
+}
+
+.permission-header {
+  @media (max-width: 740px) {
+    .add-permission {
+      margin-top: 1rem !important;
+    }
+  }
+}
+
+.rdt_Pagination {
+  select {
+    min-width: 30px;
+    &:focus,
+    &:active {
+      outline: 0;
+    }
+  }
+}
+
+.dataTable-filter {
+  max-width: 220px;
+}
+
+.dataTable-select {
+  width: 5rem;
+  &:not([multiple='multiple']) {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-position: calc(100% - 12px) 10px, calc(100% - 20px) 12px, 100% 0;
+    background-size: 10px 10px, 10px 10px;
+  }
+}
+
+// .dark-layout {
+//   .app-user-list {
+//     header {
+//       background-color: $theme-dark-card-bg;
+//     }
+//   }
+
+//   .react-dataTable {
+//     .hlidmt {
+//       background-color: $theme-dark-card-bg;
+//     }
+//     .khKjDK {
+//       background-color: $theme-dark-card-bg;
+//       color: $theme-dark-body-color;
+//     }
+
+//     .rdt_Table {
+//       background: $theme-dark-table-header-bg;
+//       color: $theme-dark-body-color;
+
+//       & > div:first-child:not(.rdt_TableHead):not(.rdt_TableBody) {
+//         color: $theme-dark-body-color;
+//         background-color: $theme-dark-card-bg;
+//       }
+//     }
+//     .rdt_TableHead {
+//       .rdt_TableHeadRow {
+//         background-color: $theme-dark-table-header-bg;
+//         border-color: $theme-dark-border-color;
+//         .rdt_TableCol {
+//           color: $theme-dark-body-color;
+//           div[role='button'] {
+//             color: $theme-dark-body-color;
+//           }
+//         }
+//         .rdt_TableCol_Sortable {
+//           color: $theme-dark-headings-color;
+
+//           svg {
+//             stroke: $theme-dark-headings-color;
+//           }
+//         }
+//       }
+//     }
+//     .rdt_TableBody {
+//       .expandable-content {
+//         background-color: $theme-dark-table-bg;
+//         color: $theme-dark-body-color;
+//       }
+//       .rdt_TableRow {
+//         background-color: $theme-dark-table-bg;
+//         color: $theme-dark-body-color;
+//         border-color: $theme-dark-border-color;
+//         .rdt_TableCell {
+//           color: $theme-dark-body-color;
+//           .column-action {
+//             svg {
+//               stroke: $theme-dark-body-color;
+//             }
+//           }
+//         }
+//         button {
+//           &:hover:not(:disabled) {
+//             background-color: $theme-dark-body-bg;
+//           }
+//           svg {
+//             color: $theme-dark-body-color;
+//           }
+//         }
+//         .permissions-actions {
+//           button:hover {
+//             background-color: transparent;
+//           }
+//         }
+//       }
+//     }
+//     .rdt_Pagination {
+//       color: $theme-dark-body-color;
+//       border-color: $theme-dark-border-color;
+//       background-color: $theme-dark-table-bg;
+
+//       svg {
+//         fill: $theme-dark-body-color;
+//       }
+//     }
+//   }
+
+//   .rdt_Pagination {
+//     color: $theme-dark-body-color;
+//     background-color: $theme-dark-card-bg;
+//     button {
+//       svg {
+//         fill: $theme-dark-body-color;
+//       }
+//       &[disabled] svg {
+//         fill: $theme-dark-text-muted-color;
+//       }
+//     }
+//   }
+// }

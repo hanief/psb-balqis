@@ -111,7 +111,7 @@ export default function DaftarPage() {
             color={activeStep > getProgressIndex() ? "secondary" : "success"}
             disabled={activeStep > getProgressIndex() }
             onClick={() => setActiveStep(activeStep + 1)}>
-            <span className='d-none d-md-block me-1'>{activeStep === 0 && 'Simpan & '}Lanjutkan</span><i className='bi bi-arrow-right'></i>
+            <span className='me-1'>{activeStep === 0 ? 'Kirim' : 'Lanjutkan'}</span><i className='bi bi-arrow-right'></i>
           </Button>
         </Col>
       </Row>

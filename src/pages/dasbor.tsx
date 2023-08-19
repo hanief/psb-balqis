@@ -1,6 +1,7 @@
 import DataTable from "react-data-table-component"
 import { useRegistrations } from "@/model/registration"
-import { Button, Input } from "reactstrap";
+import { Button, Col, Input, InputGroup, Row } from "reactstrap";
+import { useState } from "react";
 
 const columns = [
   {
@@ -14,96 +15,78 @@ const columns = [
     sortable: true,
   },
   {
-    name: 'Konfirmasi Pembayaran',
-    cell: row => {
-      return (
-        <Input type="checkbox"/>
-      )
-    }
+    name: 'Tanggal Lahir',
+    selector: row => row.tanggal_lahir,
+    sortable: true,
   },
   {
-    name: 'Nilai Tahsin',
-    cell: row => {
-      return (
-        <Input type="text"/>
-      )
-    }
+    name: 'Nama Ayah / Wali 1',
+    selector: row => row.nama_ayah,
+    sortable: true,
   },
   {
-    name: 'Nilai Akademik',
-    cell: row => {
-      return (
-        <Input type="text"/>
-      )
-    }
+    name: 'HP Ayah / Wali 1',
+    selector: row => row.nomor_hp_ayah,
+    sortable: true,
   },
   {
-    name: 'Nilai Pesantren',
-    cell: row => {
-      return (
-        <Input type="text"/>
-      )
-    }
+    name: 'Nama Ibu / Wali 2',
+    selector: row => row.nama_ibu,
+    sortable: true,
   },
   {
-    name: 'Status',
-    width: '200px',
-    cell: row => {
-      return (
-        <Input type="select">
-          <option value="pending">Pending</option>
-          <option value="accepted">Diterima</option>
-          <option value="rejected">Ditolak</option>
-        </Input>
-      )
-    }
-  },
-  {
-    name: 'Syarat penerimaan',
-    width: '200px',
-    cell: row => {
-      return (
-        <Input type="text"/>
-      )
-    }
-  },
-  {
-    name: 'Catatan Khusus',
-    width: '200px',
-    cell: row => {
-      return (
-        <Input type="text"/>
-      )
-    }
-  },
-  {
-    name: 'Action',
-    width: '300px',
-    cell: row => {
-      return (
-        <div className="d-flex gap-2">
-          <button className="btn btn-primary">Lihat</button>
-          <button className="btn btn-primary">Edit</button>
-          <button className="btn btn-danger">Hapus</button>
-        </div>
-      )
-    }
+    name: 'HP Ibu / Wali 2',
+    selector: row => row.nomor_hp_ibu,
+    sortable: true,
   },
 ];
 
 export default function Dashboard() {
-  const { registrations } = useRegistrations()
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [keyword, setKeyword] = useState('')
+  const { registrations, getAsCSV } = useRegistrations({keyword})
+  
   return (
     <div className="container">
-      <div className="d-flex justify-content-between align-items-center my-2">
-        <h3 className="w-25">Data Pendaftar</h3>
-        <Button color="primary" className="me-1 w-25">Download xlsx</Button>
-        <Input type="text" placeholder="Cari"/>
-      </div>
-      <DataTable
+      <Row>
+        <Col>
+        </Col>
+        <Col>
+          <div className="d-flex">
+            <Button
+              color="primary"
+              className="me-1 w-50"
+              onClick={() => getAsCSV()}
+            >
+              <i className="bi-download me-1"></i>Download
+            </Button>
+            <InputGroup>
+              <Input
+                type="text" 
+                placeholder="Cari Nama" 
+                value={searchKeyword} 
+                onChange={e => setSearchKeyword(e.target.value)}
+                onKeyUp={e => {
+                  if (e.key === 'Enter') {
+                    setKeyword(searchKeyword)
+                  }
+                }}
+              />
+              <Button color="primary" className="me-1" onClick={() => setKeyword(searchKeyword)}>Cari</Button>         
+            </InputGroup>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+        <DataTable
+          theme="default"
           columns={columns}
           data={registrations}
-      />
+        />
+        </Col>
+      </Row>
+      
     </div>
   )
 }

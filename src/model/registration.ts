@@ -2,18 +2,31 @@ import useSWR from "swr"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
 
-export function useRegistrations() {
+export function useRegistrations({keyword}) {
   const user = useUser()
   const supabase = useSupabaseClient()
 
-  const {data, ...rest} = useSWR(user && `/registrations`, async () => {
-    const {data} = await supabase.from("registrations").select().eq("user_id", user?.id)
+  const {data, ...rest} = useSWR(user && `/registrations/${keyword}`, async () => {
+    const {data} = await supabase.from("registrations").select().ilike("nama_lengkap", `%${keyword}%`)
 
     return data
   })
 
+  async function getAsCSV() {
+    const {data} = await supabase.from("registrations").select().csv()
+
+    var blob=new Blob([data]);
+    var link=document.createElement('a');
+    link.href=window.URL.createObjectURL(blob);
+    link.download="registrations.csv";
+    link.click()
+
+    return data
+  }
+
   return {
     registrations: data,
+    getAsCSV,
     ...rest
   }
 }
