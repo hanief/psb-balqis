@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button, Col, Container, Row } from 'reactstrap'
-import { useCountdown } from '@/hooks/useCountdown'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useProfile } from '@/model/profiles'
 import Head from 'next/head'
@@ -9,7 +8,6 @@ import Head from 'next/head'
 export default function Layout({children}) {
   const { user, profile } = useProfile()
   const supabaseClient = useSupabaseClient()
-  const [days, hours, minutes, seconds] = useCountdown(new Date('2023-08-15 15:00:00'))
   
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
@@ -20,26 +18,7 @@ export default function Layout({children}) {
         </Head>
         <div className="p-5 text-center bg-success-subtle rounded-3">
           <Image className='my-2' src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-          <h1 className="display-1 my-4">Segera hadir</h1>
-          {/* <p className="col-lg-8 mx-auto fs-5 text-muted">
-            Penerimaan santri baru akan dibuka dalam
-          </p>
-          <div id="countdown" className='my-2'>
-            <div className="d-flex justify-content-center gap-3">
-              <div className="countdown-item mx-4">
-                <h1>{days}</h1>
-                <div className="countdown-item__label">Hari</div>
-              </div>
-              <div className="countdown-item mx-4">
-                <h1>{hours}</h1>
-                <div className="countdown-item__label">Jam</div>
-              </div>
-              <div className="countdown-item mx-4">
-                <h1>{minutes}</h1>
-                <div className="countdown-item__label">Menit</div>
-              </div>
-            </div>
-          </div> */}
+          <h1 className="display-1 my-4">Maaf website PSB BALQIS sedang dalam perawatan.</h1>
           <div className="d-inline-flex gap-2 my-5">
             <Link href="https://balqisjogja.com" className="d-inline-flex align-items-center btn btn-primary btn-lg px-4" type="button">
               <i className="bi bi-box-arrow-up-right me-2"></i>Kembali ke website Balqis
@@ -70,11 +49,13 @@ export default function Layout({children}) {
                 <>
                   {profile?.is_admin && (
                     <li className="nav-item">
-                      <Link className="btn btn-outline-secondary me-2" href="/dasbor">Dasbor</Link>
+                      <Link className="btn btn-outline-success me-2" href="/dasbor">Dasbor</Link>
                     </li>
                   )}
                   <li className="nav-item">
-                    <Button color="success" onClick={() => supabaseClient.auth.signOut()}>Sign Out</Button>
+                    <Button color="outline-success" onClick={() => supabaseClient.auth.signOut()}>
+                      Sign Out
+                    </Button>
                   </li>
                 </>
               ) : (

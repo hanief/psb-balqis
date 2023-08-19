@@ -25,6 +25,12 @@ export default function Dashboard() {
     minWidth: '200px',
   },
   {
+    id: 'jenjang',
+    name: 'Jenjang',
+    selector: row => row.jenjang,
+    sortable: true,
+  },
+  {
     id: 'jalur_pendaftaran',
     name: 'Jalur',
     selector: row => row.jalur_pendaftaran,
@@ -102,31 +108,31 @@ const customStyles = {
       </Head>
       <Row>
         <Col>
+          <Button
+            color="primary"
+            className="me-1"
+            onClick={() => getAsCSV()}
+          >
+            <i className="bi-download me-1"></i>Download
+          </Button>
         </Col>
-        <Col>
-          <div className="d-flex">
-            <Button
-              color="primary"
-              className="me-1 w-50"
-              onClick={() => getAsCSV()}
-            >
-              <i className="bi-download me-1"></i>Download
-            </Button>
-            <InputGroup>
-              <Input
-                type="text" 
-                placeholder="Cari Nama" 
-                value={searchKeyword} 
-                onChange={e => setSearchKeyword(e.target.value)}
-                onKeyUp={e => {
-                  if (e.key === 'Enter') {
-                    setKeyword(searchKeyword)
-                  }
-                }}
-              />
-              <Button color="primary" className="me-1" onClick={() => setKeyword(searchKeyword)}>Cari</Button>         
-            </InputGroup>
-          </div>
+        <Col> 
+          <InputGroup>
+            <Input
+              type="text" 
+              placeholder="Cari Nama" 
+              value={searchKeyword} 
+              onChange={e => setSearchKeyword(e.target.value)}
+              onKeyUp={e => {
+                if (e.key === 'Enter') {
+                  setKeyword(searchKeyword)
+                }
+              }}
+            />
+            <Button color="primary" className="me-1" onClick={() => setKeyword(searchKeyword)}>
+              <i className="bi-search"></i>
+            </Button>         
+          </InputGroup>
         </Col>
       </Row>
       <Row className="my-2">
@@ -146,7 +152,6 @@ const customStyles = {
           </Card>
         </Col>
       </Row>
-      
     </div>
   )
 }
