@@ -42,7 +42,7 @@ export default function Login({ onSuccess }) {
 
   return user ? (
     <>
-      <p>Selamat datang, {user.email}</p>
+      <p>Selamat datang</p>
 
       <Button color='primary' className='me-1' onClick={() => supabaseClient.auth.signOut()}>
         Keluar
