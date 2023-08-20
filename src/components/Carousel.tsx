@@ -8,8 +8,6 @@ export default function CarouselComponent() {
       <Image className="bd-placeholder-img" src="/slide2.jpg" width={768} height={431} alt="Santri"></Image>
       <Image className="bd-placeholder-img" src="/slide3.jpg" width={768} height={431} alt="Santri"></Image>
       <Image className="bd-placeholder-img" src="/slide4.jpg" width={768} height={431} alt="Santri"></Image>
-      <Image className="bd-placeholder-img" src="/slide5.jpg" width={768} height={431} alt="Santri"></Image>
-      <Image className="bd-placeholder-img" src="/slide6.jpg" width={768} height={431} alt="Santri"></Image>
     </Carousel>
   )
 }
