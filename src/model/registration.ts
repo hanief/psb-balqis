@@ -3,12 +3,37 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
 import XLSX from 'xlsx'
 
-export function useRegistrations({keyword}) {
+export function useRegistrations({selectedColumn = 'nama_lengkap', keyword}) {
   const user = useUser()
   const supabase = useSupabaseClient()
+  const columns = [
+    'jenjang',
+    'jalur_pendaftaran',
+    'jalur_beasiswa',
+    'jalur_beasiswa_prestasi',
+    'nama_prestasi',
+    'tingkat_prestasi',
+    'tahun_prestasi',
+    'jalur_beasiswa_khusus',
+    'nama_lengkap',
+    'jenis_kelamin',
+    'tempat_lahir',
+    'tanggal_lahir',
+    'asal_sekolah',
+    'nama_ayah',
+    'nomor_hp_ayah',
+    'nama_ibu',
+    'nomor_hp_ibu',
+    'alamat',
+    'provinsi',
+    'kabupaten',
+    'kecamatan',
+    'desa',
+    'kodepos',
+  ]
 
-  const {data, ...rest} = useSWR(user && `/registrations/${keyword}`, async () => {
-    const {data} = await supabase.from("registrations").select().ilike("nama_lengkap", `%${keyword}%`)
+  const {data, ...rest} = useSWR(user && `/registrations/${selectedColumn}/${keyword}`, async () => {
+    const {data} = await supabase.from("registrations").select().ilike(selectedColumn, `%${keyword}%`)
 
     return data
   })
@@ -26,31 +51,6 @@ export function useRegistrations({keyword}) {
   }  
   
   async function getAsXLSX() {
-    const columns = [
-      'jenjang',
-      'jalur_pendaftaran',
-      'jalur_beasiswa',
-      'jalur_beasiswa_prestasi',
-      'nama_prestasi',
-      'tingkat_prestasi',
-      'tahun_prestasi',
-      'jalur_beasiswa_khusus',
-      'nama_lengkap',
-      'jenis_kelamin',
-      'tempat_lahir',
-      'tanggal_lahir',
-      'asal_sekolah',
-      'nama_ayah',
-      'nomor_hp_ayah',
-      'nama_ibu',
-      'nomor_hp_ibu',
-      'alamat',
-      'provinsi',
-      'kabupaten',
-      'kecamatan',
-      'desa',
-      'kodepos',
-    ]
     const {data} = await supabase.from("registrations").select(columns.join(',')).neq('nama_lengkap', null)
 
     console.log(data)
@@ -78,6 +78,7 @@ export function useRegistrations({keyword}) {
 
   return {
     registrations: data,
+    columns,
     getAsCSV,
     getAsXLSX,
     downloadFile,

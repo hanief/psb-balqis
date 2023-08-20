@@ -29,6 +29,25 @@ export default function Layout({children}) {
     )
   }
 
+  if (process.env.NEXT_PUBLIC_IS_ADMIN === 'true') {
+    return (
+        <main>
+          <Head>
+            <title>Admin PSB BALQIS Jogja</title>
+            <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
+          </Head>
+          <Container fluid>
+            <Row>
+              <Col>
+                Admin
+              </Col>
+            </Row>
+          </Container>
+      </main>
+
+    )
+  }
+
   return (
     <>
       <main className='pb-4'>
