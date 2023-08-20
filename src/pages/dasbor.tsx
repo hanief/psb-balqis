@@ -67,9 +67,9 @@ export default function Dashboard() {
       }
     },
     {
-      id: 'konfirmasi_pembayaran',
+      id: 'pembayaran_diterima',
       name: 'Konfirmasi Pembayaran',
-      cell: row => <Input type="checkbox" checked={row.bukti_pembayaran} disabled={!row.bukti_pembayaran}></Input>
+      cell: row => <Input type="checkbox" checked={row.pembayaran_diterima} disabled={!row.bukti_pembayaran}></Input>
     },
   ];  
 
