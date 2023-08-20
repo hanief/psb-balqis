@@ -47,7 +47,8 @@
     "styled-components": "^6.0.7",
     "swr": "^2.2.0",
     "typescript": "5.1.6",
-    "ulid": "^2.3.0"
+    "ulid": "^2.3.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.5",

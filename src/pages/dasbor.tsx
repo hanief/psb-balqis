@@ -7,7 +7,7 @@ import Head from "next/head";
 export default function Dashboard() {
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
-  const { registrations, getAsCSV, downloadFile } = useRegistrations({keyword})
+  const { registrations, getAsXLSX, downloadFile } = useRegistrations({keyword})
   
   const columns = [
   {
@@ -111,7 +111,7 @@ const customStyles = {
           <Button
             color="primary"
             className="me-1"
-            onClick={() => getAsCSV()}
+            onClick={() => getAsXLSX()}
           >
             <i className="bi-download me-1"></i>Download
           </Button>

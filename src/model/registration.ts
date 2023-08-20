@@ -1,6 +1,7 @@
 import useSWR from "swr"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
+import XLSX from 'xlsx'
 
 export function useRegistrations({keyword}) {
   const user = useUser()
@@ -22,6 +23,44 @@ export function useRegistrations({keyword}) {
     link.click()
 
     return data
+  }  
+  
+  async function getAsXLSX() {
+    const columns = [
+      'jenjang',
+      'jalur_pendaftaran',
+      'jalur_beasiswa',
+      'jalur_beasiswa_prestasi',
+      'nama_prestasi',
+      'tingkat_prestasi',
+      'tahun_prestasi',
+      'jalur_beasiswa_khusus',
+      'nama_lengkap',
+      'jenis_kelamin',
+      'tempat_lahir',
+      'tanggal_lahir',
+      'asal_sekolah',
+      'nama_ayah',
+      'nomor_hp_ayah',
+      'nama_ibu',
+      'nomor_hp_ibu',
+      'alamat',
+      'provinsi',
+      'kabupaten',
+      'kecamatan',
+      'desa',
+      'kodepos',
+    ]
+    const {data} = await supabase.from("registrations").select(columns.join(',')).neq('nama_lengkap', null)
+
+    console.log(data)
+
+    const worksheet = XLSX.utils.json_to_sheet(data)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations')
+    XLSX.writeFile(workbook, 'registrations.xlsx')
+
+    return data
   }
 
   async function downloadFile(nama, fileName) {
@@ -40,6 +79,7 @@ export function useRegistrations({keyword}) {
   return {
     registrations: data,
     getAsCSV,
+    getAsXLSX,
     downloadFile,
     ...rest
   }
