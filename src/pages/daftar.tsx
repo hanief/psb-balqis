@@ -121,7 +121,7 @@ export default function DaftarPage() {
         )}
         {activeStep === 1 && (
           <Col>
-            <Bayar onSuccess={() => setActiveStep(2)}/>
+            <Bayar/>
           </Col>
         )}
         {activeStep === 2 && (

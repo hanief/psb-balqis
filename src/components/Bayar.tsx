@@ -1,7 +1,9 @@
-import { useProof, useRegistration } from "@/model/registration";
+import { useRegistration } from "@/model/registration";
 import { Button, Card, CardBody, FormGroup, Input, Label, Spinner } from "reactstrap";
+import { useUser } from "@supabase/auth-helpers-react";
 
-export default function Bayar({onSuccess}) {
+export default function Bayar() {
+  const user = useUser()
   const {registration, isUploading, uploadBukti, deleteBukti} = useRegistration()
   
   return (
@@ -32,9 +34,11 @@ export default function Bayar({onSuccess}) {
               </>
             ) : (
               <>
-                <h2 className="card-title">Biaya Pendaftaran</h2>
                 <p className="card-text">
-                  Mohon melakukan pembayaran sebesar <strong>Rp. 250.000</strong> untuk biaya pendaftaran.
+                  Terima kasih sudah mendaftarkan diri anda untuk menjadi santri BALQIS Jogja.
+                </p>
+                <p className="card-text">
+                  Selanjutnya, mohon melakukan pembayaran sebesar <strong>Rp. 250.000</strong> untuk biaya pendaftaran.
                 </p>
                 <p>
                   Pembayaran dapat dilakukan melalui transfer ke rekening berikut:

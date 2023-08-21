@@ -11,6 +11,11 @@
   border-color: rgb(255, 78, 0);
 }
 
+.btn-outline-primary {
+  color: rgb(255, 78, 0);
+  border-color: rgb(255, 78, 0);
+}
+
 .btn-primary:hover {
   background-color: rgb(190, 57, 0);
   border-color: rgb(190, 57, 0);
