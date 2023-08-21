@@ -24,6 +24,8 @@ export default function Dashboard() {
   const {registrations, columns, downloadAsXLSX, downloadBukti, refreshData, deleteData, updateSpecificRegistrationData} = useRegistration({specificUserId: null, selectedColumn, keyword})
   
   function toTitleCase(str) {
+    if (!str) return ''
+
     return str.replace(
       /\w\S*/g,
       function(txt) {
@@ -168,7 +170,7 @@ export default function Dashboard() {
             </select>
             <Input
               type="text" 
-              placeholder={`Cari ${toTitleCase(selectedColumn.replaceAll('_', ' '))}`}
+              placeholder={`Cari ${toTitleCase(selectedColumn?.replaceAll('_', ' '))}`}
               value={searchKeyword} 
               onChange={e => setSearchKeyword(e.target.value)}
               onKeyUp={e => {

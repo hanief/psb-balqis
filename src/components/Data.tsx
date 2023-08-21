@@ -64,7 +64,7 @@ const jalurBeasiswaKhususOptions = [
   { value: 'yatim', label: 'Yatim & Piatu' },
 ]
   
-export default function Data({onSuccess}) {
+export default function Data() {
   const user = useUser()
   const {registration: remoteRegistration, uploadBukti, deleteBukti, isUploading, isLoading, updateRegistrationData} = useRegistration()
   const [registration, setRegistration] = useState({

@@ -40,6 +40,7 @@ export function useRegistration({
     'desa',
     'kodepos',
     'pembayaran_diterima',
+    'created_at',
   ]
 
   let requestKey = '/registrations'
@@ -63,7 +64,7 @@ export function useRegistration({
         .eq("user_id", specificUserId)
     }
     
-    if (selectedColumn)  {
+    if (selectedColumn && keyword)  {
         selectOp = selectOp
         .ilike(selectedColumn, `%${keyword}%`)
     } 
@@ -90,9 +91,9 @@ export function useRegistration({
     let response
 
     if (isFiltered) {
-      response = await supabase.from("registrations").select(columns.join(',')).ilike(selectedColumn, `%${keyword}%`)
+      response = await supabase.from("registrations").select(columns.join(',')).is('deleted_at', null).ilike(selectedColumn, `%${keyword}%`)
     } else {
-      response = await supabase.from("registrations").select(columns.join(','))
+      response = await supabase.from("registrations").select(columns.join(',')).is('deleted_at', null)
     }
     
     const {data} = response

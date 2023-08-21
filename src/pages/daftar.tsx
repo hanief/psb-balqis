@@ -117,7 +117,7 @@ export default function DaftarPage() {
       </Row>
       <Row className='justify-content-center mb-6'>
         {activeStep === 0 && (
-          <Data onSuccess={() => setActiveStep(1)}/>
+          <Data/>
         )}
         {activeStep === 1 && (
           <Col>
