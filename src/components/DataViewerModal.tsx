@@ -1,6 +1,5 @@
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import DataEdit from "./DataEdit";
-import { useRegistration } from "@/model/pendaftaran";
 
 export default function DataViewerModal({isOpen, toggle, initialRegistration, onUpdate}) {
   function handleSave() {

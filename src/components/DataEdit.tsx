@@ -2,7 +2,7 @@ import Select from 'react-select'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import data from '@/data/wilayah.json'
 import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, InputGroup, Label, Row, Spinner } from 'reactstrap'
-import { useRegistration } from '@/model/pendaftaran'
+import { usePendaftaran } from '@/model/pendaftaran'
 import { debounce } from 'lodash'
 import { Wilayah } from '@/types'
 import { 
@@ -16,7 +16,7 @@ import {
 const provinces = data as Wilayah[]
 
 export default function Data({initialRegistration, onUpdate}) {
-  const {singleRegistration: remoteRegistration, uploadBukti, deleteBukti, isUploading, updateRegistrationData} = useRegistration({
+  const {singleRegistration: remoteRegistration, uploadBukti, deleteBukti, isUploading, updateRegistrationData} = usePendaftaran({
     specificUserId: initialRegistration?.user_id,
     selectedColumn: null,
     keyword: null

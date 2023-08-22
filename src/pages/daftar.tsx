@@ -52,13 +52,14 @@ export default function DaftarPage() {
 
   useEffect(() => {
     if (registration) {
-      setActiveStep(getProgressIndex() + 1)
+      setActiveStep(getProgressIndex())
     }
   }, [registration])
 
   function getProgressIndex() {
     if (!registration) return 0
-    if (registration.pembayaran_diterima) return 1
+    if (registration.pembayaran_diterima) return 2
+    if (registration.bukti_pembayaran) return 1
     
     return 0
   }
@@ -130,7 +131,7 @@ export default function DaftarPage() {
         )}
         {activeStep === 2 && (
           <Col>
-            <Tes onSuccess={() => setActiveStep(3)}/>
+            <Tes />
           </Col>
         )}
         {activeStep === 3 && (

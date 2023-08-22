@@ -1,5 +1,5 @@
 import DataTable from "react-data-table-component"
-import { useRegistration } from "@/model/pendaftaran"
+import { usePendaftaran } from "@/model/pendaftaran";
 import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Row } from "reactstrap";
 import { useState } from "react";
 import Head from "next/head";
@@ -21,7 +21,7 @@ export default function Dashboard() {
     registration: null,
   })
 
-  const {registrations, columns, downloadAsXLSX, downloadBukti, refreshData, deleteData, updateSpecificRegistrationData} = useRegistration({specificUserId: null, selectedColumn, keyword})
+  const {registrations, columns, downloadAsXLSX, downloadBukti, refreshData, deleteData, updateSpecificRegistrationData} = usePendaftaran({specificUserId: null, selectedColumn, keyword})
   
   function toTitleCase(str) {
     if (!str) return ''

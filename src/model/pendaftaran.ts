@@ -3,7 +3,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
 import XLSX from 'xlsx'
 
-export function useRegistration({
+export function usePendaftaran({
   specificUserId, 
   selectedColumn, 
   keyword} = {
