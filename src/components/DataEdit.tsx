@@ -15,7 +15,7 @@ import {
 
 const provinces = data as Wilayah[]
 
-export default function Data({initialRegistration, onUpdate}) {
+export default function DataEdit({initialRegistration, updateSpecificRegistrationData, onUpdate}) {
   const {singleRegistration: remoteRegistration, uploadBukti, deleteBukti, isUploading, updateRegistrationData} = usePendaftaran({
     specificUserId: initialRegistration?.user_id,
     selectedColumn: null,
@@ -71,7 +71,7 @@ export default function Data({initialRegistration, onUpdate}) {
   }, [remoteRegistration])
 
   function handleUpdateData(data) {
-    updateRegistrationData(data)
+    updateSpecificRegistrationData(initialRegistration?.user_id, data)
 
     if (!onUpdate) return
     

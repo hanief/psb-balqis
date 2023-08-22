@@ -214,6 +214,7 @@ export default function Dashboard() {
 
       <DataViewerModal
         initialRegistration={dataViewerProps.registration}
+        updateSpecificRegistrationData={updateSpecificRegistrationData}
         isOpen={dataViewerProps.isOpen}
         toggle={() => setDataViewerProps({...dataViewerProps, isOpen: !dataViewerProps.isOpen})}
         onUpdate={() => refreshData()}
