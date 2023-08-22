@@ -6,6 +6,37 @@ export default function Bayar() {
   const user = useUser()
   const {registration, isUploading, uploadBukti, deleteBukti} = useRegistration()
   
+  if (registration?.pembayaran_diterima) {
+    return (
+      <Card>
+        <CardBody>
+          <h2>Terima kasih.</h2>
+          <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>
+          <p>Anda dapat melanjutkan ke tahap berikutnya.</p>
+        </CardBody>
+      </Card>
+    )
+  }
+
+  if (registration?.bukti_pembayaran) {
+    return (
+      <Card>
+        <CardBody>
+          <h2>Terima kasih.</h2>
+          <p>Anda sudah mengunggah bukti pembayaran.</p>
+          <p>Mohon menunggu hingga panitia PSB mengkonfirmasi pembayaran anda untuk bisa melanjutkan ke tahap berikutnya</p>
+          <Button
+            color="danger" 
+            onClick={() => {
+              deleteBukti('pembayaran')
+            }}>
+              Hapus bukti pembayaran
+          </Button>
+        </CardBody>
+      </Card>
+    )
+  }
+
   return (
     <>
       <Card>

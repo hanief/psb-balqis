@@ -51,16 +51,20 @@ export default function DaftarPage() {
   ], [activeStep])
 
   useEffect(() => {
-    if (registration && activeStep === 0) {
-      setActiveStep(getProgressIndex())
+    if (registration) {
+      setActiveStep(getProgressIndex() + 1)
     }
   }, [registration])
 
   function getProgressIndex() {
     if (!registration) return 0
-    const index = steps.findIndex(step => step.slug === registration?.progress_status)
+    if (registration.pembayaran_diterima) return 1
+    
+    return 0
+  }
 
-    return index < 0 ? 0 : index
+  function isNextButtonDisabled() {
+    return activeStep > getProgressIndex()
   }
 
   if (!user) {
@@ -108,8 +112,8 @@ export default function DaftarPage() {
           <h2 className=''>{steps[activeStep]?.label}</h2>
           <Button
             className="d-flex align-items-center"
-            color={activeStep > getProgressIndex() ? "secondary" : "success"}
-            disabled={activeStep > getProgressIndex() }
+            color={isNextButtonDisabled() ? "secondary" : "success"}
+            disabled={isNextButtonDisabled() }
             onClick={() => setActiveStep(activeStep + 1)}>
             <span className='me-1'>{activeStep === 0 ? 'Kirim' : 'Lanjutkan'}</span><i className='bi bi-arrow-right'></i>
           </Button>
@@ -125,7 +129,7 @@ export default function DaftarPage() {
           </Col>
         )}
         {activeStep === 2 && (
-          <Col sm="6">
+          <Col>
             <Tes onSuccess={() => setActiveStep(3)}/>
           </Col>
         )}

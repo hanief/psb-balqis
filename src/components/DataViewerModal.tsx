@@ -3,12 +3,6 @@ import DataEdit from "./DataEdit";
 import { useRegistration } from "@/model/pendaftaran";
 
 export default function DataViewerModal({isOpen, toggle, initialRegistration, onUpdate}) {
-  const {singleRegistration: registration} = useRegistration({
-    specificUserId: initialRegistration?.user_id,
-    selectedColumn: null,
-    keyword: null,
-  })
-
   function handleSave() {
     toggle()
   }

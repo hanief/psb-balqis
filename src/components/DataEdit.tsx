@@ -71,12 +71,11 @@ export default function Data({initialRegistration, onUpdate}) {
   }, [remoteRegistration])
 
   function handleUpdateData(data) {
-    console.log('updating data', data)
     updateRegistrationData(data)
 
-    if (onUpdate) {
-      onUpdate(data)
-    }
+    if (!onUpdate) return
+    
+    onUpdate(data)
   }
   function handleRegistrationFieldChange(key, value) {
     const updatedData = {[key]: value}
