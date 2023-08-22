@@ -1,72 +1,33 @@
 import Select from 'react-select'
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import data from '@/data/wilayah.json'
 import { Button, Card, CardBody, CardTitle, Col, Form, FormGroup, Input, InputGroup, Label, Row, Spinner } from 'reactstrap'
-import { useRegistration, useAccomplishments, useProof } from '@/model/registration'
+import { useRegistration } from '@/model/registration'
 import { debounce } from 'lodash'
-import { getRandomInteger } from '@/utils'
 import { useUser } from '@supabase/auth-helpers-react'
+import { Wilayah } from '@/types'
+import { 
+  jalurPendaftaranOptions, 
+  jenjangOptions, 
+  jalurBeasiswaKhususOptions,
+  jalurBeasiswaPrestasiOptions,
+  jenisKelaminOptions
+} from '@/data/options'
 
-interface Wilayah {
-  code: string
-  province: string
-  slug: string
-  cities: {
-    code: string
-    city: string
-    slug: string
-    districts: {
-      code: string
-      district: string
-      slug: string
-      villages: {
-        code: string
-        postal: number
-        village: string
-        slug: string
-        latitude: number
-        longitude: number
-        elevation: number
-        geometry: boolean
-      }[]
-    }[]
-  }[]
-}
-
-const provinces: Wilayah[] = data as Wilayah[]
-
-const jalurPendaftaranOptions = [
-  { value: 'reguler', label: 'Jalur Reguler' },
-  { value: 'prestasi', label: 'Jalur Beasiswa - Prestasi' },
-  { value: 'afirmasi', label: 'Jalur Beasiswa - Afirmasi' },
-  { value: 'alumni', label: 'Jalur Beasiswa - Alumni' },
-]
-
-const jenjangOptions = [
-  { value: 'smp', label: "SMP IT Baitul Qur'an Yogyakarta" },
-  { value: 'sma', label: "SMA IT Baitul Qur'an Yogyakarta" },
-]
-
-const jenisKelaminOptions = [
-  { value: 'laki-laki', label: 'Laki-laki' },
-  { value: 'perempuan', label: 'Perempuan' },
-]
-
-const jalurBeasiswaPrestasiOptions = [
-  { value: 'tiga besar', label: 'Peringkat 3 besar kelas' },
-  { value: 'hafidz 15 juz', label: 'Hafidz 15 Juz (Pendaftar SMP)' },
-  { value: 'hafidz 30 juz', label: 'Hafidz 30 Juz (Pendaftar SMA)' },
-  { value: 'tiga besar lomba', label: 'Juara 3 besar Lomba MTQ/OSN/Olimpiade semua cabang' },
-]
-
-const jalurBeasiswaKhususOptions = [
-  { value: 'dhuafa', label: 'Dhuafa berprestasi' },
-  { value: 'yatim', label: 'Yatim & Piatu' },
-]
+const provinces = data as Wilayah[]
   
 export default function Data() {
   const user = useUser()
-  const {registration: remoteRegistration, uploadBukti, deleteBukti, isUploading, isLoading, updateRegistrationData} = useRegistration()
+  const {
+    registration: remoteRegistration, 
+    uploadBukti, 
+    deleteBukti,
+    isUploading, 
+    isLoading, 
+    isValidating,
+    updateRegistrationData,
+  } = useRegistration()
+
   const [registration, setRegistration] = useState({
     jenjang: '',
     jalur_pendaftaran: '',
@@ -104,16 +65,16 @@ export default function Data() {
   const handleUpdateRegistration = useMemo(() => debounce(saveRegistrationData, 1000), [saveRegistrationData])
 
   useEffect(() => {
-    if (isLoading) return
     if (!remoteRegistration) return
 
-    const newRegData = registration
-    Object.keys(newRegData).forEach(key => {
-      if (!newRegData[key]) {
-        newRegData[key] = remoteRegistration[key]
-      }
+    const newRegistration = {...registration}
+
+    Object.keys(registration).forEach(field => {
+      if (!remoteRegistration[field]) return
+      newRegistration[field] = remoteRegistration[field]
     })
-    setRegistration(newRegData)
+
+    setRegistration(newRegistration)
   }, [remoteRegistration])
 
   function handleRegistrationFieldChange(key, value) {

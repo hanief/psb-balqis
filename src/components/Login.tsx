@@ -8,10 +8,12 @@ export default function Login({ onSuccess }) {
   const supabaseClient = useSupabaseClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
   const router = useRouter()
   
   const handleSignIn = async (event) => {
     event.preventDefault()
+    setIsLoggingIn(true)
 
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: `${email}@utama.app`,
@@ -24,6 +26,7 @@ export default function Login({ onSuccess }) {
         password
       })
 
+      setIsLoggingIn(false)
       if (!error) {
         router.push('/daftar')
       }
@@ -32,6 +35,8 @@ export default function Login({ onSuccess }) {
     if (!error) {
       const {data: profile} = await supabaseClient.from('profiles').select('*').eq('id', data?.user.id).single()
       
+      setIsLoggingIn(false)
+
       if (profile?.is_admin) {
         router.push('/dasbor')
       } else {
@@ -72,8 +77,17 @@ export default function Login({ onSuccess }) {
         />
         <Label for="password"><small>Jika sudah punya akun sebelumnya, masukkan password akun tersebut. Jika belum memiliki akun silakan masukkan password yang anda inginkan di kolom password</small></Label>
       </FormGroup>
-      <Button block color='primary' className='me-1' onClick={handleSignIn}>
-        Masuk
+      <Button 
+        block 
+        color={isLoggingIn ? 'secondary' : 'primary'}
+        disabled={isLoggingIn}
+        className='me-1' 
+        onClick={handleSignIn}
+      >
+        {isLoggingIn ? (
+          <div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div>
+          ) : 'Masuk'
+        }
       </Button>
     </Form>
   )

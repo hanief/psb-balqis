@@ -4,6 +4,7 @@ import { Button, Col, Container, Row } from 'reactstrap'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useProfile } from '@/model/profiles'
 import Head from 'next/head'
+import {Toaster} from 'react-hot-toast'
 
 export default function Layout({children}) {
   const { user, profile } = useProfile()
@@ -44,13 +45,13 @@ export default function Layout({children}) {
             </Row>
           </Container>
       </main>
-
     )
   }
 
   return (
     <>
       <main className='pb-4'>
+        <div><Toaster/></div>
         <header className='py-2 text-white bg-balqis'>
           <div className="container d-flex flex-wrap align-items-center">
             <span className=''><i className='bi-whatsapp'></i></span>

@@ -2,6 +2,7 @@ import useSWR from "swr"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
 import XLSX from 'xlsx'
+import toast from 'react-hot-toast'
 
 export function usePendaftaran({
   specificUserId, 
@@ -116,7 +117,7 @@ export function usePendaftaran({
       }
     })
 
-    return mutate(async () => {
+    const promise = mutate(async () => {
       await supabase
         .from("registrations")
         .update(newDatum)
@@ -126,6 +127,14 @@ export function usePendaftaran({
     }, {
       optimisticData: updatedData
     })
+
+    toast.promise(promise, {
+      loading: 'Menyimpan...',
+      success: 'Berhasil disimpan',
+      error: 'Gagal menyimpan'
+    })
+
+    return promise
   }
 
   async function updateSpecificRegistrationData(userId, newDatum) {
@@ -139,7 +148,7 @@ export function usePendaftaran({
       }
     })
 
-    return mutate(async () => {
+    const promise = mutate(async () => {
       await supabase
         .from("registrations")
         .update(newDatum)
@@ -149,6 +158,14 @@ export function usePendaftaran({
     }, {
       optimisticData: updatedData
     })
+
+    toast.promise(promise, {
+      loading: 'Menyimpan...',
+      success: 'Berhasil disimpan',
+      error: 'Gagal menyimpan'
+    })
+
+    return promise
   }
 
   async function uploadBukti(file, type) {
