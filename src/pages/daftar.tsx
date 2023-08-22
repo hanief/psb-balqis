@@ -136,12 +136,7 @@ export default function DaftarPage() {
         )}
         {activeStep === 3 && (
           <Col sm="6">
-            <Pengumuman onSuccess={() => setActiveStep(4)} />
-          </Col>
-        )}
-        {activeStep === 4 && (
-          <Col sm="6">
-            <DaftarUlang onSuccess={() => setActiveStep(5)} />
+            <Pengumuman />
           </Col>
         )}
       </Row>
