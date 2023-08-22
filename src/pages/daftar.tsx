@@ -65,7 +65,7 @@ export default function DaftarPage() {
   }
 
   function isNextButtonDisabled() {
-    return activeStep > getProgressIndex()
+    return activeStep == getProgressIndex()
   }
 
   if (!user) {
