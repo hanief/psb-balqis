@@ -27,3 +27,9 @@ export const jalurBeasiswaKhususOptions = [
   { value: 'dhuafa', label: 'Dhuafa berprestasi' },
   { value: 'yatim', label: 'Yatim & Piatu' },
 ]
+
+export const statusPenerimaanOptions = [
+  { value: 'pending', label: 'Pending' },
+  { value: 'diterima', label: 'Diterima' },
+  { value: 'ditolak', label: 'Ditolak' },
+]

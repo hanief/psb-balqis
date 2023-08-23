@@ -45,6 +45,8 @@ export default function DaftarPage() {
   ], [activeStep])
 
   useEffect(() => {
+    if (activeStep === 0) return
+    
     setActiveStep(getProgressIndex())
   }, [registration])
 

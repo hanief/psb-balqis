@@ -27,7 +27,7 @@ export const columnsObject = {
   'kecamatan': '',
   'desa': '',
   'kodepos': '',
-  'created_at': '',
+  'created_at': ''
 }
 
 export const columns = Object.keys(columnsObject)
