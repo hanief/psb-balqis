@@ -1,4 +1,4 @@
-import { useRegistration } from "@/model/registration";
+import { useRegistration } from "@/data/registration";
 import { Button, Card, CardBody, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { useUser } from "@supabase/auth-helpers-react";
 

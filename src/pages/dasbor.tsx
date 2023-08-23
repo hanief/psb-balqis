@@ -1,16 +1,19 @@
 import DataTable from "react-data-table-component"
-import { usePendaftaran } from "@/model/pendaftaran";
-import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Row } from "reactstrap";
+import { usePendaftaran } from "@/data/pendaftaran";
+import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from "reactstrap";
 import { useState } from "react";
 import Head from "next/head";
 import FileViewerModal from "@/components/FileViewerModal";
 import DataViewerModal from "@/components/DataViewerModal";
 import { DateTime } from 'luxon'
+import { columns } from '@/data/columns'
+import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 
 export default function Dashboard() {
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')
+  const [showDeleted, setShowDeleted] = useState(false)
   const [fileViewerProps, setFileViewerProps] = useState({
     isOpen: false,
     type: '',
@@ -20,8 +23,19 @@ export default function Dashboard() {
     isOpen: false,
     registration: null,
   })
+  
+  const [deleteConfirmationProps, setDeleteConfirmationProps] = useState({
+    isOpen: false,
+    onConfirm: null,
+    userId: null,
+  })
 
-  const {registrations, columns, downloadAsXLSX, downloadBukti, refreshData, deleteData, updateSpecificRegistrationData} = usePendaftaran({specificUserId: null, selectedColumn, keyword})
+  const {registrations, downloadAsXLSX, downloadBukti, refreshData, deleteData, updateSpecificRegistrationData} = usePendaftaran({
+    specificUserId: null,
+    selectedColumn: selectedColumn, 
+    keyword: keyword,
+    showDeleted: showDeleted
+  })
   
   function toTitleCase(str) {
     if (!str) return ''
@@ -50,6 +64,13 @@ export default function Dashboard() {
   }
 
   const tableColumns = [
+    {
+      id: 'nomor',
+      name: 'No.',
+      selector: (row, index) => index + 1,
+      sortable: false,
+      minWidth: '30px',
+    },
     {
       id: 'nama_lengkap',
       name: 'Nama',
@@ -113,9 +134,19 @@ export default function Dashboard() {
           })}>
             Ubah
           </Button>
-          <Button color="outline-danger" onClick={() => deleteData(row.user_id)}>
-            <i className="bi bi-trash"></i>
-          </Button>
+          {row.deleted_at ? (
+            <Button color="outline-success" onClick={() => updateSpecificRegistrationData(row.user_id, {deleted_at: null})}>
+              <i className="bi bi-recycle"></i>
+            </Button>
+          ) : (
+            <Button color="outline-danger" onClick={() => setDeleteConfirmationProps({
+              isOpen: true,
+              onConfirm: () => deleteData(row.user_id),
+              userId: row.user_id,
+            })}>
+              <i className="bi bi-trash"></i>
+            </Button>
+          )}
         </>
       ),
       minWidth: '150px',
@@ -142,22 +173,27 @@ export default function Dashboard() {
         <title>Dashboard PSB Balqis</title>
       </Head>
       <Row className="gap-0 row-gap-2">
-        <Col md="6">
+        <Col xs="6" md="4">
           <Button
             color="outline-success"
             className="me-1"
-            onClick={() => downloadAsXLSX({isFiltered: false})}
+            onClick={() => downloadAsXLSX()}
           >
-            <i className="bi-download me-1"></i>Unduh semua
+            <i className="bi-download me-1"></i>Unduh
           </Button>
-          <Button
-            color="outline-success" 
-            className="" 
-            onClick={() => downloadAsXLSX({isFiltered: true})}>
-            <i className="bi-cloud-arrow-down me-1"></i>Unduh dengan filter
-          </Button>  
         </Col>
-        <Col md="6"> 
+        <Col xs="6" md="4" className="d-flex align-items-center justify-content-end">
+          <FormGroup switch>
+            <Input 
+              type="switch" 
+              role="switch" 
+              checked={showDeleted}
+              onClick={() => setShowDeleted(!showDeleted)}
+            />
+            <Label check>Lihat terhapus</Label>
+          </FormGroup>
+        </Col>
+        <Col md="4" className="d-flex align-items-center">
           <InputGroup>
             <select
               className="form-select"
@@ -182,7 +218,7 @@ export default function Dashboard() {
             <Button className="d-none d-lg-block" color="outline-success" onClick={() => setKeyword(searchKeyword)}>
               <i className="bi-search"></i>
             </Button>       
-          </InputGroup>
+          </InputGroup>          
         </Col>
       </Row>
       <Row className="my-2">
@@ -192,7 +228,17 @@ export default function Dashboard() {
               <DataTable
                 theme="default"
                 columns={tableColumns}
-                data={registrations}
+                data={registrations?.filter(registration => {
+                  let shouldShow = true
+                  if (!showDeleted) {
+                    shouldShow = registration.deleted_at === null
+                  }
+                  if (selectedColumn && keyword) {
+                    shouldShow = registration[selectedColumn]?.toLowerCase().includes(keyword.toLowerCase())
+                  }
+
+                  return shouldShow
+                })}
                 customStyles={customStyles}
                 pagination
                 striped
@@ -218,6 +264,14 @@ export default function Dashboard() {
         isOpen={dataViewerProps.isOpen}
         toggle={() => setDataViewerProps({...dataViewerProps, isOpen: !dataViewerProps.isOpen})}
         onUpdate={() => refreshData()}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={deleteConfirmationProps.isOpen}
+        toggle={() => setDeleteConfirmationProps({...deleteConfirmationProps, isOpen: !deleteConfirmationProps.isOpen})}
+        onConfirm={deleteConfirmationProps.onConfirm}
+        title={'Konfirmasi hapus'}
+        description={'Apakah Anda yakin ingin menghapus data ini?'}
       />
     </div>
   )

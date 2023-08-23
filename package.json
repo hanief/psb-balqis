@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hookform/resolvers": "^3.2.0",
     "@mdx-js/loader": "^2.3.0",
     "@mdx-js/react": "^2.3.0",
     "@next/mdx": "^13.4.12",
@@ -42,6 +43,7 @@
     "react-data-table-component": "^7.5.3",
     "react-dom": "18.2.0",
     "react-form-stepper": "^2.0.3",
+    "react-hook-form": "^7.45.4",
     "react-hot-toast": "^2.4.1",
     "react-responsive-carousel": "^3.2.23",
     "react-select": "^5.7.4",
@@ -51,7 +53,8 @@
     "swr": "^2.2.0",
     "typescript": "5.1.6",
     "ulid": "^2.3.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.5",

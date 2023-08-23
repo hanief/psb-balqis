@@ -3,56 +3,30 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
 import XLSX from 'xlsx'
 import toast from 'react-hot-toast'
+import { columns } from '@/data/columns'
+import { Wilayah } from '@/types'
+import data from '@/data/wilayah.json'
+
+const provinces = data as Wilayah[]
 
 export function usePendaftaran({
   specificUserId, 
   selectedColumn, 
-  keyword} = {
+  keyword,
+  showDeleted
+} = {
     specificUserId: null,
     selectedColumn: null,
-    keyword: null
+    keyword: null,
+    showDeleted: false
   }
 ) {
   const supabase = useSupabaseClient()
   const [isUploading, setIsUploading] = useState(false)
 
-  const columns = [
-    'nama_lengkap',
-    'jenjang',
-    'jalur_pendaftaran',
-    'jalur_beasiswa',
-    'jalur_beasiswa_prestasi',
-    'nama_prestasi',
-    'tingkat_prestasi',
-    'tahun_prestasi',
-    'jalur_beasiswa_khusus',
-    'jenis_kelamin',
-    'tempat_lahir',
-    'tanggal_lahir',
-    'asal_sekolah',
-    'nama_ayah',
-    'nomor_hp_ayah',
-    'nama_ibu',
-    'nomor_hp_ibu',
-    'alamat',
-    'provinsi',
-    'kabupaten',
-    'kecamatan',
-    'desa',
-    'kodepos',
-    'pembayaran_diterima',
-    'created_at',
-  ]
-
   let requestKey = '/registrations'
   if (specificUserId) {
     requestKey += `/${specificUserId}`
-  }
-  if (selectedColumn) {
-    requestKey += `/${selectedColumn}`
-  }
-  if (keyword) {
-    requestKey += `/${keyword}`
   }
 
   const {data, mutate, ...rest} = useSWR(requestKey, async () => {
@@ -64,13 +38,8 @@ export function usePendaftaran({
       selectOp = selectOp
         .eq("user_id", specificUserId)
     }
-    
-    if (selectedColumn && keyword)  {
-        selectOp = selectOp
-        .ilike(selectedColumn, `%${keyword}%`)
-    } 
 
-    const {data} = await selectOp.is('deleted_at', null).order('created_at', {ascending: false})
+    const {data} = await selectOp.order('created_at', {ascending: false})
 
     return data
   })
@@ -84,24 +53,46 @@ export function usePendaftaran({
       var blob=new Blob([data]);
       var link=document.createElement('a');
       link.href=window.URL.createObjectURL(blob);
-      link.download=`${nama} ${fileName}`;
+      link.download=`${nama}/${fileName}`;
       link.click()
   }
   
-  async function downloadAsXLSX({isFiltered = false}) {
-    let response
+  function formatDataWithWilayahNames(data) {
+    return data.map((datum, index) => {
+      const provinsi = provinces.find(provinsi => provinsi.code === datum.provinsi)
+      const kabupaten = provinsi?.cities.find(kabupaten => kabupaten.code === datum.kabupaten)
+      const kecamatan = kabupaten?.districts.find(kecamatan => kecamatan.code === datum.kecamatan)
+      const desa = kecamatan?.villages.find(desa => desa.code === datum.desa)
 
-    if (isFiltered) {
-      response = await supabase.from("registrations").select(columns.join(',')).is('deleted_at', null).ilike(selectedColumn, `%${keyword}%`)
-    } else {
-      response = await supabase.from("registrations").select(columns.join(',')).is('deleted_at', null)
+      return {
+        no: index + 1,
+        ...datum,
+        provinsi: provinsi?.province,
+        kabupaten: kabupaten?.city,
+        kecamatan: kecamatan?.district,
+        desa: desa?.village
+      }
+    })
+  }
+
+  async function downloadAsXLSX() {
+    let selectOp = supabase.from("registrations").select(columns.join(','))
+
+    if (!showDeleted) {
+      selectOp = selectOp.is('deleted_at', null)
     }
+
+    if (selectedColumn && keyword)  {
+      selectOp = selectOp.ilike(selectedColumn, `%${keyword}%`)
+    } 
     
-    const {data} = response
-    const worksheet = XLSX.utils.json_to_sheet(data)
+    const {data} = await selectOp.order('created_at', {ascending: false})
+    const formattedData = formatDataWithWilayahNames(data)
+  
+    const worksheet = XLSX.utils.json_to_sheet(formattedData)
     const workbook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Pendaftar')
-    XLSX.writeFile(workbook, `pendaftar${isFiltered ? '_' + selectedColumn + '_' + keyword : '_semua'}.xlsx`)
+    XLSX.writeFile(workbook, `pendaftar${(selectedColumn && keyword) && ('_' + selectedColumn + '_' + keyword)}.xlsx`)
 
     return data
   }
@@ -227,7 +218,7 @@ export function usePendaftaran({
     return mutate(async () => {
       await supabase.from('registrations')
         .update(updatedData)
-        .eq('id', data[0]?.id)
+        .eq('user_id', data[0]?.user_id)
 
       return updatedData
     }, {

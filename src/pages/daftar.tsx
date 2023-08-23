@@ -10,7 +10,7 @@ import Pengumuman from '@/components/Pengumuman'
 import DaftarUlang from '@/components/DaftarUlang'
 import Head from 'next/head'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useRegistration } from '@/model/registration'
+import { useRegistration } from '@/data/registration'
 
 const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
   ssr: false,
@@ -53,7 +53,7 @@ export default function DaftarPage() {
   useEffect(() => {
     if (registration) {
       if (activeStep === 0) return
-      
+
       setActiveStep(getProgressIndex())
     }
   }, [registration])
@@ -124,7 +124,9 @@ export default function DaftarPage() {
       </Row>
       <Row className='justify-content-center mb-6'>
         {activeStep === 0 && (
-          <Data/>
+          <Col>
+            <Data/>
+          </Col>
         )}
         {activeStep === 1 && (
           <Col>

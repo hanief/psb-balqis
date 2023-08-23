@@ -3,35 +3,11 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useState } from "react"
 import XLSX from 'xlsx'
 import toast from 'react-hot-toast'
+import { columns } from '@/data/columns'
 
 export function useRegistrations({selectedColumn = 'nama_lengkap', keyword}) {
   const user = useUser()
   const supabase = useSupabaseClient()
-  const columns = [
-    'jenjang',
-    'jalur_pendaftaran',
-    'jalur_beasiswa',
-    'jalur_beasiswa_prestasi',
-    'nama_prestasi',
-    'tingkat_prestasi',
-    'tahun_prestasi',
-    'jalur_beasiswa_khusus',
-    'nama_lengkap',
-    'jenis_kelamin',
-    'tempat_lahir',
-    'tanggal_lahir',
-    'asal_sekolah',
-    'nama_ayah',
-    'nomor_hp_ayah',
-    'nama_ibu',
-    'nomor_hp_ibu',
-    'alamat',
-    'provinsi',
-    'kabupaten',
-    'kecamatan',
-    'desa',
-    'kodepos',
-  ]
 
   const {data, ...rest} = useSWR(user && `/registrations/${selectedColumn}/${keyword}`, async () => {
     const {data} = await supabase.from("registrations").select().ilike(selectedColumn, `%${keyword}%`)
@@ -79,7 +55,6 @@ export function useRegistrations({selectedColumn = 'nama_lengkap', keyword}) {
 
   return {
     registrations: data,
-    columns,
     getAsCSV,
     getAsXLSX,
     downloadFile,
@@ -130,7 +105,7 @@ export function useRegistration() {
     }, {
       optimisticData: updatedData
     })
-    
+
     toast.promise(promise, {
       loading: 'Menyimpan...',
       success: 'Berhasil disimpan',
@@ -165,9 +140,10 @@ export function useRegistration() {
           upsert: true
         })
       
-      await supabase.from('registrations')
+      await supabase
+        .from('registrations')
         .update(updatedData)
-        .eq('id', data?.id)
+        .eq("user_id", user?.id)
 
       return updatedReg
     }, {
@@ -186,14 +162,32 @@ export function useRegistration() {
       ...updatedData
     }
 
-    return mutate(async () => {
-      await supabase.from('registrations')
+    const response = mutate(async () => {
+      await supabase
+        .from('registrations')
         .update(updatedData)
-        .eq('id', data?.id)
+        .eq("user_id", user?.id)
 
       return updatedReg
     }, {
       optimisticData: updatedReg
+    })
+
+    return response
+  }
+
+  async function downloadBukti(nama, file) {
+    return mutate(async () => {
+      const {data} = await supabase
+        .storage
+        .from('proofs')
+        .download(file)
+
+      var blob=new Blob([data]);
+      var link=document.createElement('a');
+      link.href=window.URL.createObjectURL(blob);
+      link.download=`${nama}/${file}`;
+      link.click()
     })
   }
 
@@ -204,6 +198,7 @@ export function useRegistration() {
     isUploading,
     uploadBukti,
     deleteBukti,
+    downloadBukti,
     ...rest
   }
 }

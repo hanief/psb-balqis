@@ -1,4 +1,4 @@
-import { useRegistration } from "@/model/registration";
+import { useRegistration } from "@/data/registration";
 import { Button, Card, CardBody } from "reactstrap";
 import {DateTime} from 'luxon'
 import NextImage from 'next/image'

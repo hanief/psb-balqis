@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button, Col, Container, Row } from 'reactstrap'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useProfile } from '@/model/profiles'
+import { useProfile } from '@/data/profiles'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
 
