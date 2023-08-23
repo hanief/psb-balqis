@@ -1,12 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import data from '@/data/wilayah.json'
 import { usePendaftaran } from '@/data/pendaftaran'
 import { debounce } from 'lodash'
-import { Wilayah } from '@/types'
 import DataForm from '@/components/DataForm'
 import { columnsObject } from '@/data/columns'
-
-const provinces = data as Wilayah[]
 
 export default function DataEdit({initialRegistration, updateSpecificRegistrationData, onUpdate}) {
   const {
@@ -18,14 +14,11 @@ export default function DataEdit({initialRegistration, updateSpecificRegistratio
   } = usePendaftaran({
     specificUserId: initialRegistration?.user_id,
     selectedColumn: null,
-    keyword: null
+    keyword: null,
+    showDeleted: false
   })
 
   const [registration, setRegistration] = useState(initialRegistration || columnsObject)
-
-  const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
-  const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
-  const desas = useMemo(() => kecamatans?.find(kecamatan => kecamatan.code === registration?.kecamatan)?.villages, [kecamatans, registration?.kecamatan])
 
   const saveRegistrationData = useCallback(handleUpdateData, [])
   const handleUpdateRegistration = useMemo(() => debounce(saveRegistrationData, 750), [saveRegistrationData])

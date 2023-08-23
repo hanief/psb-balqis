@@ -1,6 +1,4 @@
-import Select from 'react-select'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Col,  } from 'reactstrap'
 import { useRegistration } from '@/data/registration'
 import { debounce } from 'lodash'
 import { useUser } from '@supabase/auth-helpers-react'
