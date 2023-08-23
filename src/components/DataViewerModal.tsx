@@ -64,7 +64,7 @@ export default function DataViewerModal({isOpen, toggle, initialRegistration, up
             />
           </TabPane>
           <TabPane tabId="3">
-            <PasswordEdit />
+            <PasswordEdit userId={initialRegistration?.user_id}/>
           </TabPane>
         </TabContent>
         

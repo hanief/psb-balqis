@@ -8,7 +8,7 @@ import DataViewerModal from "@/components/DataViewerModal";
 import { DateTime } from 'luxon'
 import { columns } from '@/data/columns'
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
-import { formatDataWithWilayahNames, formatDatumWithWilayahNames } from "@/utils";
+import { formatDatumWithWilayahNames } from "@/utils";
 
 export default function Dashboard() {
   const [searchKeyword, setSearchKeyword] = useState('')

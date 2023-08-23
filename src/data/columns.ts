@@ -27,7 +27,13 @@ export const columnsObject = {
   'kecamatan': '',
   'desa': '',
   'kodepos': '',
-  'created_at': ''
+  'created_at': '',
+  'nilai_tahsin': '',
+  'nilai_akademik': '',
+  'nilai_pesantren': '',
+  'status_pendaftaran': '',
+  'syarat_penerimaan': '',
+  'catatan_internal': '',
 }
 
 export const columns = Object.keys(columnsObject)

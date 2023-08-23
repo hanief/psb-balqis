@@ -1,12 +1,16 @@
-import { Card, CardBody, CardTitle, FormGroup, Input, Label } from "reactstrap"
-import Select from "react-select"
-import { useUser } from "@supabase/auth-helpers-react"
+import { Button, Card, CardBody, CardTitle, FormGroup, Input, Label } from "reactstrap"
 import { useState } from "react"
+import { useAdminUser } from "@/data/adminUser"
 
-export default function PasswordEdit() {
-  const [phone, setPhone] = useState('')
+export default function PasswordEdit({ userId }) {
+  const { user, updatePassword } = useAdminUser(userId)
+  const [phone, setPhone] = useState(getPhoneFromEmail(user?.email))
   const [newPassword, setNewPassword] = useState('')
-  
+
+  function getPhoneFromEmail(email) {
+    return email?.split('@')[0]
+  }
+
   return (
     <Card>
       <CardBody>
@@ -17,8 +21,9 @@ export default function PasswordEdit() {
             type="text"
             id="phone"
             placeholder="cth: +628123456789"
+            disabled={true}
             required={true}
-            value={phone}
+            value={getPhoneFromEmail(user?.email)}
             onChange={event => setPhone(event.target.value)}
           /> 
         </FormGroup>  
@@ -33,6 +38,7 @@ export default function PasswordEdit() {
             onChange={event => setNewPassword(event.target.value)}
           />
         </FormGroup>
+        <Button color="outline-success" onClick={() => updatePassword(userId, newPassword)}>Update Password</Button>
       </CardBody>
     </Card>
   )
