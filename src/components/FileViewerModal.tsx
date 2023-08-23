@@ -4,11 +4,10 @@ import { supabase } from "@/lib/supabase"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
-export default function FileViewerModal({type, url, isOpen, toggle, onClose}) {
+export default function FileViewerModal({type, url, isOpen, toggle}) {
   const [fileURL, setFileURL] = useState(null)
   
   useEffect(() => {
-    console.log('url changed', url)
     if (url) {
       getSignedFileURL()
     } else {
@@ -18,7 +17,6 @@ export default function FileViewerModal({type, url, isOpen, toggle, onClose}) {
 
   async function getSignedFileURL() {
     const {data} = await supabase.storage.from('proofs').getPublicUrl(url)
-    console.log('signedUrl', url, data)
     setFileURL(data.publicUrl)
 
     return data
@@ -35,7 +33,7 @@ export default function FileViewerModal({type, url, isOpen, toggle, onClose}) {
   }
 
   return (
-    <Modal isOpen={isOpen} toggle={toggle} size='lg' centered onClosed={onClose}>
+    <Modal isOpen={isOpen} toggle={toggle} size='lg' centered>
       <ModalHeader toggle={toggle}>{type}</ModalHeader>
       <ModalBody>
         {fileURL && (

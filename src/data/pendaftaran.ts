@@ -100,7 +100,7 @@ export function usePendaftaran({
 
     toast.promise(promise, {
       loading: 'Menyimpan...',
-      success: 'Berhasil disimpan',
+      success: 'Tersimpan',
       error: 'Gagal menyimpan'
     })
 
@@ -131,7 +131,7 @@ export function usePendaftaran({
 
     toast.promise(promise, {
       loading: 'Menyimpan...',
-      success: 'Berhasil disimpan',
+      success: 'Tersimpan',
       error: 'Gagal menyimpan'
     })
 

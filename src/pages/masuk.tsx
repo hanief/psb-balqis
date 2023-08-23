@@ -7,7 +7,7 @@ export default function LoginPage() {
       <Row className='justify-content-center mb-6'>
           <Col sm="6">
           <h1>Masuk</h1>
-          <Login onSuccess={() => console.log('success')}/>
+          <Login />
         </Col>
       </Row>
     </Container>

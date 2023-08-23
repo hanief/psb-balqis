@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Button, Form, FormGroup, Input, Label } from "reactstrap"
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
-export default function Login({ onSuccess }) {
+export default function Login() {
   const user = useUser()
   const supabaseClient = useSupabaseClient()
   const [email, setEmail] = useState('')

@@ -29,11 +29,9 @@ export default function Tes() {
     <Card>
       <CardBody>
         <h2 className="text-success">Kartu Pendaftaran</h2>
-          <p>
-            Silakan menyimpan kartu pendaftaran di bawah ini:
-            <Button className="mx-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>
+        <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>
+        <Button block className="my-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>
 
-          </p>
         <Card id="kartu">
           <CardBody>
             <div className="text-center mb-3 bg-white">
@@ -60,7 +58,7 @@ export default function Tes() {
                 </tr>
                 <tr>
                   <th scope="row">Tempat Tanggal Lahir:</th>
-                  <td>{registration?.tempat_lahir}, {DateTime.fromISO(registration?.tanggal_lahir).toLocaleString(DateTime.DATE_MED)}</td>
+                  <td>{registration?.tempat_lahir || '-'}{registration?.tanggal_lahir ? ', ' + DateTime.fromISO(registration?.tanggal_lahir).toLocaleString(DateTime.DATE_MED) : ''}</td>
                 </tr>
                 <tr>
                   <th scope="row">Tanggal Pendaftaran:</th>

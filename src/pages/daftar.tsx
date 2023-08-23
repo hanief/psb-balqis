@@ -2,14 +2,12 @@ import Login from '@/components/Login'
 import Data from '@/components/Data'
 import Bayar from '@/components/Bayar'
 import dynamic from 'next/dynamic'
-import { use, useEffect, useMemo, useState } from 'react'
-import { Button, Card, Col, Container, Row } from 'reactstrap'
-import Kartu from '@/components/Kartu'
+import { useEffect, useMemo, useState } from 'react'
+import { Button, Col, Container, Row } from 'reactstrap'
 import Tes from '@/components/Tes'
 import Pengumuman from '@/components/Pengumuman'
-import DaftarUlang from '@/components/DaftarUlang'
 import Head from 'next/head'
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useUser } from '@supabase/auth-helpers-react'
 import { useRegistration } from '@/data/registration'
 
 const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
@@ -17,11 +15,9 @@ const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
 })
 
 export default function DaftarPage() {
-  const {registration} = useRegistration()
-
-  const supabaseClient = useSupabaseClient()
   const user = useUser()
-  const [activeStep, setActiveStep] = useState(0)
+  const {registration, isLoading} = useRegistration()
+  const [activeStep, setActiveStep] = useState(getProgressIndex())
 
   const steps = useMemo(() => [
     {
@@ -51,11 +47,7 @@ export default function DaftarPage() {
   ], [activeStep])
 
   useEffect(() => {
-    if (registration) {
-      if (activeStep === 0) return
-
-      setActiveStep(getProgressIndex())
-    }
+    setActiveStep(getProgressIndex())
   }, [registration])
 
   function getProgressIndex() {
@@ -67,7 +59,10 @@ export default function DaftarPage() {
   }
 
   function isNextButtonDisabled() {
-    return activeStep == getProgressIndex()
+    if (activeStep === 0) return false
+    if (activeStep === 1) return !registration?.pembayaran_diterima
+    
+    return true
   }
 
   if (!user) {
@@ -79,7 +74,7 @@ export default function DaftarPage() {
         </Head>
         <Row className='justify-content-center mb-6'>
           <Col sm="6">
-            <Login onSuccess={() => console.log('login success')}></Login>
+            <Login />
           </Col>
         </Row>
       </Container>
@@ -123,26 +118,20 @@ export default function DaftarPage() {
         </Col>
       </Row>
       <Row className='justify-content-center mb-6'>
+        <Col>
         {activeStep === 0 && (
-          <Col>
-            <Data/>
-          </Col>
+          <Data />
         )}
         {activeStep === 1 && (
-          <Col>
-            <Bayar/>
-          </Col>
+          <Bayar />
         )}
         {activeStep === 2 && (
-          <Col>
-            <Tes />
-          </Col>
+          <Tes />
         )}
         {activeStep === 3 && (
-          <Col sm="6">
-            <Pengumuman />
-          </Col>
+          <Pengumuman />
         )}
+        </Col>
       </Row>
     </Container>
   )

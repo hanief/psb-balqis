@@ -192,7 +192,7 @@ export default function Dashboard() {
               type="switch" 
               role="switch" 
               checked={showDeleted}
-              onClick={() => setShowDeleted(!showDeleted)}
+              onChange={() => setShowDeleted(!showDeleted)}
             />
             <Label check>Lihat terhapus</Label>
           </FormGroup>
@@ -258,7 +258,6 @@ export default function Dashboard() {
         toggle={() => setFileViewerProps({...fileViewerProps, isOpen: !fileViewerProps.isOpen})}
         type={fileViewerProps.type}
         url={fileViewerProps.url}
-        onClose={() => console.log('closed')}
       />
 
       <DataViewerModal
