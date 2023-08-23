@@ -53,7 +53,7 @@ export default function Dashboard() {
     const formattedData = formatDatumWithWilayahNames(data, 1)
 
     return (
-      <table className="table m-2">
+      <table className="table table-striped m-2">
         <tbody>
         {columns.map(column => (
           <tr key={column}>
@@ -234,11 +234,13 @@ export default function Dashboard() {
                 columns={tableColumns}
                 data={registrations?.filter(registration => {
                   let shouldShow = true
+
                   if (!showDeleted) {
                     shouldShow = registration.deleted_at === null
                   }
+
                   if (selectedColumn && keyword) {
-                    shouldShow = registration[selectedColumn]?.toLowerCase().includes(keyword.toLowerCase())
+                    shouldShow = shouldShow && registration[selectedColumn]?.toLowerCase().includes(keyword.toLowerCase())
                   }
 
                   return shouldShow
