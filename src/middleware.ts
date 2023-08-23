@@ -13,18 +13,13 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession()
 
   if (session) {
-    const {data: profile} = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
-    
-    // Check auth condition
-    if (profile?.is_admin) {
-      // Authentication successful, forward request to protected route.
-      return res
-    }
+    // Authentication successful, forward request to protected route.
+    return res
   }
 
   // Auth condition not met, redirect to home page.
   const redirectUrl = req.nextUrl.clone()
-  redirectUrl.pathname = '/'
+  redirectUrl.pathname = '/masuk'
   redirectUrl.searchParams.set(`redirectedFrom`, req.nextUrl.pathname)
   return NextResponse.redirect(redirectUrl)
 }
