@@ -4,10 +4,7 @@ import { useState } from "react"
 import XLSX from 'xlsx'
 import toast from 'react-hot-toast'
 import { columns } from '@/data/columns'
-import { Wilayah } from '@/types'
-import data from '@/data/wilayah.json'
-
-const provinces = data as Wilayah[]
+import { formatDataWithWilayahNames } from '@/utils'
 
 export function usePendaftaran({
   specificUserId, 
@@ -55,24 +52,6 @@ export function usePendaftaran({
       link.href=window.URL.createObjectURL(blob);
       link.download=`${nama}/${fileName}`;
       link.click()
-  }
-  
-  function formatDataWithWilayahNames(data) {
-    return data.map((datum, index) => {
-      const provinsi = provinces.find(provinsi => provinsi.code === datum.provinsi)
-      const kabupaten = provinsi?.cities.find(kabupaten => kabupaten.code === datum.kabupaten)
-      const kecamatan = kabupaten?.districts.find(kecamatan => kecamatan.code === datum.kecamatan)
-      const desa = kecamatan?.villages.find(desa => desa.code === datum.desa)
-
-      return {
-        no: index + 1,
-        ...datum,
-        provinsi: provinsi?.province,
-        kabupaten: kabupaten?.city,
-        kecamatan: kecamatan?.district,
-        desa: desa?.village
-      }
-    })
   }
 
   async function downloadAsXLSX() {

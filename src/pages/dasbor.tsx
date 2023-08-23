@@ -8,6 +8,7 @@ import DataViewerModal from "@/components/DataViewerModal";
 import { DateTime } from 'luxon'
 import { columns } from '@/data/columns'
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
+import { formatDataWithWilayahNames, formatDatumWithWilayahNames } from "@/utils";
 
 export default function Dashboard() {
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -49,13 +50,16 @@ export default function Dashboard() {
   }
 
   const ExpandedComponent = ({ data }) => {
+    const formattedData = formatDatumWithWilayahNames(data, 1)
+
     return (
-      <table className="m-2">
+      <table className="table m-2">
         <tbody>
         {columns.map(column => (
           <tr key={column}>
-            <th scope="row">{toTitleCase(column.replaceAll('_', ' '))}: </th>
-            <td>{data[column]}</td>
+            <th scope="row">{toTitleCase(column.replaceAll('_', ' '))}</th>
+            <td>:</td>
+            <td>{formattedData[column]}</td>
           </tr>
         ))}
         </tbody>
@@ -240,7 +244,6 @@ export default function Dashboard() {
                   return shouldShow
                 })}
                 customStyles={customStyles}
-                pagination
                 striped
                 highlightOnHover
                 expandableRows
