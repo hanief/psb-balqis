@@ -7,7 +7,6 @@ import { Button, Col, Container, Row } from 'reactstrap'
 import Tes from '@/components/Tes'
 import Pengumuman from '@/components/Pengumuman'
 import Head from 'next/head'
-import { useUser } from '@supabase/auth-helpers-react'
 import { useRegistration } from '@/data/registration'
 
 const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
@@ -15,7 +14,6 @@ const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
 })
 
 export default function DaftarPage() {
-  const user = useUser()
   const {registration, isLoading} = useRegistration()
   const [activeStep, setActiveStep] = useState(getProgressIndex())
 
@@ -63,22 +61,6 @@ export default function DaftarPage() {
     if (activeStep === 1) return !registration?.pembayaran_diterima
     
     return true
-  }
-
-  if (!user) {
-    return (
-      <Container>
-        <Head>
-          <title>PSB Balqis Jogja - Pendaftaran</title>
-          <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
-        </Head>
-        <Row className='justify-content-center mb-6'>
-          <Col sm="6">
-            <Login />
-          </Col>
-        </Row>
-      </Container>
-    )
   }
 
   return (
