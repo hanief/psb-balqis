@@ -5,9 +5,11 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useProfile } from '@/data/profiles'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 export default function Layout({children}) {
   const { user, profile } = useProfile()
+  const router = useRouter()
   const supabaseClient = useSupabaseClient()
   
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
@@ -73,7 +75,10 @@ export default function Layout({children}) {
                     </li>
                   )}
                   <li className="nav-item">
-                    <Button color="outline-success" onClick={() => supabaseClient.auth.signOut()}>
+                    <Button color="outline-success" onClick={() => {
+                      router.push('/')
+                      supabaseClient.auth.signOut()
+                    }}>
                       Sign Out
                     </Button>
                   </li>
