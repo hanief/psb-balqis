@@ -159,7 +159,7 @@ export function usePendaftaran({
       }
     })
 
-    const response = mutate(async () => {
+    const promise = mutate(async () => {
       await supabase
         .storage
         .from('proofs')
@@ -170,16 +170,22 @@ export function usePendaftaran({
       
       await supabase.from('registrations')
         .update(updatedData)
-        .eq('id', data[0]?.id)
+        .eq('user_id', specificUserId)
 
       return updatedData
     }, {
       optimisticData: updatedData
     })
 
+    toast.promise(promise, {
+      loading: 'Mengunggah file...',
+      success: 'Tersimpan',
+      error: 'Gagal menyimpan'
+    })
+
     setIsUploading(false)
 
-    return response
+    return promise
   }
 
   async function deleteBukti(type) {
@@ -194,15 +200,23 @@ export function usePendaftaran({
       }
     })
 
-    return mutate(async () => {
+    const promise = mutate(async () => {
       await supabase.from('registrations')
         .update(updatedData)
-        .eq('user_id', data[0]?.user_id)
+        .eq('user_id', specificUserId)
 
       return updatedData
     }, {
       optimisticData: updatedData
     })
+
+    toast.promise(promise, {
+      loading: 'Menghapus...',
+      success: 'Terhapus',
+      error: 'Gagal menghapus'
+    })
+
+    return promise
   }
 
   async function deleteData(userId) {

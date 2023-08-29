@@ -1,4 +1,3 @@
-import Login from '@/components/Login'
 import Data from '@/components/Data'
 import Bayar from '@/components/Bayar'
 import dynamic from 'next/dynamic'

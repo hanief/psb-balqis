@@ -121,7 +121,6 @@ export default function Dashboard() {
       cell: row => <Input
         type="checkbox" 
         checked={row.pembayaran_diterima} 
-        disabled={!row.bukti_pembayaran}
         onChange={e => {
           updateSpecificRegistrationData(row.user_id, {pembayaran_diterima: e.target.checked})
         }}
