@@ -20,23 +20,21 @@ export default function Login() {
     })
 
 
-    if (!error) {
+    if (data?.user) {
       setIsLoggingIn(false)
 
       if (router.query.redirectedFrom) {
         router.push(router.query.redirectedFrom as string)
       } else {
         const {data: profile} = await supabaseClient.from('profiles').select('*').eq('id', data?.user.id).single()
-        
+
         if (profile?.is_admin) {
           router.push('/dasbor')
         } else {
           router.push('/daftar')
         }
       }
-
-      
-    } else {
+    } else if (error) {
       const { error } = await supabaseClient.auth.signUp({
         email: `${phone}@utama.app`,
         password
@@ -47,6 +45,8 @@ export default function Login() {
         router.push('/daftar')
       }
     }
+
+    setIsLoggingIn(false)
   }
 
   return (

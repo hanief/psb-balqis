@@ -4,6 +4,7 @@ import { Alert, Button, Col, Container, Row } from 'reactstrap'
 import Head from 'next/head'
 import { useUser } from '@supabase/auth-helpers-react'
 import { useSingleRegistration } from '@/data/singleRegistration'
+import Login from '@/components/Login'
 
 const Data = dynamic(() => import('@/components/Data'), { ssr: false })
 const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
@@ -63,6 +64,23 @@ export default function DaftarPage() {
     if (activeStep === 1) return !registration?.pembayaran_diterima
     
     return true
+  }
+
+  if (!user) {
+    return (
+      <Container>
+        <Head>
+          <title>PSB Balqis Jogja - Pendaftaran</title>
+          <meta name="description" content="Penerimaan Santri Baru Balqis Jogja"/>
+        </Head>
+        <Row className='justify-content-center mb-6'>
+            <Col sm="6">
+            <h1>Masuk</h1>
+            <Login />
+          </Col>
+        </Row>
+      </Container>
+    )
   }
 
   return (
