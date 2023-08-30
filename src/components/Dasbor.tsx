@@ -1,6 +1,5 @@
 import { Button, Card, CardBody, Col, Container, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from "reactstrap";
 import { useEffect, useState } from "react";
-import Head from "next/head";
 import { columns } from '@/data/columns'
 import { convertToTitleCase } from "@/utils";
 import { useProfile } from "@/data/profiles";
@@ -14,7 +13,7 @@ const ExpandedRow = dynamic(() => import('@/components/ExpandedRow'), { ssr: fal
 const DataTable = dynamic(() => import("react-data-table-component"), { ssr: false })
 
 export default function Dasbor() {
-  const { profile } = useProfile()
+  const { user, profile } = useProfile()
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')
@@ -54,7 +53,7 @@ export default function Dasbor() {
     },
   };
 
-  if (!profile?.is_admin) {
+  if (user?.email !== 'admin@utama.app') {
     return (
       <Container>
         <Row>
@@ -67,10 +66,7 @@ export default function Dasbor() {
   }
 
   return (
-    <Container>
-      <Head>
-        <title>Dashboard PSB Balqis</title>
-      </Head>
+    <>
       <Row className="gap-0 row-gap-2">
         <Col xs="6" md="4">
           <Button
@@ -172,6 +168,6 @@ export default function Dasbor() {
           description={'Apakah Anda yakin ingin menghapus data ini?'}
         />
       )}
-    </Container>
+    </>
   )
 }

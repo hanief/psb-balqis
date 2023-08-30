@@ -3,8 +3,34 @@ import Link from 'next/link'
 import Head from 'next/head'
 import Carousel from '@/components/Carousel'
 import Info from '@/components/Info'
+import AdminLogin from '@/components/AdminLogin'
+import { isAdmin } from '@/utils'
+import { useUser } from '@supabase/auth-helpers-react'
+import Dasbor from '@/components/dasbor'
 
 export default function Home() {
+  const user = useUser()
+  
+  if (isAdmin()) {
+    return (
+      <Container className='my-5'>
+        <Head>
+          <title>PSB Balqis Jogja - Pendaftaran</title>
+          <meta name="description" content="Penerimaan Santri Baru Balqis Jogja"/>
+        </Head>
+        {user ? (
+          <Dasbor />
+        ) : (
+          <Row className='justify-content-center mb-6'>
+            <Col sm="6">
+              <AdminLogin />
+            </Col>
+          </Row>
+        )}
+      </Container>
+    )
+  }
+
   return (
     <Container className="container my-5">
       <Head>

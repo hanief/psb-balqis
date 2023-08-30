@@ -8,10 +8,6 @@ import {Toaster} from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
 export default function Layout({children}) {
-  const { user, profile } = useProfile()
-  const router = useRouter()
-  const supabaseClient = useSupabaseClient()
-  
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
       <Container className="container my-5 justify-content-center">
@@ -34,18 +30,26 @@ export default function Layout({children}) {
 
   if (process.env.NEXT_PUBLIC_IS_ADMIN === 'true') {
     return (
-        <main>
-          <Head>
-            <title>Admin PSB BALQIS Jogja</title>
-            <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
-          </Head>
-          <Container fluid>
-            <Row>
-              <Col>
-                Admin
-              </Col>
-            </Row>
-          </Container>
+      <main >
+        <Head>
+          <title>Admin PSB BALQIS Jogja</title>
+          <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
+        </Head>
+        <div><Toaster/></div>
+        <nav className="py-3 border-bottom">
+          <div className="container d-flex flex-wrap justify-content-center align-items-center">
+            <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none">
+              <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+            </Link>
+          </div>
+        </nav>
+        <Container fluid>
+          <Row>
+            <Col>
+              {children}
+            </Col>
+          </Row>
+        </Container>
       </main>
     )
   }
@@ -66,31 +70,6 @@ export default function Layout({children}) {
             <Link href="/" className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </Link>
-            <ul className="nav">
-              {user ? (
-                <>
-                  {profile?.is_admin && (
-                    <li className="nav-item">
-                      <Link className="btn btn-outline-success me-2" href="/dasbor">Dasbor</Link>
-                    </li>
-                  )}
-                  <li className="nav-item">
-                    <Button color="outline-success" onClick={() => {
-                      router.push('/')
-                      supabaseClient.auth.signOut()
-                    }}>
-                      Sign Out
-                    </Button>
-                  </li>
-                </>
-              ) : (
-                <li className="nav-item">
-                  <Link className="btn btn-success me-2" href="/masuk">
-                    <strong>Masuk</strong>
-                  </Link>
-                </li>
-              )}
-            </ul>
           </div>
         </nav>
         {children}
