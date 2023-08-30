@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardTitle, Col, FormGroup, Input, InputGroup, Label, Row, Spinner } from "reactstrap"
+import { Button, Card, CardBody, CardTitle, Col, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
 import Select from 'react-select'
 import { useMemo } from "react"
 import { 
@@ -10,17 +10,20 @@ import {
 } from '@/data/options'
 import { Wilayah } from '@/types'
 import data from '@/data/wilayah.json'
+import ValidatedInput from "@/components/ValidatedInput"
+import ValidatedSelect from "@/components/ValidatedSelect"
 
 const provinces = data as Wilayah[]
 
 export default function DataForm({
-  registration, 
-  handleRegistrationFieldChange, 
-  handleMultipleRegistrationFieldChange,
+  registration,
+  rules,
+  validities,
+  onChange,
+  onMultipleChanges,
   uploadBukti,
   deleteBukti,
-  downloadBukti,
-  isUploading,
+  downloadBukti
 }) {
   const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
   const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
@@ -32,61 +35,60 @@ export default function DataForm({
         <Card>
           <CardBody>
             <CardTitle tag="h5" className='mb-4'>Data Calon Santri</CardTitle>
-            <FormGroup>
-                <Label for='nama_lengkap'>Nama Lengkap</Label>
-                <Input
-                  type="text"
-                  id="nama_lengkap"
-                  placeholder="cth: Ahmad Fulan"
-                  required={true}
-                  value={registration?.nama_lengkap}
-                  onChange={event => handleRegistrationFieldChange('nama_lengkap', event.target.value)}
-                />
-            </FormGroup>
-            <FormGroup>
-              <Label for='jenis_kelamin'>Jenis Kelamin</Label>                
-              <Select
-                options={jenisKelaminOptions}
-                placeholder='Pilih Jenis Kelamin'
-                isSearchable={false}
-                required={true}
-                id="jenis_kelamin"
-                value={jenisKelaminOptions.find(o => o.value === registration?.jenis_kelamin)}
-                onChange={event => handleRegistrationFieldChange('jenis_kelamin', event.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for='tempat_lahir'>Tempat dan Tanggal Lahir</Label>
-              <div className='d-flex justify-content-between gap-2'>
-                <Input
-                  type="text"
-                  id="tempat_lahir"
-                  placeholder="Tempat Lahir"
-                  required={true}
-                  value={registration?.tempat_lahir}
-                  onChange={event => handleRegistrationFieldChange('tempat_lahir', event.target.value)}
-                />
-                <Input
-                  type="date"
-                  id="tanggal_lahir"
-                  placeholder="Tanggal Lahir"
-                  required={true}
-                  value={registration?.tanggal_lahir}
-                  onChange={event => handleRegistrationFieldChange('tanggal_lahir', event.target.value)}
-                />
-              </div>
-          </FormGroup>
-          <FormGroup>
-            <Label for='asal_sekolah'>Asal Sekolah</Label>
-            <Input
+            <ValidatedInput
               type="text"
-              id="asal_sekolah"
-              placeholder="Asal Sekolah"
-              required={true}
-              value={registration?.asal_sekolah}
-              onChange={event => handleRegistrationFieldChange('asal_sekolah', event.target.value)}
+              name="nama_lengkap"
+              label="Nama Lengkap" 
+              placeholder="contoh: Ahmad Fulan"
+              value={registration?.nama_lengkap}
+              valid={validities?.nama_lengkap}
+              required={rules?.nama_lengkap}
+              onChange={onChange}
             />
-          </FormGroup>
+            <ValidatedSelect
+              options={jenisKelaminOptions}
+              name="jenis_kelamin"
+              label="Jenis Kelamin"
+              placeholder='Pilih Jenis Kelamin'
+              required={rules.jenis_kelamin}
+              valid={validities?.jenis_kelamin}
+              isSearchable={false}
+              onChange={onChange}
+              value={registration?.jenis_kelamin}
+            />
+            <div className='d-flex justify-content-between'>
+              <ValidatedInput
+                className='flex-grow-1 me-2'
+                type="text"
+                name="tempat_lahir"
+                label="Tempat Lahir" 
+                placeholder="contoh: Bantul"
+                value={registration?.tempat_lahir}
+                valid={validities?.tempat_lahir}
+                required={rules?.tempat_lahir}
+                onChange={onChange}
+              />
+              <ValidatedInput
+                type="date"
+                name="tanggal_lahir"
+                label="Tanggal Lahir"
+                placeholder="contoh: 17/08/1945"
+                value={registration?.tanggal_lahir}
+                valid={validities?.tanggal_lahir}
+                required={rules?.tanggal_lahir}
+                onChange={onChange}
+              />
+            </div>
+            <ValidatedInput
+              type="text"
+              name="asal_sekolah"
+              label="Asal Sekolah" 
+              placeholder="contoh: SMA 1 Bantul"
+              value={registration?.asal_sekolah}
+              valid={validities?.asal_sekolah}
+              required={rules?.asal_sekolah}
+              onChange={onChange}
+            />
           </CardBody>
         </Card>
       </Col>
@@ -94,76 +96,76 @@ export default function DataForm({
         <Card>
           <CardBody>
             <CardTitle tag="h5" className='mb-4'>Jalur Pendaftaran</CardTitle>
-            <FormGroup>
-              <Label for='jenjang'>Jenjang Sekolah</Label>
-              <Select
-                options={jenjangOptions}
-                placeholder='Pilih Jenjang Sekolah'
-                required={true}
-                id="jenjang"
-                isSearchable={false}
-                name="jenjang"
-                value={jenjangOptions.find(o => o.value === registration?.jenjang)}
-                onChange={option => handleRegistrationFieldChange('jenjang', option.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for='jalur_pendaftaran'>Jenis Pendaftaran</Label>
-              <Select
-                options={jalurPendaftaranOptions}
-                placeholder='Pilih Jalur Pendaftaran'
-                required={true}
-                id="jalur_pendaftaran"
-                isSearchable={false}
-                name="jalur_pendaftaran"
-                value={jalurPendaftaranOptions.find(o => o.value === registration?.jalur_pendaftaran)}
-                onChange={option => handleRegistrationFieldChange('jalur_pendaftaran', option.value)}
-              />
-            </FormGroup>
+            <ValidatedSelect
+              options={jenjangOptions}
+              name="jenjang"
+              label="Jenjang Sekolah"
+              placeholder='Pilih Jenjang Sekolah'
+              required={rules?.jenjang}
+              isSearchable={false}
+              onChange={onChange}
+              value={registration?.jenjang}
+              valid={validities?.jenjang}
+            />
+            <ValidatedSelect
+              options={jalurPendaftaranOptions}
+              name="jalur_pendaftaran"
+              label="Jenis Pendaftaran"
+              placeholder='Pilih Jenis Pendaftaran'
+              required={rules?.jalur_pendaftaran}
+              isSearchable={false}
+              onChange={onChange}
+              value={registration?.jalur_pendaftaran}
+              valid={validities?.jalur_pendaftaran}
+            />
             {registration?.jalur_pendaftaran === 'prestasi' && (
               <>
-                <FormGroup>
-                  <Label for='jalur_beasiswa_prestasi'>Jenis Prestasi</Label>
-                  <Select
-                    options={jalurBeasiswaPrestasiOptions}
-                    placeholder='Pilih Jalur Beasiswa Prestasi'
-                    id="jalur_beasiswa_prestasi"
-                    value={jalurBeasiswaPrestasiOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_prestasi)}
-                    onChange={option => handleRegistrationFieldChange('jalur_beasiswa_prestasi', option.value)}
-                  />
-                </FormGroup>
+                <ValidatedSelect
+                  options={jalurBeasiswaPrestasiOptions}
+                  name="jalur_beasiswa_prestasi"
+                  label="Jalur Beasiswa Prestasi"
+                  placeholder='Pilih Jalur Beasiswa Prestasi'
+                  required={rules?.jalur_beasiswa_prestasi}
+                  isSearchable={false}
+                  onChange={onChange}
+                  value={registration?.jalur_beasiswa_prestasi}
+                  valid={validities?.jalur_beasiswa_prestasi}
+                />
                 <FormGroup>
                   <Label for="nama_prestasi">Detail Prestasi</Label>
-                  <Input
-                    className='mb-1'
+                  <ValidatedInput
                     type="text"
-                    id="nama_prestasi"
+                    name="nama_prestasi"
                     placeholder="Nama Prestasi"
                     value={registration?.nama_prestasi}
-                    onChange={event => handleRegistrationFieldChange('nama_prestasi', event.target.value)}
+                    required={rules?.nama_prestasi}
+                    valid={validities?.nama_prestasi}
+                    onChange={onChange}
                   />
-                  <Input 
-                    className='mb-1'
+                  <ValidatedInput
                     type="text"
-                    id="tingkat_prestasi"
-                    placeholder="Tingkat (cth: Kabupaten, Provinsi, Nasional)"
-                    value={registration?.tingkat_prestasi}    
-                    onChange={event => handleRegistrationFieldChange('tingkat_prestasi', event.target.value)}
+                    name="tingkat_prestasi"
+                    placeholder="Tingkat Prestasi (contoh: Kabupaten, Provinsi, Nasional)"
+                    value={registration?.tingkat_prestasi}
+                    required={rules?.tingkat_prestasi}
+                    valid={validities?.tingkat_prestasi}
+                    onChange={onChange}
                   />
-                  <Input 
-                    className='mb-1'
+                  <ValidatedInput
                     type="text"
-                    id="tahun_prestasi"
-                    placeholder="Tahun (cth: 2020)"
-                    value={registration?.tahun_prestasi}   
-                    onChange={event => handleRegistrationFieldChange('tahun_prestasi', event.target.value)}
+                    name="tahun_prestasi"
+                    placeholder="Tahun Prestasi (contoh: 2020)"
+                    value={registration?.tahun_prestasi}
+                    required={rules?.tahun_prestasi}
+                    valid={validities?.tahun_prestasi}
+                    onChange={onChange}
                   />
                 </FormGroup>
                 {registration?.bukti_prestasi ? (
                   <FormGroup>
                     <Label for="bukti_prestasi">Bukti Prestasi</Label>
                     <InputGroup>
-                      <Input type="text" disabled value="Berkas bukti sudah tersimpan"></Input>
+                      <Input name="bukti_prestasi" type="text" disabled value="Berkas bukti sudah tersimpan"></Input>
                       <Button
                         color="success" 
                         onClick={() => {
@@ -181,33 +183,23 @@ export default function DataForm({
                     </InputGroup>
                   </FormGroup>
                 ) : (
-                  <>
-                  {isUploading ? (
-                    <>
-                      <Spinner>
-                        Uploading...
-                      </Spinner>
-                      <span>Uploading...</span>
-                    </>
-                  ) : (
-                    <FormGroup>
-                      <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
-                      <Input 
-                        className='mb-1'
-                        type="file"
-                        id="bukti_prestasi"
-                        placeholder="Bukti Prestasi"
-                        accept="image/*,.pdf"
-                        onChange={event => {
-                          const file = event.target.files[0]
-                          const type = 'prestasi'
+                  <FormGroup>
+                    <Label for="bukti_prestasi">Upload berkas bukti prestasi (Sertifikat, Ijazah, dll)</Label>
+                    <Input 
+                      className='mb-1'
+                      type="file"
+                      id="bukti_prestasi"
+                      name="bukti_prestasi"
+                      placeholder="Bukti Prestasi"
+                      accept="image/*,.pdf"
+                      onChange={event => {
+                        const file = event.target.files[0]
+                        const type = 'prestasi'
 
-                          uploadBukti(file, type)
-                        }}
-                      />
-                    </FormGroup>
-                  )}
-                  </>
+                        uploadBukti(file, type)
+                      }}
+                    />
+                  </FormGroup>
                 )}
               </>
             )}
@@ -219,8 +211,9 @@ export default function DataForm({
                     options={jalurBeasiswaKhususOptions}
                     placeholder='Pilih Jalur Beasiswa Afirmasi'
                     id="jalur_beasiswa_khusus"
-                    value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_khusus)}
-                    onChange={option => handleRegistrationFieldChange('jalur_beasiswa_khusus', option.value)}
+                    name="jalur_beasiswa_khusus"
+                    value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_khusus) || null}
+                    onChange={option => onChange('jalur_beasiswa_khusus', option.value)}
                   />
                 </FormGroup>
                 
@@ -280,24 +273,28 @@ export default function DataForm({
             <CardTitle tag="h5" className='mb-4'>Data Orang Tua/Wali Santri</CardTitle>
             <FormGroup>
               <Label for='nama_ayah'>Ayah / Wali 1</Label>
+              
               <Row>
                 <Col lg="6">
-                  <Input
-                    className='mb-2'
+                  <ValidatedInput
                     type="text"
-                    id="nama_ayah"
-                    placeholder='Nama Lengkap'
+                    name="nama_ayah"
+                    placeholder="Nama Lengkap"
                     value={registration?.nama_ayah}
-                    onChange={event => handleRegistrationFieldChange('nama_ayah', event.target.value)}
+                    required={rules?.nama_ayah}
+                    valid={validities?.nama_ayah}
+                    onChange={onChange}
                   />
                 </Col>
                 <Col lg="6">
-                  <Input
+                  <ValidatedInput
                     type="text"
-                    id="nomor_hp_ayah"
-                    placeholder="Nomor HP (cth: +6281234567890)"
+                    name="nomor_hp_ayah"
+                    placeholder="Nomor HP"
                     value={registration?.nomor_hp_ayah}
-                    onChange={event => handleRegistrationFieldChange('nomor_hp_ayah', event.target.value)}
+                    required={rules?.nomor_hp_ayah}
+                    valid={validities?.nomor_hp_ayah}
+                    onChange={onChange}
                   />
                 </Col>
               </Row>
@@ -306,22 +303,25 @@ export default function DataForm({
               <Label for='asal_sekolah'>Ibu / Wali 2</Label>
               <Row>
                 <Col lg="6">
-                  <Input
-                    className='mb-2'
+                  <ValidatedInput
                     type="text"
-                    id="nama_ibu"
-                    placeholder='Nama Lengkap'
+                    name="nama_ibu"
+                    placeholder="Nomor HP"
                     value={registration?.nama_ibu}
-                    onChange={event => handleRegistrationFieldChange('nama_ibu', event.target.value)}
+                    required={rules?.nama_ibu}
+                    valid={validities?.nama_ibu}
+                    onChange={onChange}
                   />
                 </Col>
                 <Col lg="6">
-                  <Input
+                  <ValidatedInput
                     type="text"
-                    id="nomor_hp_ibu"
-                    placeholder="Nomor HP (cth: +6281234567890)"
+                    name="nomor_hp_ibu"
+                    placeholder="Nomor HP"
                     value={registration?.nomor_hp_ibu}
-                    onChange={event => handleRegistrationFieldChange('nomor_hp_ibu', event.target.value)}
+                    required={rules?.nomor_hp_ibu}
+                    valid={validities?.nomor_hp_ibu}
+                    onChange={onChange}
                   />
                 </Col>
               </Row>
@@ -333,84 +333,81 @@ export default function DataForm({
         <Card>
           <CardBody>
             <CardTitle tag="h5" className='mb-4'>Alamat Tempat Tinggal</CardTitle>
-              <Input
-                className='mb-2'
-                label="Alamat"
+              <ValidatedInput
                 type="text"
-                id="alamat"
+                name="alamat"
                 placeholder="Jalan, RT/RW, Desa/Kelurahan"
                 value={registration?.alamat}
-                onChange={event => handleRegistrationFieldChange('alamat', event.target.value)}
+                required={rules?.alamat}
+                valid={validities?.alamat}
+                onChange={onChange}
               />
-              <Select
-                className='mb-2'
-                id="provinsi"
-                placeholder="Pilih Provinsi"
-                options={provinces}
-                getOptionValue={option => option.code}
-                getOptionLabel={option => option.province}
-                value={provinces.find(prov => prov.code === registration?.provinsi)}
-                onChange={option => handleMultipleRegistrationFieldChange([
-                  {key: 'provinsi', value: option.code},
+              <ValidatedSelect
+                options={provinces?.map(province => ({value: province.code, label: province.province}))}
+                name="provinsi"
+                placeholder='Pilih Provinsi'
+                required={rules?.provinsi}
+                onChange={(name, value) => onMultipleChanges([
+                  {key: 'provinsi', value: value},
                   {key: 'kabupaten', value: ''},
                   {key: 'kecamatan', value: ''},
                   {key: 'desa', value: ''},
                   {key: 'kodepos', value: ''},
                 ])}
+                value={registration?.provinsi}
+                valid={validities?.provinsi}
               />
-              <Select
-                className='mb-2'
-                id="kabupaten"
-                placeholder="Pilih Kabupaten"
-                options={kabupatens}
-                value={kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)}
-                getOptionValue={option => option.code}
-                getOptionLabel={option => option.city}
-                onChange={option => handleMultipleRegistrationFieldChange([
-                  {key: 'kabupaten', value: option.code},
+              <ValidatedSelect
+                options={kabupatens?.map(kabupaten => ({value: kabupaten.code, label: kabupaten.city}))}
+                name="kabupaten"
+                placeholder='Pilih Kabupaten'
+                required={rules?.kabupaten}
+                onChange={(name, value) => onMultipleChanges([
+                  {key: 'kabupaten', value: value},
                   {key: 'kecamatan', value: ''},
                   {key: 'desa', value: ''},
                   {key: 'kodepos', value: ''},
                 ])}
+                value={registration?.kabupaten}
+                valid={validities?.kabupaten}
               />
-              <Select
-                className='mb-2'
-                id="kecamatan"
-                placeholder="Pilih Kecamatan"
-                value={kecamatans?.find(kecamatan => kecamatan.code === registration?.kecamatan)}
-                options={kecamatans}
-                getOptionValue={option => option.code}
-                getOptionLabel={option => option.district}
-                onChange={option => handleMultipleRegistrationFieldChange([
-                  {key: 'kecamatan', value: option.code},
+              <ValidatedSelect
+                options={kecamatans?.map(kecamatan => ({value: kecamatan.code, label: kecamatan.district}))}
+                name="kecamatan"
+                placeholder='Pilih Kecamatan'
+                required={rules?.kecamatan}
+                onChange={(name, value) => onMultipleChanges([
+                  {key: 'kecamatan', value: value},
                   {key: 'desa', value: ''},
                   {key: 'kodepos', value: ''},
                 ])}
+                value={registration?.kecamatan}
+                valid={validities?.kecamatan}
               />
-              <Select
-                className='mb-2'
-                id="desa"
-                placeholder="Pilih Desa/Kelurahan"
-                value={desas?.find(kelurahan => kelurahan.code === registration?.desa)}
-                options={desas}
-                getOptionValue={option => option.code}
-                getOptionLabel={option => option.village}
-                onChange={option => {
-                  handleMultipleRegistrationFieldChange([
-                    {key: 'desa', value: option.code},
-                    {key: 'kodepos', value: `${desas.find(village => village.code === option.code)?.postal}`}
+              <ValidatedSelect
+                options={desas?.map(desa => ({value: desa.code, label: desa.village}))}
+                name="desa"
+                placeholder='Pilih Desa'
+                required={rules?.desa}
+                onChange={(name, value) => {
+                  const desa = desas?.find(desa => desa.code === value)
+                  onMultipleChanges([
+                    {key: 'desa', value: value},
+                    {key: 'kodepos', value: desa ? `${desa.postal}` : null},
                   ])
                 }}
+                value={registration?.desa}
+                valid={validities?.desa}
               />
-              <Input
-                className='mb-2'
-                label="Kode Pos"
+              <ValidatedInput
                 type="text"
-                id="kodepos"
+                name="kodepos"
                 placeholder="Kode Pos"
                 value={registration?.kodepos}
-                onChange={event => handleRegistrationFieldChange('kodepos', event.target.value)}
-              /> 
+                required={rules?.kodepos}
+                valid={validities?.kodepos}
+                onChange={onChange}
+              />
           </CardBody>
         </Card>
       </Col>

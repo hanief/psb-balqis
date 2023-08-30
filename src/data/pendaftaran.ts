@@ -1,23 +1,136 @@
 import useSWR from "swr"
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
-import { useState } from "react"
+import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useMemo, useState } from "react"
 import XLSX from 'xlsx'
 import toast from 'react-hot-toast'
 import { columns } from '@/data/columns'
 import { formatDataWithWilayahNames } from '@/utils'
+import { mutate as mutateGlobal } from 'swr'
+
+export function usePendaftaranByUserId(userId) {
+  const supabase = useSupabaseClient()
+
+  const {data, mutate} = useSWR(userId && `/registrations/${userId}`, async () => {
+    const { data } = await supabase
+        .from("registrations")
+        .select()
+        .eq("user_id", userId)
+        .limit(1)
+
+    return data
+  })
+
+  const registration = useMemo(() => {
+    if (!userId) return null
+
+    return data ? data[0] : null
+  }, [userId, data])
+
+  async function uploadBukti(file, type) {
+    const fileNameSplit = file?.name?.split('.')
+    const fileExtension = fileNameSplit[fileNameSplit.length-1]
+    const path = `${type}/${data[0]?.id}.${fileExtension}`
+
+    const newDatum = {
+      [`bukti_${type}`]: path
+    }
+
+    const oldDatum = data?.find(datum => datum.id === userId)
+    const newData = {...oldDatum, ...newDatum}
+    const updatedData = data?.map(datum => {
+      if (datum.user_id === userId) {
+        return newData
+      } else {
+        return datum
+      }
+    })
+
+    const promise = mutate(async () => {
+      await supabase
+        .storage
+        .from('proofs')
+        .upload(path, file, {
+          cacheControl: '3600',
+          upsert: true
+        })
+      
+      await supabase
+        .from('registrations')
+        .update(updatedData)
+        .eq('user_id', userId)
+
+      return updatedData
+    }, {
+      optimisticData: updatedData
+    })
+
+    toast.promise(promise, {
+      loading: 'Mengunggah file...',
+      success: 'Tersimpan',
+      error: 'Gagal menyimpan'
+    })
+
+    return promise
+  }
+
+  async function downloadBukti(fileName) {
+    const { data } = await supabase.storage
+      .from('proofs')
+      .download(fileName)
+
+    const blob = new Blob([data]);
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `${registration?.nama_lengkap}/${fileName}`;
+    link.click()
+  }
+
+  async function deleteBukti(type) {
+    const newDatum = {[`bukti_${type}`]: ''}
+    const oldDatum = data?.find(datum => datum.id === userId)
+    const newData = {...oldDatum, ...newDatum}
+    const updatedData = data?.map(datum => {
+      if (datum.user_id === userId) {
+        return newData
+      } else {
+        return datum
+      }
+    })
+
+    const promise = mutate(async () => {
+      await supabase
+        .from('registrations')
+        .update(updatedData)
+        .eq('user_id', userId)
+
+      return updatedData
+    }, {
+      optimisticData: updatedData
+    })
+
+    toast.promise(promise, {
+      loading: 'Menghapus...',
+      success: 'Terhapus',
+      error: 'Gagal menghapus'
+    })
+
+    return promise
+  }
+
+  return {
+    registration,
+    uploadBukti,
+    downloadBukti,
+    deleteBukti,
+  }
+}
 
 export function usePendaftaran({
   specificUserId, 
   selectedColumn, 
   keyword,
   showDeleted
-} = {
-    specificUserId: null,
-    selectedColumn: null,
-    keyword: null,
-    showDeleted: false
-  }
-) {
+}) {
   const supabase = useSupabaseClient()
   const [isUploading, setIsUploading] = useState(false)
 

@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import toast from 'react-hot-toast'
 
 export function useRegistration() {
@@ -124,18 +124,16 @@ export function useRegistration() {
   }
 
   async function downloadBukti(nama, file) {
-    return mutate(async () => {
-      const {data} = await supabase
-        .storage
-        .from('proofs')
-        .download(file)
+    const {data} = await supabase
+      .storage
+      .from('proofs')
+      .download(file)
 
-      var blob=new Blob([data]);
-      var link=document.createElement('a');
-      link.href=window.URL.createObjectURL(blob);
-      link.download=`${nama}/${file}`;
-      link.click()
-    })
+    var blob=new Blob([data]);
+    var link=document.createElement('a');
+    link.href=window.URL.createObjectURL(blob);
+    link.download=`${nama}/${file}`;
+    link.click()
   }
 
   return {

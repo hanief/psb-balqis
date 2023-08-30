@@ -1,68 +1,142 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRegistration } from '@/data/registration'
-import { debounce } from 'lodash'
+import { useEffect, useMemo, useState } from 'react'
+import { useSingleRegistration } from '@/data/singleRegistration'
 import { useUser } from '@supabase/auth-helpers-react'
 import DataForm from './DataForm'
-import { columnsObject } from '@/data/columns'
+import { Alert, Button } from 'reactstrap'
+import { convertToTitleCase } from "@/utils"
 
-export default function Data() {
+export default function Data({onValidityChange}) {
   const user = useUser()
+
   const {
-    registration: remoteRegistration, 
+    registration, 
+    change,
+    changeMultiple,
     uploadBukti, 
     deleteBukti,
-    downloadBukti,
-    isUploading, 
-    isLoading, 
-    isValidating,
-    updateRegistrationData,
-  } = useRegistration()
+    downloadBukti
+  } = useSingleRegistration(user?.id)
 
-  const [errors, setErrors] = useState(columnsObject)
+  const [showValiditiesWarning, setShowValiditiesWarning] = useState(false)
 
-  const [registration, setRegistration] = useState(columnsObject)
+  const [localRegistration, setLocalRegistration] = useState(registration)
 
-  const saveRegistrationData = useCallback(updateRegistrationData, [])
-  const handleUpdateRegistration = useMemo(() => debounce(saveRegistrationData, 750), [saveRegistrationData])
+  const requiredRules = useMemo(() => {
+    return {
+      'nama_lengkap': true,
+      'jenis_kelamin': true,
+      'tempat_lahir': true,
+      'tanggal_lahir': true,
+      'asal_sekolah': true,
+      'jenjang': true,
+      'jalur_pendaftaran': true,
+      // 'jalur_beasiswa': true,
+      // 'jalur_beasiswa_khusus': localRegistration?.jalur_pendaftaran === 'afirmasi',
+      // 'jalur_beasiswa_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
+      // 'nama_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
+      // 'tingkat_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
+      // 'tahun_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
+      // 'bukti_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
+      // 'bukti_dhuafa': localRegistration?.jalur_beasiswa_khusus === 'dhuafa',
+      // 'bukti_yatim':  localRegistration?.jalur_beasiswa_khusus === 'yatim',
+      'nama_ayah': true,
+      'nomor_hp_ayah': true,
+      'nama_ibu': true,
+      'nomor_hp_ibu': true,
+      'alamat': true,
+      // 'provinsi': true,
+      // 'kabupaten': true,
+      // 'kecamatan': true,
+      // 'desa': true,
+      // 'kodepos': true,
+    }
+  }, [localRegistration])
 
   useEffect(() => {
-    if (!remoteRegistration) return
+    console.log('registration', registration)
+    console.log('localRegistration', localRegistration)
+    setLocalRegistration(registration)
+  }, [registration])
 
-    const newRegistration = {...registration}
+  const validities = useMemo(() => {
+    return Object.keys(requiredRules).reduce((acc, field) => {
+      acc[field] = requiredRules[field] && localRegistration && localRegistration[field]
+      return acc
+    }, {})
+  }, [localRegistration])
 
-    Object.keys(registration).forEach(field => {
-      if (newRegistration[field] === remoteRegistration[field]) return
+  const isValid = useMemo(() => {
+    return Object.keys(requiredRules).every(field => {
+      if (!requiredRules[field]) return true
 
-      newRegistration[field] = remoteRegistration[field]
+      return localRegistration && localRegistration[field]
     })
+  }, [localRegistration])
+  
+  useEffect(() => {
+    if (isValid && showValiditiesWarning) {
+      setShowValiditiesWarning(false)
+    }
 
-    setRegistration(newRegistration)
-  }, [remoteRegistration])
+    onValidityChange(isValid)
+  }, [isValid])
 
-  function handleRegistrationFieldChange(key, value) {
-    const updatedData = {[key]: value}
-    setRegistration({ ...registration, ...updatedData})
-    handleUpdateRegistration(updatedData)
-  }
-
-  function handleMultipleRegistrationFieldChange(changes) {
-    const updatedData = {}
+  function handleChange(name, value) {
+    setLocalRegistration({
+      ...localRegistration,
+      [name]: value
+    })
+    if (requiredRules[name] && value) {
+      change(name, value)
+    }
+  } 
+  
+  function handleMultipleChanges(changes) {
+    const newRegistration = {}
+    let isValid = true
     changes.forEach(change => {
-      updatedData[change.key] = change.value
+      newRegistration[change.key] = change.value
+      if (requiredRules[change.key] && !change.value) {
+        isValid = false
+      }
     })
-    setRegistration({ ...registration, ...updatedData})
-    handleUpdateRegistration(updatedData)
+
+    setLocalRegistration({
+      ...localRegistration,
+      ...newRegistration
+    })
+
+    if (isValid) {
+      changeMultiple(changes)
+    }
   }
 
   return (
-    <DataForm
-      registration={registration}
-      handleRegistrationFieldChange={handleRegistrationFieldChange}
-      handleMultipleRegistrationFieldChange={handleMultipleRegistrationFieldChange}
-      downloadBukti={downloadBukti}
-      deleteBukti={deleteBukti}
-      isUploading={isUploading}
-      uploadBukti={uploadBukti}
-    />
+    <>
+      {!isValid && (
+        <Alert fade color="danger">
+          <i className="bi-exclamation-circle me-2"></i>Ada isian yang masih kosong, mohon diperbaiki terlebih dahulu:
+          <ul>
+            {Object.keys(validities).map(field => {
+              if (validities[field]) return null
+
+              return (
+                <li key={field}>{convertToTitleCase(field)}</li>
+              )
+            })}
+          </ul>
+        </Alert>
+      )}
+      <DataForm
+        registration={registration}
+        rules={requiredRules}
+        validities={validities}
+        onChange={handleChange}
+        onMultipleChanges={handleMultipleChanges}
+        downloadBukti={downloadBukti}
+        deleteBukti={deleteBukti}
+        uploadBukti={uploadBukti}
+      />
+    </> 
   )
 }

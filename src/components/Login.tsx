@@ -66,6 +66,11 @@ export default function Login() {
           placeholder='Password'
           onChange={event => setPassword(event.target.value)}
           value={password}
+          onKeyUp={event => {
+            if (event.key === 'Enter') {
+              handleSignIn(event)
+            }
+          }}
         />
         <Label for="password"><small>Jika sudah punya akun sebelumnya, masukkan password akun tersebut. Jika belum, silakan buat password baru.</small></Label>
       </FormGroup>

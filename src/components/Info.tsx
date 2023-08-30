@@ -1,4 +1,4 @@
-import { Col, Container, ListGroup, ListGroupItem, Row } from "reactstrap";
+import { Col, ListGroup, ListGroupItem, Row } from "reactstrap";
 import Jadwal from '@/posts/Jadwal.mdx'
 import Jalur from '@/posts/Jalur.mdx'
 import Beasiswa from '@/posts/Beasiswa.mdx'

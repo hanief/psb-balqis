@@ -1,7 +1,6 @@
 import DataTable from "react-data-table-component"
-import { usePendaftaran } from "@/data/pendaftaran";
-import { Button, Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from "reactstrap";
-import { useState } from "react";
+import { Button, Card, CardBody, Col, Container, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from "reactstrap";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import FileViewerModal from "@/components/FileViewerModal";
 import DataViewerModal from "@/components/DataViewerModal";
@@ -9,8 +8,13 @@ import { DateTime } from 'luxon'
 import { columns } from '@/data/columns'
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import { formatDatumWithWilayahNames } from "@/utils";
+import { useProfile } from "@/data/profiles";
+import { useRouter } from "next/router";
+import { useRegistrations } from "@/data/registrations";
 
-export default function Dashboard() {
+export default function Dasbor() {
+  const router = useRouter()
+  const { profile } = useProfile()
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')
@@ -19,7 +23,8 @@ export default function Dashboard() {
     isOpen: false,
     type: '',
     url: '',
-  })  
+  })
+
   const [dataViewerProps, setDataViewerProps] = useState({
     isOpen: false,
     registration: null,
@@ -28,15 +33,9 @@ export default function Dashboard() {
   const [deleteConfirmationProps, setDeleteConfirmationProps] = useState({
     isOpen: false,
     onConfirm: null,
-    userId: null,
   })
 
-  const {registrations, downloadAsXLSX, downloadBukti, refreshData, deleteData, updateSpecificRegistrationData} = usePendaftaran({
-    specificUserId: null,
-    selectedColumn: selectedColumn, 
-    keyword: keyword,
-    showDeleted: showDeleted
-  })
+  const { registrations, update, refreshData, remove, downloadBukti, downloadAsXLSX } = useRegistrations()
   
   function toTitleCase(str) {
     if (!str) return ''
@@ -85,19 +84,22 @@ export default function Dashboard() {
     {
       id: 'jenjang',
       name: 'Jenjang',
+      // hide: 'sm',
       format: row => row.jenjang?.toUpperCase(),
       selector: row => row.jenjang,
-      sortable: true,
+      sortable: true
     },
     {
       id: 'jalur_pendaftaran',
       name: 'Jalur',
+      // hide: 'sm',
       selector: row => row.jalur_pendaftaran,
       sortable: true,
     },
     {
       id: 'created_at',
       name: 'Tanggal',
+      // hide: 'sm',
       format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATETIME_MED),
       selector: row => row.created_at,
       sortable: true,
@@ -109,7 +111,7 @@ export default function Dashboard() {
         if (!row.bukti_pembayaran) return '-'
 
         return (
-          <Button color="outline-success" onClick={() => downloadBukti(row.nama_lengkap, row.bukti_pembayaran)}>
+          <Button color="outline-success" onClick={() => downloadBukti(row)}>
             Unduh
           </Button>
         )
@@ -122,7 +124,7 @@ export default function Dashboard() {
         type="checkbox" 
         checked={row.pembayaran_diterima} 
         onChange={e => {
-          updateSpecificRegistrationData(row.user_id, {pembayaran_diterima: e.target.checked})
+          update(row.user_id, {pembayaran_diterima: e.target.checked})
         }}
       />
     },
@@ -131,21 +133,23 @@ export default function Dashboard() {
       name: 'Actions',
       cell: row => (
         <>
-          <Button className="me-1" color="outline-success" onClick={() => setDataViewerProps({
-            isOpen: true,
-            registration: row,
-          })}>
+          <Button className="me-1" color="outline-success" onClick={() => {
+            console.log('registration', row)
+            setDataViewerProps({
+              isOpen: true,
+              registration: row,
+            })  
+          }}>
             Ubah
           </Button>
           {row.deleted_at ? (
-            <Button color="outline-success" onClick={() => updateSpecificRegistrationData(row.user_id, {deleted_at: null})}>
+            <Button color="outline-success" onClick={() => update(row.user_id, {deleted_at: null})}>
               <i className="bi bi-recycle"></i>
             </Button>
           ) : (
             <Button color="outline-danger" onClick={() => setDeleteConfirmationProps({
               isOpen: true,
-              onConfirm: () => deleteData(row.user_id),
-              userId: row.user_id,
+              onConfirm: () => remove(row.user_id),
             })}>
               <i className="bi bi-trash"></i>
             </Button>
@@ -170,8 +174,20 @@ export default function Dashboard() {
     },
   };
 
+  if (!profile?.is_admin) {
+    return (
+      <Container>
+        <Row>
+          <Col>
+            Sorry, you don&apos;t have access rights to this page.
+          </Col>
+        </Row>
+      </Container>
+    )
+  }
+
   return (
-    <div className="container">
+    <Container>
       <Head>
         <title>Dashboard PSB Balqis</title>
       </Head>
@@ -180,7 +196,7 @@ export default function Dashboard() {
           <Button
             color="outline-success"
             className="me-1"
-            onClick={() => downloadAsXLSX()}
+            onClick={() => downloadAsXLSX(selectedColumn, keyword, showDeleted)}
           >
             <i className="bi-download me-1"></i>Unduh
           </Button>
@@ -229,7 +245,6 @@ export default function Dashboard() {
           <Card>
             <CardBody>
               <DataTable
-                theme="default"
                 columns={tableColumns}
                 data={registrations?.filter(registration => {
                   let shouldShow = true
@@ -245,8 +260,8 @@ export default function Dashboard() {
                   return shouldShow
                 })}
                 customStyles={customStyles}
-                striped
                 highlightOnHover
+                striped
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
               />
@@ -254,19 +269,16 @@ export default function Dashboard() {
           </Card>
         </Col>
       </Row>
-      <FileViewerModal
-        isOpen={fileViewerProps.isOpen}
-        toggle={() => setFileViewerProps({...fileViewerProps, isOpen: !fileViewerProps.isOpen})}
-        type={fileViewerProps.type}
-        url={fileViewerProps.url}
-      />
 
       <DataViewerModal
         initialRegistration={dataViewerProps.registration}
-        updateSpecificRegistrationData={updateSpecificRegistrationData}
         isOpen={dataViewerProps.isOpen}
-        toggle={() => setDataViewerProps({...dataViewerProps, isOpen: !dataViewerProps.isOpen})}
-        onUpdate={() => refreshData()}
+        toggle={() => {
+          setDataViewerProps({
+            isOpen: !dataViewerProps.isOpen,
+            registration: dataViewerProps.registration ? null : dataViewerProps.registration})
+        }}
+        onUpdate={refreshData}
       />
 
       <DeleteConfirmationModal
@@ -276,6 +288,6 @@ export default function Dashboard() {
         title={'Konfirmasi hapus'}
         description={'Apakah Anda yakin ingin menghapus data ini?'}
       />
-    </div>
+    </Container>
   )
 }

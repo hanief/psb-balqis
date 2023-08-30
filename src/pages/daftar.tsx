@@ -2,7 +2,7 @@ import Data from '@/components/Data'
 import Bayar from '@/components/Bayar'
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Alert, Button, Col, Container, Row } from 'reactstrap'
 import Tes from '@/components/Tes'
 import Pengumuman from '@/components/Pengumuman'
 import Head from 'next/head'
@@ -15,6 +15,7 @@ const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
 export default function DaftarPage() {
   const {registration, isLoading} = useRegistration()
   const [activeStep, setActiveStep] = useState(getProgressIndex())
+  const [isDataFormValid, setIsDataFormValid] = useState(false)
 
   const steps = useMemo(() => [
     {
@@ -58,7 +59,7 @@ export default function DaftarPage() {
   }
 
   function isNextButtonDisabled() {
-    if (activeStep === 0) return false
+    if (activeStep === 0) return !isDataFormValid
     if (activeStep === 1) return !registration?.pembayaran_diterima
     
     return true
@@ -103,7 +104,7 @@ export default function DaftarPage() {
       <Row className='justify-content-center mb-6'>
         <Col>
         {activeStep === 0 && (
-          <Data />
+          <Data onValidityChange={setIsDataFormValid}/>
         )}
         {activeStep === 1 && (
           <Bayar />

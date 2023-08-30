@@ -2,7 +2,7 @@ import useSWR from "swr"
 import toast from 'react-hot-toast'
 
 export function useAdminUser(userId) {
-  const { data, mutate, ...rest } = useSWR(`/admin/user/${userId}`, async () => {
+  const { data, mutate, ...rest } = useSWR(userId && `/admin/user/${userId}`, async () => {
     const { user } = await fetch(`/api/user?userId=${userId}`, {
       method: 'GET',
       headers: {
@@ -14,6 +14,8 @@ export function useAdminUser(userId) {
   })
 
   async function updatePassword(userId, newPassword) {
+    if (!userId) throw new Error('userId is required')
+    
     const promise = mutate(async () => {
       await fetch(`/api/user?userId=${userId}`, {
         method: 'PUT',

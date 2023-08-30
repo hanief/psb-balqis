@@ -2,8 +2,8 @@ import { Button, Card, CardBody, CardTitle, FormGroup, Input, Label } from "reac
 import { useState } from "react"
 import { useAdminUser } from "@/data/adminUser"
 
-export default function PasswordEdit({ userId }) {
-  const { user, updatePassword } = useAdminUser(userId)
+export default function PasswordEdit({ initialRegistration }) {
+  const { user, updatePassword } = useAdminUser(initialRegistration?.user_id)
   const [phone, setPhone] = useState(getPhoneFromEmail(user?.email))
   const [newPassword, setNewPassword] = useState('')
 
@@ -38,7 +38,7 @@ export default function PasswordEdit({ userId }) {
             onChange={event => setNewPassword(event.target.value)}
           />
         </FormGroup>
-        <Button color="outline-success" onClick={() => updatePassword(userId, newPassword)}>Update Password</Button>
+        <Button color="outline-success" onClick={() => updatePassword(initialRegistration?.user_id, newPassword)}>Update Password</Button>
       </CardBody>
     </Card>
   )
