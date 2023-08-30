@@ -5,6 +5,8 @@ import Head from 'next/head'
 import { useUser } from '@supabase/auth-helpers-react'
 import { useSingleRegistration } from '@/data/singleRegistration'
 import Login from '@/components/Login'
+import { useProfile } from '@/data/profiles'
+import { useRouter } from 'next/router'
 
 const Data = dynamic(() => import('@/components/Data'), { ssr: false })
 const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
@@ -13,7 +15,8 @@ const Pengumuman = dynamic(() => import('@/components/Pengumuman'), { ssr: false
 const Stepper = dynamic(() => import('@/components/CustomStepper'), { ssr: false })
 
 export default function DaftarPage() {
-  const user = useUser()
+  const router = useRouter()
+  const { user, profile } = useProfile()
   const {registration} = useSingleRegistration(user?.id)
   const [activeStep, setActiveStep] = useState(getProgressIndex())
   const [isDataFormValid, setIsDataFormValid] = useState(false)
@@ -50,6 +53,12 @@ export default function DaftarPage() {
     
     setActiveStep(getProgressIndex())
   }, [registration])
+
+  useEffect(() => {
+    if (profile?.is_admin) {
+      router.push('/dasbor')
+    }
+  })
 
   function getProgressIndex() {
     if (!registration) return 0

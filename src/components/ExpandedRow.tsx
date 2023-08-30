@@ -1,7 +1,7 @@
 import { columns } from "@/data/columns"
 import { convertToTitleCase, formatDatumWithWilayahNames } from "@/utils"
 
-export default function ExpandedComponent(data) {
+export default function ExpandedComponent({data}) {
   const formattedData = formatDatumWithWilayahNames(data, 1)
 
   return (
