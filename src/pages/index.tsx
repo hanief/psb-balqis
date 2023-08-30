@@ -1,12 +1,14 @@
 import { Col, Container, Row } from 'reactstrap'
 import Link from 'next/link'
 import Head from 'next/head'
-import Carousel from '@/components/Carousel'
-import Info from '@/components/Info'
-import AdminLogin from '@/components/AdminLogin'
 import { isAdmin } from '@/utils'
 import { useUser } from '@supabase/auth-helpers-react'
-import Dasbor from '@/components/Dasbor'
+import dynamic from 'next/dynamic'
+
+const Dasbor = dynamic(() => import('@/components/Dasbor'), { ssr: false })
+const AdminLogin = dynamic(() => import('@/components/AdminLogin'), { ssr: false })
+const Info = dynamic(() => import('@/components/Info'), { ssr: false })
+const Carousel = dynamic(() => import('@/components/Carousel'), { ssr: false })
 
 export default function Home() {
   const user = useUser()
