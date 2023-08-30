@@ -12,7 +12,6 @@ export default function Bayar() {
         <CardBody>
           <h2>Terima kasih.</h2>
           <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>
-          <p>Anda dapat melanjutkan ke tahap berikutnya.</p>
         </CardBody>
       </Card>
     )
@@ -24,7 +23,7 @@ export default function Bayar() {
         <CardBody>
           <h2>Terima kasih.</h2>
           <p>Anda sudah mengunggah bukti pembayaran.</p>
-          <p>Mohon menunggu hingga panitia PSB mengkonfirmasi pembayaran anda untuk bisa melanjutkan ke tahap berikutnya</p>
+          <p>Panitia PSB akan mengkonfirmasi pembayaran anda.</p>
           <Button
             color="danger" 
             onClick={() => {
