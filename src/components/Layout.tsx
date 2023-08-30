@@ -6,8 +6,12 @@ import { useProfile } from '@/data/profiles'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import { isAdmin } from '@/utils'
 
 export default function Layout({children}) {
+  const user = useUser()
+  const supabase = useSupabaseClient()
+
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
       <Container className="container my-5 justify-content-center">
@@ -28,20 +32,23 @@ export default function Layout({children}) {
     )
   }
 
-  if (process.env.NEXT_PUBLIC_IS_ADMIN === 'true') {
+  if (isAdmin()) {
     return (
-      <main >
+      <main className='bg-light'>
         <Head>
           <title>Admin PSB BALQIS Jogja</title>
           <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
         </Head>
         <div><Toaster/></div>
-        <nav className="py-3 border-bottom">
-          <div className="container d-flex flex-wrap justify-content-center align-items-center">
-            <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none">
-              <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-            </Link>
-          </div>
+        <nav className="py-3 border-bottom text-center bg-success-subtle bg-gradient">
+          <Link href="/" className='me-2'>
+            <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+          </Link>
+          {user && (
+            <Button size='sm' className='mt-2' color="outline-success" onClick={() => {
+              supabase.auth.signOut()
+            }}>Sign Out</Button>
+          )}
         </nav>
         <Container fluid>
           <Row>
@@ -66,8 +73,8 @@ export default function Layout({children}) {
           </div>
         </header>
         <nav className="py-3 mb-4 border-bottom">
-          <div className="container d-flex flex-wrap justify-content-between align-items-center">
-            <Link href="/" className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+          <div className="container d-flex flex-wrap justify-content-center align-items-center">
+            <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </Link>
           </div>
