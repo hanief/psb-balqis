@@ -1,14 +1,17 @@
-import DataTable from "react-data-table-component"
 import { Button, Card, CardBody, Col, Container, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from "reactstrap";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import DataViewerModal from "@/components/DataViewerModal";
-import { DateTime } from 'luxon'
 import { columns } from '@/data/columns'
-import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
-import { formatDatumWithWilayahNames } from "@/utils";
+import { convertToTitleCase } from "@/utils";
 import { useProfile } from "@/data/profiles";
 import { useRegistrations } from "@/data/registrations";
+import dynamic from "next/dynamic"
+import useDashboardColumnDefinitions from '@/data/dashboardColumnDefinition'
+
+const DataViewerModal = dynamic(() => import('@/components/DataViewerModal'), { ssr: false })
+const DeleteConfirmationModal = dynamic(() => import('@/components/DeleteConfirmationModal'), { ssr: false })
+const ExpandedRow = dynamic(() => import('@/components/ExpandedRow'), { ssr: false })
+const DataTable = dynamic(() => import("react-data-table-component"), { ssr: false })
 
 export default function Dasbor() {
   const { profile } = useProfile()
@@ -29,127 +32,13 @@ export default function Dasbor() {
 
   const { registrations, update, refreshData, remove, downloadBukti, downloadAsXLSX } = useRegistrations()
   
-  function toTitleCase(str) {
-    if (!str) return ''
-
-    return str.replace(
-      /\w\S*/g,
-      function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      }
-    );
-  }
-
-  const ExpandedComponent = ({ data }) => {
-    const formattedData = formatDatumWithWilayahNames(data, 1)
-
-    return (
-      <table className="table table-striped m-2">
-        <tbody>
-        {columns.map(column => (
-          <tr key={column}>
-            <th scope="row">{toTitleCase(column.replaceAll('_', ' '))}</th>
-            <td>:</td>
-            <td>{formattedData[column]}</td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-    )
-  }
-
-  const tableColumns = [
-    {
-      id: 'nomor',
-      name: 'No.',
-      selector: (row, index) => index + 1,
-      sortable: false,
-      minWidth: '30px',
-    },
-    {
-      id: 'nama_lengkap',
-      name: 'Nama',
-      selector: row => row.nama_lengkap,
-      sortable: true,
-      minWidth: '200px',
-    },
-    {
-      id: 'jenjang',
-      name: 'Jenjang',
-      // hide: 'sm',
-      format: row => row.jenjang?.toUpperCase(),
-      selector: row => row.jenjang,
-      sortable: true
-    },
-    {
-      id: 'jalur_pendaftaran',
-      name: 'Jalur',
-      // hide: 'sm',
-      selector: row => row.jalur_pendaftaran,
-      sortable: true,
-    },
-    {
-      id: 'created_at',
-      name: 'Tanggal',
-      // hide: 'sm',
-      format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATETIME_MED),
-      selector: row => row.created_at,
-      sortable: true,
-    },
-    {
-      id: 'bukti_pembayaran',
-      name: 'Bukti Pembayaran',
-      cell: row => {
-        if (!row.bukti_pembayaran) return '-'
-
-        return (
-          <Button color="outline-success" onClick={() => downloadBukti(row)}>
-            Unduh
-          </Button>
-        )
-      }
-    },
-    {
-      id: 'pembayaran_diterima',
-      name: 'Konfirmasi Pembayaran',
-      cell: row => <Input
-        type="checkbox" 
-        checked={row.pembayaran_diterima} 
-        onChange={e => {
-          update(row.user_id, {pembayaran_diterima: e.target.checked})
-        }}
-      />
-    },
-    {
-      id: 'view_data',
-      name: 'Actions',
-      cell: row => (
-        <>
-          <Button className="me-1" color="outline-success" onClick={() => {
-            setDataViewerProps({
-              isOpen: true,
-              registration: row,
-            })  
-          }}>
-            Ubah
-          </Button>
-          {row.deleted_at ? (
-            <Button color="outline-success" onClick={() => update(row.user_id, {deleted_at: null})}>
-              <i className="bi bi-recycle"></i>
-            </Button>
-          ) : (
-            <Button color="outline-danger" onClick={() => setDeleteConfirmationProps({
-              isOpen: true,
-              onConfirm: () => remove(row.user_id),
-            })}>
-              <i className="bi bi-trash"></i>
-            </Button>
-          )}
-        </>
-      ),
-      minWidth: '150px',
-    }
-  ];  
+  const { definitions } = useDashboardColumnDefinitions(
+    downloadBukti, 
+    setDataViewerProps,
+    update,
+    setDeleteConfirmationProps,
+    remove
+  )
 
   const customStyles = {
     head: {
@@ -211,12 +100,12 @@ export default function Dasbor() {
               onChange={event => setSelectedColumn(event.target.value)}
             >
               {columns.map(column => (
-                <option key={column} value={column}>{toTitleCase(column.replaceAll('_', ' '))}</option>
+                <option key={column} value={column}>{convertToTitleCase(column)}</option>
               ))}
             </select>
             <Input
               type="text" 
-              placeholder={`Cari ${toTitleCase(selectedColumn?.replaceAll('_', ' '))}`}
+              placeholder={`Cari ${convertToTitleCase(selectedColumn)}`}
               value={searchKeyword} 
               onChange={e => setSearchKeyword(e.target.value)}
               onKeyUp={e => {
@@ -236,7 +125,7 @@ export default function Dasbor() {
           <Card>
             <CardBody>
               <DataTable
-                columns={tableColumns}
+                columns={definitions}
                 data={registrations?.filter(registration => {
                   let shouldShow = true
 
@@ -254,31 +143,35 @@ export default function Dasbor() {
                 highlightOnHover
                 striped
                 expandableRows
-                expandableRowsComponent={ExpandedComponent}
+                expandableRowsComponent={ExpandedRow}
               />
             </CardBody>
           </Card>
         </Col>
       </Row>
 
-      <DataViewerModal
-        initialRegistration={dataViewerProps.registration}
-        isOpen={dataViewerProps.isOpen}
-        toggle={() => {
-          setDataViewerProps({
-            isOpen: !dataViewerProps.isOpen,
-            registration: dataViewerProps.registration ? null : dataViewerProps.registration})
-        }}
-        onUpdate={refreshData}
-      />
+      {dataViewerProps.isOpen && (
+        <DataViewerModal
+          initialRegistration={dataViewerProps.registration}
+          isOpen={dataViewerProps.isOpen}
+          toggle={() => {
+            setDataViewerProps({
+              isOpen: !dataViewerProps.isOpen,
+              registration: dataViewerProps.registration ? null : dataViewerProps.registration})
+          }}
+          onUpdate={refreshData}
+        />
+      )}
 
-      <DeleteConfirmationModal
-        isOpen={deleteConfirmationProps.isOpen}
-        toggle={() => setDeleteConfirmationProps({...deleteConfirmationProps, isOpen: !deleteConfirmationProps.isOpen})}
-        onConfirm={deleteConfirmationProps.onConfirm}
-        title={'Konfirmasi hapus'}
-        description={'Apakah Anda yakin ingin menghapus data ini?'}
-      />
+      {deleteConfirmationProps.isOpen && (
+        <DeleteConfirmationModal
+          isOpen={deleteConfirmationProps.isOpen}
+          toggle={() => setDeleteConfirmationProps({...deleteConfirmationProps, isOpen: !deleteConfirmationProps.isOpen})}
+          onConfirm={deleteConfirmationProps.onConfirm}
+          title={'Konfirmasi hapus'}
+          description={'Apakah Anda yakin ingin menghapus data ini?'}
+        />
+      )}
     </Container>
   )
 }

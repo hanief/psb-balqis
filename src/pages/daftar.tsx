@@ -1,17 +1,15 @@
-import Data from '@/components/Data'
-import Bayar from '@/components/Bayar'
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Col, Container, Row } from 'reactstrap'
-import Tes from '@/components/Tes'
-import Pengumuman from '@/components/Pengumuman'
 import Head from 'next/head'
 import { useUser } from '@supabase/auth-helpers-react'
 import { useSingleRegistration } from '@/data/singleRegistration'
 
-const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
-  ssr: false,
-})
+const Data = dynamic(() => import('@/components/Data'), { ssr: false })
+const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
+const Tes = dynamic(() => import('@/components/Tes'), { ssr: false })
+const Pengumuman = dynamic(() => import('@/components/Pengumuman'), { ssr: false })
+const Stepper = dynamic(() => import('@/components/CustomStepper'), { ssr: false })
 
 export default function DaftarPage() {
   const user = useUser()
@@ -75,7 +73,7 @@ export default function DaftarPage() {
       </Head>
       <Row>
         <Col>
-          <StepperComponent
+          <Stepper
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             steps={steps}
