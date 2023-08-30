@@ -54,12 +54,6 @@ export default function DaftarPage() {
     setActiveStep(getProgressIndex())
   }, [registration])
 
-  useEffect(() => {
-    if (profile?.is_admin) {
-      router.push('/dasbor')
-    }
-  }, [profile])
-
   function getProgressIndex() {
     if (!registration) return 0
     if (registration.pembayaran_diterima) return 2

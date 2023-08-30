@@ -27,15 +27,6 @@ export default function Login() {
       } else {
         router.push('/daftar')
       }
-    //   } else {
-    //     const {data: profile} = await supabaseClient.from('profiles').select('*').eq('id', data?.user.id).single()
-
-    //     if (profile?.is_admin) {
-    //       router.push('/dasbor')
-    //     } else {
-    //       router.push('/daftar')
-    //     }
-    //   }
     } else if (error) {
       await handleSignUp()
     }

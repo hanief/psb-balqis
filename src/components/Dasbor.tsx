@@ -13,7 +13,7 @@ const ExpandedRow = dynamic(() => import('@/components/ExpandedRow'), { ssr: fal
 const DataTable = dynamic(() => import("react-data-table-component"), { ssr: false })
 
 export default function Dasbor() {
-  const { user, profile } = useProfile()
+  const { user } = useProfile()
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')

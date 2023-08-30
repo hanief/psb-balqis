@@ -25,5 +25,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dasbor', '/daftar', '/api/user'],
+  matcher: ['/daftar', '/api/user'],
 }

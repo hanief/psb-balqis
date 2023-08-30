@@ -6,7 +6,7 @@ import Info from '@/components/Info'
 import AdminLogin from '@/components/AdminLogin'
 import { isAdmin } from '@/utils'
 import { useUser } from '@supabase/auth-helpers-react'
-import Dasbor from '@/components/dasbor'
+import Dasbor from '@/components/Dasbor'
 
 export default function Home() {
   const user = useUser()
