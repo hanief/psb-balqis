@@ -95,20 +95,6 @@ export default function Data({onValidityChange}) {
 
   return (
     <>
-      {!isValid && (
-        <Alert fade color="danger">
-          <i className="bi-exclamation-circle me-2"></i>Ada isian yang masih kosong, mohon diisi terlebih dahulu:
-          <ul>
-            {Object.keys(validities).map(field => {
-              if (validities[field]) return null
-
-              return (
-                <li key={field}>{convertToTitleCase(field)}</li>
-              )
-            })}
-          </ul>
-        </Alert>
-      )}
       <DataFormSantri
         registration={registration}
         rules={requiredRules}

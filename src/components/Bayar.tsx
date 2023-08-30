@@ -40,8 +40,9 @@ export default function Bayar() {
   return (
     <Card>
       <CardBody>
+        <h2>Terima kasih.</h2>
         <p className="card-text">
-          Terima kasih sudah mendaftarkan diri anda untuk menjadi santri BALQIS Jogja.
+          Anda sudah mendaftarkan diri untuk menjadi santri BALQIS Jogja.
         </p>
         <p className="card-text">
           Selanjutnya, mohon melakukan pembayaran sebesar <strong>Rp. 250.000</strong> untuk biaya pendaftaran.

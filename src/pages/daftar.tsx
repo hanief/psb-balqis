@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Col, Container, Row } from 'reactstrap'
 import Head from 'next/head'
-import { useUser } from '@supabase/auth-helpers-react'
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useSingleRegistration } from '@/data/singleRegistration'
 import Login from '@/components/Login'
 import { useProfile } from '@/data/profiles'
@@ -18,11 +18,20 @@ const Pengumuman = dynamic(() => import('@/components/Pengumuman'), { ssr: false
 const Stepper = dynamic(() => import('@/components/CustomStepper'), { ssr: false })
 
 export default function DaftarPage() {
-  const router = useRouter()
-  const { user, profile } = useProfile()
+  const user = useUser()
+  const supabase = useSupabaseClient()
   const {registration} = useSingleRegistration(user?.id)
   const [activeStep, setActiveStep] = useState(getProgressIndex())
   const [isDataFormValid, setIsDataFormValid] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      supabase.auth.signUp({
+        email: `${Date.now()}@utama.app`,
+        password: `${Date.now()}!`
+      })
+    }
+  }, [user])
 
   const steps = useMemo(() => [
     {
@@ -51,12 +60,6 @@ export default function DaftarPage() {
     },
   ], [activeStep])
 
-  useEffect(() => {
-    if (activeStep === 0) return
-    
-    setActiveStep(getProgressIndex())
-  }, [registration])
-
   function getProgressIndex() {
     if (!registration) return 0
     if (registration.pembayaran_diterima) return 3
@@ -65,11 +68,7 @@ export default function DaftarPage() {
   }
 
   function isNextButtonDisabled() {
-    return activeStep >= steps.length - 1
-
-    if (activeStep === 0) return !isDataFormValid
-    
-    return true
+    return activeStep >= steps.length - 1 || !isDataFormValid
   }
 
   return (
@@ -80,15 +79,13 @@ export default function DaftarPage() {
       </Head>
       <Row>
         <Col className='d-flex justify-content-between my-2'>
-          {activeStep > 0 && (
-            <Button
-              className="d-flex align-items-center"
-              color="success"
-              onClick={() => setActiveStep(activeStep - 1)}>
-              <i className='bi bi-chevron-left'></i><span className='d-none d-md-block ms-1'>Kembali</span>
-            </Button>
-          )}
-          <h2 className=''>{steps[activeStep]?.label}</h2>
+          <Button
+            className="d-flex align-items-center"
+            color={activeStep === 0 ? "secondary" : "success"}
+            disabled={activeStep === 0}
+            onClick={() => setActiveStep(activeStep - 1)}>
+            <i className='bi bi-chevron-left'></i><span className='ms-1'>Kembali</span>
+          </Button>
           <Button
             className="d-flex align-items-center"
             color={isNextButtonDisabled() ? "secondary" : "success"}
