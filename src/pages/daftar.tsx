@@ -58,7 +58,7 @@ export default function DaftarPage() {
     if (profile?.is_admin) {
       router.push('/dasbor')
     }
-  })
+  }, [profile])
 
   function getProgressIndex() {
     if (!registration) return 0
