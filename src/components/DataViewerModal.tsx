@@ -1,5 +1,4 @@
 import { Alert, Button, Modal, ModalBody, ModalHeader, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-import DataEdit from "./DataEdit";
 import { useEffect, useMemo, useState } from "react";
 import HasilTesEdit from "./HasilTesEdit";
 import PasswordEdit from "./PasswordEdit";
