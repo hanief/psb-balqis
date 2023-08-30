@@ -1,10 +1,10 @@
-import { useRegistration } from "@/data/registration";
+import { useSingleRegistration } from "@/data/singleRegistration";
 import { Button, Card, CardBody, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { useUser } from "@supabase/auth-helpers-react";
 
 export default function Bayar() {
   const user = useUser()
-  const {registration, isUploading, uploadBukti, deleteBukti} = useRegistration()
+  const {registration, uploadBukti, deleteBukti} = useSingleRegistration(user?.id)
   
   if (registration?.pembayaran_diterima) {
     return (
@@ -13,16 +13,6 @@ export default function Bayar() {
           <h2>Terima kasih.</h2>
           <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>
           <p>Anda dapat melanjutkan ke tahap berikutnya.</p>
-        </CardBody>
-      </Card>
-    )
-  }
-
-  if (isUploading) {
-    return (
-      <Card>
-        <CardBody>
-          <h2><Spinner /> Sedang mengunggah bukti pembayaran...</h2>
         </CardBody>
       </Card>
     )

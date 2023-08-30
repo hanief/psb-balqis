@@ -169,7 +169,7 @@ export default function DataForm({
                       <Button
                         color="success" 
                         onClick={() => {
-                          downloadBukti(registration?.nama_lengkap, registration?.bukti_prestasi)
+                          downloadBukti(registration?.bukti_prestasi)
                         }}>
                           <i className='bi-download'></i>
                       </Button>
@@ -225,7 +225,7 @@ export default function DataForm({
                       <Button
                         color="success" 
                         onClick={() => {
-                          downloadBukti(registration?.nama_lengkap, registration?.bukti_prestasi)
+                          downloadBukti(registration?.bukti_prestasi)
                         }}>
                           <i className='bi-download'></i>
                       </Button>

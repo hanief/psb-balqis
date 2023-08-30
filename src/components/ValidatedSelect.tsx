@@ -22,7 +22,7 @@ export default function ValidatedInput({ name, label = '', options, value, requi
   function getBorderColor(state) {
     if (invalid) return 'rgb(220, 53, 69)'
     
-    return 'rgb(25, 135, 84)'
+    return 'rgb(222, 226, 230)'
   }
 
   function getBoxShadow(state) {
@@ -75,9 +75,7 @@ const DropdownIndicator = ({selectProps, ...props}: DropdownIndicatorProps) => {
           <circle cx="6" cy="8.2" r=".6" fill="#dc3545" stroke="none" />
         </svg>
       ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" fill="#198754" viewBox="0 0 8 8">
-          <path d="M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z"></path>
-        </svg>
+        props.children
       )}
     </components.DropdownIndicator>
   );

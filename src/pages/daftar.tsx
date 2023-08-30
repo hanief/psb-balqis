@@ -6,14 +6,16 @@ import { Alert, Button, Col, Container, Row } from 'reactstrap'
 import Tes from '@/components/Tes'
 import Pengumuman from '@/components/Pengumuman'
 import Head from 'next/head'
-import { useRegistration } from '@/data/registration'
+import { useUser } from '@supabase/auth-helpers-react'
+import { useSingleRegistration } from '@/data/singleRegistration'
 
 const StepperComponent = dynamic(() => import('@/components/CustomStepper'), {
   ssr: false,
 })
 
 export default function DaftarPage() {
-  const {registration, isLoading} = useRegistration()
+  const user = useUser()
+  const {registration} = useSingleRegistration(user?.id)
   const [activeStep, setActiveStep] = useState(getProgressIndex())
   const [isDataFormValid, setIsDataFormValid] = useState(false)
 

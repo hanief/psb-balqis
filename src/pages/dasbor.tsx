@@ -2,28 +2,20 @@ import DataTable from "react-data-table-component"
 import { Button, Card, CardBody, Col, Container, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from "reactstrap";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import FileViewerModal from "@/components/FileViewerModal";
 import DataViewerModal from "@/components/DataViewerModal";
 import { DateTime } from 'luxon'
 import { columns } from '@/data/columns'
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import { formatDatumWithWilayahNames } from "@/utils";
 import { useProfile } from "@/data/profiles";
-import { useRouter } from "next/router";
 import { useRegistrations } from "@/data/registrations";
 
 export default function Dasbor() {
-  const router = useRouter()
   const { profile } = useProfile()
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')
   const [showDeleted, setShowDeleted] = useState(false)
-  const [fileViewerProps, setFileViewerProps] = useState({
-    isOpen: false,
-    type: '',
-    url: '',
-  })
 
   const [dataViewerProps, setDataViewerProps] = useState({
     isOpen: false,
@@ -134,7 +126,6 @@ export default function Dasbor() {
       cell: row => (
         <>
           <Button className="me-1" color="outline-success" onClick={() => {
-            console.log('registration', row)
             setDataViewerProps({
               isOpen: true,
               registration: row,

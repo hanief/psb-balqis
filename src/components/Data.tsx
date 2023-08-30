@@ -53,8 +53,6 @@ export default function Data({onValidityChange}) {
   }, [localRegistration])
 
   useEffect(() => {
-    console.log('registration', registration)
-    console.log('localRegistration', localRegistration)
     setLocalRegistration(registration)
   }, [registration])
 

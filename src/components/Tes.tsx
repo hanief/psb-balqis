@@ -1,11 +1,13 @@
-import { useRegistration } from "@/data/registration";
+import { useSingleRegistration } from "@/data/singleRegistration";
 import { Button, Card, CardBody } from "reactstrap";
 import {DateTime} from 'luxon'
 import NextImage from 'next/image'
 import { toPng } from 'html-to-image'
+import { useUser } from "@supabase/auth-helpers-react";
 
 export default function Tes() {
-  const {registration} = useRegistration()
+  const user = useUser()
+  const {registration} = useSingleRegistration(user?.id)
 
   function downloadKartu() {
     const node = document.getElementById('kartu')
@@ -93,7 +95,7 @@ export default function Tes() {
 
         <h4>Wawancara Wali Santri</h4>
         <ul>
-          <li>Wali santri terlebih dahulu mengisi kuisoner pada <a href="bit.ly/kuesionerwali2324">Link ini</a></li>
+          <li>Wali santri terlebih dahulu mengisi kuisoner pada <a href="https://bit.ly/kuesionerwali2324">link ini</a></li>
           <li>Wali santri mencetak surat pernyataan kemudian mengisi dan menyerahkan ketika wawancara (format terlampir)</li>
           <li>Bagi yang seleksi secara daring, wajib mengirimkan scan surat pernyataan yang telah diisi sebelumnya</li>
           <li>Setiap wali wajib mengambil salinan 3 surat pernyataan di tempat registrasi diakhir sesi sebelum kembali ke rumah</li>

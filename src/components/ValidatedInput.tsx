@@ -22,7 +22,6 @@ export default function ValidatedInput({ className = '', name, label = '', valid
       <Input
         id={name}
         name={name}
-        valid={valid}
         invalid={!valid}
         aria-invalid={!valid}
         required={required}

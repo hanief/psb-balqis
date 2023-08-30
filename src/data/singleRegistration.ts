@@ -87,19 +87,21 @@ export function useSingleRegistration(userId, onUpdate = null, initialRegistrati
   async function uploadBukti(file, type) {
     if (!userId) throw new Error('userId is required')
 
+    const oldDatum = data?.find(datum => datum.user_id === userId)
+    // console.log('oldDatum', oldDatum)
+
     const fileNameSplit = file?.name?.split('.')
     const fileExtension = fileNameSplit[fileNameSplit.length-1]
-    const path = `${type}/${data[0]?.id}.${fileExtension}`
+    const path = `${type}/${oldDatum?.id}.${fileExtension}`
 
     const newDatum = {
       [`bukti_${type}`]: path
     }
 
-    const oldDatum = data?.find(datum => datum.id === userId)
-    const newData = {...oldDatum, ...newDatum}
+    const updatedDatum = {...oldDatum, ...newDatum}
     const updatedData = data?.map(datum => {
       if (datum.user_id === userId) {
-        return newData
+        return updatedDatum
       } else {
         return datum
       }
@@ -116,13 +118,15 @@ export function useSingleRegistration(userId, onUpdate = null, initialRegistrati
       
       await supabase
         .from('registrations')
-        .update(updatedData)
+        .update(newDatum)
         .eq('user_id', userId)
 
       return updatedData
     }, {
       optimisticData: updatedData
     })
+
+    if (onUpdate) onUpdate(updatedDatum)
 
     toast.promise(promise, {
       loading: 'Mengunggah file...',
@@ -138,20 +142,21 @@ export function useSingleRegistration(userId, onUpdate = null, initialRegistrati
       .from('proofs')
       .download(fileName)
 
+    const datum = data[0] || initialRegistration
     const blob = new Blob([data]);
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.download = `${initialRegistration?.nama_lengkap}-${fileName}`;
+    link.download = `${datum?.nama_lengkap}-${fileName}`;
     link.click()
   }
 
   async function deleteBukti(type) {
     const newDatum = {[`bukti_${type}`]: ''}
-    const oldDatum = data?.find(datum => datum.id === userId)
-    const newData = {...oldDatum, ...newDatum}
+    const oldDatum = data?.find(datum => datum.user_id === userId)
+    const updatedDatum = {...oldDatum, ...newDatum}
     const updatedData = data?.map(datum => {
       if (datum.user_id === userId) {
-        return newData
+        return updatedDatum
       } else {
         return datum
       }
@@ -160,13 +165,15 @@ export function useSingleRegistration(userId, onUpdate = null, initialRegistrati
     const promise = mutate(async () => {
       await supabase
         .from('registrations')
-        .update(updatedData)
+        .update(newDatum)
         .eq('user_id', userId)
 
       return updatedData
     }, {
       optimisticData: updatedData
     })
+
+    if (onUpdate) onUpdate(updatedDatum)
 
     toast.promise(promise, {
       loading: 'Menghapus...',

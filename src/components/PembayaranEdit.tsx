@@ -43,7 +43,6 @@ export default function PembayaranEdit({
               placeholder="Bukti Pembayaran"
               accept="image/*,.pdf"
               onChange={event => {
-                console.log('onChange', event.target.files[0])
                 const file = event.target.files[0]
                 const type = 'pembayaran'
                 uploadBukti(file, type)
