@@ -45,7 +45,7 @@ export default function Home() {
           <div className="p-5 text-center bg-body-tertiary rounded-3">
             <h1 className="text-body-emphasis">Penerimaan Santri Baru</h1>
             <p className="col-lg-8 mx-auto fs-5 text-muted">
-              BALQIS Jogja siap menerima pendaftaran untuk tahun ajaran 2024/2025. Silakan klik tombol di bawah.
+              BALQIS Jogja siap menerima pendaftaran untuk tahun ajaran 2024/2025.
             </p>
             <div className="d-inline-flex gap-2 mb-5">
               <Link href="/daftar" className="d-inline-flex align-items-center btn btn-primary btn-lg px-4">
