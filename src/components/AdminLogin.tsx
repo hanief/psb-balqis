@@ -1,13 +1,14 @@
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { Button, Form, FormGroup, Input, Label } from "reactstrap"
+import { Button, Form, FormGroup, Input, InputGroup, Label } from "reactstrap"
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function Login() {
   const supabaseClient = useSupabaseClient()
-  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+
   const router = useRouter()
   
   const handleSignIn = async (event) => {
@@ -26,19 +27,23 @@ export default function Login() {
     <Form>
       <FormGroup>
         <Label for="password">Password</Label>
-        <Input
-          label="Password"
-          type="password"
-          id="password"
-          placeholder='Password'
-          onChange={event => setPassword(event.target.value)}
-          value={password}
-          onKeyUp={event => {
-            if (event.key === 'Enter') {
-              handleSignIn(event)
-            }
-          }}
-        />
+        <InputGroup>
+          <Input
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            placeholder='Password'
+            onChange={event => setPassword(event.target.value)}
+            value={password}
+            onKeyUp={event => {
+              if (event.key === 'Enter') {
+                handleSignIn(event)
+              }
+            }}
+          />
+          <Button color={showPassword ? "secondary" : "outline-secondary"} active={showPassword} onClick={() => setShowPassword(!showPassword)}><i className="bi-eye"></i></Button>
+        </InputGroup>
+        
       </FormGroup>
       <Button 
         block 
