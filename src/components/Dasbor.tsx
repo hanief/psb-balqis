@@ -183,11 +183,7 @@ export default function Dasbor() {
               <DataTable
                 columns={definitions}
                 data={registrations?.filter(registration => {
-                  let shouldShow = true
-
-                  if (!showDeleted) {
-                    shouldShow = registration.deleted_at === null
-                  }
+                  let shouldShow = showDeleted ? registration.deleted_at : !registration.deleted_at
 
                   if (selectedColumn && keyword) {
                     shouldShow = shouldShow && registration[selectedColumn]?.toLowerCase().includes(keyword.toLowerCase())

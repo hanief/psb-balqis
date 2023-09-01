@@ -5,6 +5,7 @@ import Head from 'next/head'
 import { useSingleRegistration } from '@/data/singleRegistration'
 import { columnsObject } from '@/data/columns'
 import { useProfile } from '@/data/profiles'
+import { isAdmin } from '@/utils'
 
 const DataSantri = dynamic(() => import('@/components/DataSantri'), { ssr: false })
 const DataJalur = dynamic(() => import('@/components/DataJalur'), { ssr: false })
@@ -12,6 +13,12 @@ const DataWali = dynamic(() => import('@/components/DataWali'), { ssr: false })
 const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
 
 export default function DaftarPage() {
+  useEffect(() => {
+    if (isAdmin()) {
+      window.location.href = '/'
+    }
+  }, [])
+
   const { user, create } = useProfile()
   const { registration } = useSingleRegistration(user?.id)
   const [activeStep, setActiveStep] = useState(getProgressIndex())
