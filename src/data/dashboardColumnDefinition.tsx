@@ -6,12 +6,14 @@ export default function useDashboardColumnDefinition(
   setDataViewerProps,
   update,
   setDeleteConfirmationProps,
-  remove
+  remove,
+  displayedColumns,
 ) { 
   const definitions = [
     {
       id: 'nomor',
       name: 'No',
+      omit: !displayedColumns.includes('nomor'),
       selector: (row, index) => index + 1,
       sortable: false,
       width: '60px',
@@ -19,6 +21,7 @@ export default function useDashboardColumnDefinition(
     {
       id: 'nama_lengkap',
       name: 'Nama',
+      omit: !displayedColumns.includes('nama_lengkap'),
       selector: row => row.nama_lengkap,
       sortable: true,
       minWidth: '200px',
@@ -26,7 +29,7 @@ export default function useDashboardColumnDefinition(
     {
       id: 'jenjang',
       name: 'Jenjang',
-      // hide: 'sm',
+      omit: !displayedColumns.includes('jenjang'),
       format: row => row.jenjang?.toUpperCase(),
       selector: row => row.jenjang,
       sortable: true
@@ -34,14 +37,14 @@ export default function useDashboardColumnDefinition(
     {
       id: 'jalur_pendaftaran',
       name: 'Jalur',
-      // hide: 'sm',
+      omit: !displayedColumns.includes('jalur_pendaftaran'),
       selector: row => row.jalur_pendaftaran,
       sortable: true,
     },
     {
       id: 'created_at',
       name: 'Tanggal',
-      // hide: 'sm',
+      omit: !displayedColumns.includes('created_at'),
       format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATETIME_MED),
       selector: row => row.created_at,
       sortable: true,
@@ -49,6 +52,7 @@ export default function useDashboardColumnDefinition(
     {
       id: 'bukti_pembayaran',
       name: 'Bukti Pembayaran',
+      omit: !displayedColumns.includes('pembayaran_diterima'),
       cell: row => {
         if (!row.bukti_pembayaran) return '-'
 
@@ -62,6 +66,7 @@ export default function useDashboardColumnDefinition(
     {
       id: 'pembayaran_diterima',
       name: 'Konfirmasi Pembayaran',
+      omit: !displayedColumns.includes('pembayaran_diterima'),
       cell: row => <Input
         type="checkbox" 
         checked={row.pembayaran_diterima} 
@@ -71,8 +76,9 @@ export default function useDashboardColumnDefinition(
       />
     },
     {
-      id: 'view_data',
+      id: 'actions',
       name: 'Actions',
+      omit: !displayedColumns.includes('actions'),
       cell: row => (
         <>
           <Button className="me-1" color="outline-success" onClick={() => {
