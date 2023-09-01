@@ -11,10 +11,10 @@ export default function useDashboardColumnDefinition(
   const definitions = [
     {
       id: 'nomor',
-      name: 'No.',
+      name: 'No',
       selector: (row, index) => index + 1,
       sortable: false,
-      minWidth: '30px',
+      width: '60px',
     },
     {
       id: 'nama_lengkap',
