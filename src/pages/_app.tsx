@@ -1,8 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import './globals.css'
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import 'src/assets/css/datatables.scss'
+import 'src/assets/globals.scss'
 
 import type { AppProps } from 'next/app'
 import { Lato, Heebo } from 'next/font/google'
@@ -22,8 +18,7 @@ Bugsnag.start({
   releaseStage: process.env.NEXT_PUBLIC_APP_ENVIRONMENT
 })
 
-const ErrorBoundary = Bugsnag.getPlugin('react')
-  .createErrorBoundary(React)
+const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React)
 
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'] })
 const heebo = Heebo({ subsets: ['latin'], weight: ['400', '700'] })

@@ -2,43 +2,33 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSingleRegistration } from '@/data/singleRegistration'
 import { useUser } from '@supabase/auth-helpers-react'
 import DataFormSantri from './DataFormSantri'
-import { Alert, Button } from 'reactstrap'
-import { convertToTitleCase } from "@/utils"
 
-export default function Data({onValidityChange}) {
+export default function DataSantri({onValidityChange, onDataChange}) {
   const user = useUser()
 
   const {
     registration, 
-    change,
-    changeMultiple,
-    uploadBukti, 
-    deleteBukti,
-    downloadBukti
   } = useSingleRegistration(user?.id)
 
   const [showValiditiesWarning, setShowValiditiesWarning] = useState(false)
 
-  const [localRegistration, setLocalRegistration] = useState(registration)
+  const [localRegistration, setLocalRegistration] = useState({
+    'nama_lengkap': '',
+    'jenjang': '',
+    'jenis_kelamin': '',
+    'tempat_lahir': '',
+    'tanggal_lahir': '',
+    'asal_sekolah': '',
+  })
 
-  const requiredRules = useMemo(() => {
-    return {
-      'nama_lengkap': true,
-      'jenis_kelamin': true,
-      'tempat_lahir': true,
-      'tanggal_lahir': true,
-      'asal_sekolah': true,
-      // 'provinsi': true,
-      // 'kabupaten': true,
-      // 'kecamatan': true,
-      // 'desa': true,
-      // 'kodepos': true,
-    }
-  }, [localRegistration])
-
-  useEffect(() => {
-    setLocalRegistration(registration)
-  }, [registration])
+  const requiredRules = {
+    'nama_lengkap': true,
+    'jenjang': true,
+    'jenis_kelamin': true,
+    'tempat_lahir': true,
+    'tanggal_lahir': true,
+    'asal_sekolah': true,
+  }
 
   const validities = useMemo(() => {
     return Object.keys(requiredRules).reduce((acc, field) => {
@@ -56,6 +46,16 @@ export default function Data({onValidityChange}) {
   }, [localRegistration])
   
   useEffect(() => {
+    onDataChange(localRegistration)
+  }, [localRegistration])
+
+  useEffect(() => {
+    if (user && registration) {
+      setLocalRegistration(registration)
+    }
+  }, [user, registration])
+
+  useEffect(() => {
     if (isValid && showValiditiesWarning) {
       setShowValiditiesWarning(false)
     }
@@ -68,42 +68,15 @@ export default function Data({onValidityChange}) {
       ...localRegistration,
       [name]: value
     })
-    if (requiredRules[name] && value) {
-      change(name, value)
-    }
   } 
-  
-  function handleMultipleChanges(changes) {
-    const newRegistration = {}
-    let isValid = true
-    changes.forEach(change => {
-      newRegistration[change.key] = change.value
-      if (requiredRules[change.key] && !change.value) {
-        isValid = false
-      }
-    })
-
-    setLocalRegistration({
-      ...localRegistration,
-      ...newRegistration
-    })
-
-    if (isValid) {
-      changeMultiple(changes)
-    }
-  }
 
   return (
     <>
       <DataFormSantri
-        registration={registration}
+        registration={localRegistration}
         rules={requiredRules}
         validities={validities}
         onChange={handleChange}
-        onMultipleChanges={handleMultipleChanges}
-        downloadBukti={downloadBukti}
-        deleteBukti={deleteBukti}
-        uploadBukti={uploadBukti}
       />
     </> 
   )

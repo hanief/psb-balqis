@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { debounce } from "lodash"
 
-export function useSingleRegistration(userId, onUpdate = null, initialRegistration = null) {
+export function useSingleRegistration(userId = null, onUpdate = null, initialRegistration = null) {
   const supabase = useSupabaseClient()
   const [registration, setRegistration] = useState(initialRegistration)
 

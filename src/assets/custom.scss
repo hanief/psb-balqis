@@ -3,23 +3,39 @@
 }
 
 .bg-balqis {
-  background-color: #2a833b;
+  background-color: $balqis-green;
 }
 
-.btn-primary {
-  background-color: rgb(255, 78, 0);
-  border-color: rgb(255, 78, 0);
+.btn-balqis {
+  background-color: $balqis-orange;
+  border-color: $balqis-orange;
+  color: $white;
+
+  &:hover {
+    background-color: $balqis-orange-dark;
+    border-color: $balqis-orange-dark;
+    color: $white;
+  }
 }
 
 .btn-outline-primary {
-  color: rgb(255, 78, 0);
-  border-color: rgb(255, 78, 0);
+  color: $balqis-orange;
+  border-color: $balqis-orange;
 }
+// .btn-primary {
+//   background-color: rgb(255, 78, 0);
+//   border-color: rgb(255, 78, 0);
+// }
 
-.btn-primary:hover {
-  background-color: rgb(190, 57, 0);
-  border-color: rgb(190, 57, 0);
-}
+// .btn-outline-primary {
+//   color: rgb(255, 78, 0);
+//   border-color: rgb(255, 78, 0);
+// }
+
+// .btn-primary:hover {
+//   background-color: rgb(190, 57, 0);
+//   border-color: rgb(190, 57, 0);
+// }
 
 .bd-placeholder-img {
   width: 100%;

@@ -23,7 +23,7 @@ export default function Data({onValidityChange}) {
 
   const requiredRules = useMemo(() => {
     return {
-      'jenjang': true,
+      // 'jenjang': true,
       'jalur_pendaftaran': true,
       // 'jalur_beasiswa': true,
       // 'jalur_beasiswa_khusus': localRegistration?.jalur_pendaftaran === 'afirmasi',

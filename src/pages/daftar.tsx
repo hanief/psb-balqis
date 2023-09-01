@@ -2,36 +2,21 @@ import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import { Alert, Button, Col, Container, Row } from 'reactstrap'
 import Head from 'next/head'
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useSingleRegistration } from '@/data/singleRegistration'
-import Login from '@/components/Login'
+import { columnsObject } from '@/data/columns'
 import { useProfile } from '@/data/profiles'
-import { useRouter } from 'next/router'
 
-const Data = dynamic(() => import('@/components/Data'), { ssr: false })
 const DataSantri = dynamic(() => import('@/components/DataSantri'), { ssr: false })
 const DataJalur = dynamic(() => import('@/components/DataJalur'), { ssr: false })
 const DataWali = dynamic(() => import('@/components/DataWali'), { ssr: false })
 const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
-const Tes = dynamic(() => import('@/components/Tes'), { ssr: false })
-const Pengumuman = dynamic(() => import('@/components/Pengumuman'), { ssr: false })
-const Stepper = dynamic(() => import('@/components/CustomStepper'), { ssr: false })
 
 export default function DaftarPage() {
-  const user = useUser()
-  const supabase = useSupabaseClient()
-  const {registration} = useSingleRegistration(user?.id)
+  const { user, create } = useProfile()
+  const { registration } = useSingleRegistration(user?.id)
   const [activeStep, setActiveStep] = useState(getProgressIndex())
   const [isDataFormValid, setIsDataFormValid] = useState(false)
-
-  useEffect(() => {
-    if (!user) {
-      supabase.auth.signUp({
-        email: `${Date.now()}@utama.app`,
-        password: `${Date.now()}!`
-      })
-    }
-  }, [user])
+  const [localRegistration, setLocalRegistration] = useState(columnsObject)
 
   const steps = useMemo(() => [
     {
@@ -62,13 +47,27 @@ export default function DaftarPage() {
 
   function getProgressIndex() {
     if (!registration) return 0
-    if (registration.pembayaran_diterima) return 3
+    if (registration?.pembayaran_diterima) return 3
     
     return 0
   }
 
   function isNextButtonDisabled() {
     return activeStep >= steps.length - 1 || !isDataFormValid
+  }
+
+  function handlePreviousButtonPush() {
+    setActiveStep(activeStep - 1)
+  }
+
+  async function handleNextButtonPush() {
+    if (activeStep >= steps.length - 1) return
+
+    if (activeStep === 0 && !registration && !user) {
+      await create(localRegistration)
+    }
+
+    setActiveStep(activeStep + 1)
   }
 
   return (
@@ -78,19 +77,21 @@ export default function DaftarPage() {
         <meta name="description" content="Penerimaan Santri Baru Balqis Jogja"/>
       </Head>
       <Row>
-        <Col className='d-flex justify-content-between my-2'>
-          <Button
-            className="d-flex align-items-center"
-            color={activeStep === 0 ? "secondary" : "success"}
-            disabled={activeStep === 0}
-            onClick={() => setActiveStep(activeStep - 1)}>
-            <i className='bi bi-chevron-left'></i><span className='ms-1'>Kembali</span>
-          </Button>
+        <Col className={`d-flex justify-content-${activeStep > 0 ? 'between' : 'end'} my-2`}>
+          {activeStep > 0 && (
+            <Button
+              className="d-flex align-items-center"
+              color={activeStep === 0 ? "secondary" : "success"}
+              disabled={activeStep === 0}
+              onClick={handlePreviousButtonPush}>
+              <i className='bi bi-chevron-left'></i><span className='ms-1'>Kembali</span>
+            </Button>
+          )}
           <Button
             className="d-flex align-items-center"
             color={isNextButtonDisabled() ? "secondary" : "success"}
             disabled={isNextButtonDisabled() }
-            onClick={() => setActiveStep(activeStep + 1)}>
+            onClick={handleNextButtonPush}>
             <span className='me-1'>Lanjutkan</span><i className='bi bi-chevron-right'></i>
           </Button>
         </Col>
@@ -98,7 +99,7 @@ export default function DaftarPage() {
       <Row className='justify-content-center mb-6'>
         <Col>
         {activeStep === 0 && (
-          <DataSantri onValidityChange={setIsDataFormValid}/>
+          <DataSantri onValidityChange={setIsDataFormValid} onDataChange={setLocalRegistration}/>
         )}
         {activeStep === 1 && (
           <DataJalur onValidityChange={setIsDataFormValid}/>

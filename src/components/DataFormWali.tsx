@@ -89,6 +89,82 @@ export default function DataForm({
               </Col>
             </Row>
           </FormGroup>
+
+          <ValidatedInput
+            type="text"
+            name="alamat"
+            placeholder="Jalan, RT/RW, Desa/Kelurahan"
+            value={registration?.alamat}
+            required={rules?.alamat}
+            valid={validities?.alamat}
+            onChange={onChange}
+          />
+          <ValidatedSelect
+            options={provinces?.map(province => ({value: province.code, label: province.province}))}
+            name="provinsi"
+            placeholder='Pilih Provinsi'
+            required={rules?.provinsi}
+            onChange={(name, value) => onMultipleChanges([
+              {key: 'provinsi', value: value},
+              {key: 'kabupaten', value: ''},
+              {key: 'kecamatan', value: ''},
+              {key: 'desa', value: ''},
+              {key: 'kodepos', value: ''},
+            ])}
+            value={registration?.provinsi}
+            valid={validities?.provinsi}
+          />
+          <ValidatedSelect
+            options={kabupatens?.map(kabupaten => ({value: kabupaten.code, label: kabupaten.city}))}
+            name="kabupaten"
+            placeholder='Pilih Kabupaten'
+            required={rules?.kabupaten}
+            onChange={(name, value) => onMultipleChanges([
+              {key: 'kabupaten', value: value},
+              {key: 'kecamatan', value: ''},
+              {key: 'desa', value: ''},
+              {key: 'kodepos', value: ''},
+            ])}
+            value={registration?.kabupaten}
+            valid={validities?.kabupaten}
+          />
+          <ValidatedSelect
+            options={kecamatans?.map(kecamatan => ({value: kecamatan.code, label: kecamatan.district}))}
+            name="kecamatan"
+            placeholder='Pilih Kecamatan'
+            required={rules?.kecamatan}
+            onChange={(name, value) => onMultipleChanges([
+              {key: 'kecamatan', value: value},
+              {key: 'desa', value: ''},
+              {key: 'kodepos', value: ''},
+            ])}
+            value={registration?.kecamatan}
+            valid={validities?.kecamatan}
+          />
+          <ValidatedSelect
+            options={desas?.map(desa => ({value: desa.code, label: desa.village}))}
+            name="desa"
+            placeholder='Pilih Desa'
+            required={rules?.desa}
+            onChange={(name, value) => {
+              const desa = desas?.find(desa => desa.code === value)
+              onMultipleChanges([
+                {key: 'desa', value: value},
+                {key: 'kodepos', value: desa ? `${desa.postal}` : null},
+              ])
+            }}
+            value={registration?.desa}
+            valid={validities?.desa}
+          />
+          <ValidatedInput
+            type="text"
+            name="kodepos"
+            placeholder="Kode Pos"
+            value={registration?.kodepos}
+            required={rules?.kodepos}
+            valid={validities?.kodepos}
+            onChange={onChange}
+          />
         </CardBody>
       </Card>
     </Col>

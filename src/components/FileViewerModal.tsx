@@ -40,7 +40,7 @@ export default function FileViewerModal({type, url, isOpen, toggle}) {
           <div>
             <Link
               target="_blank"
-              className="btn btn-primary btn-lg mb-2" 
+              className="btn btn-balqis btn-lg mb-2" 
               href={fileURL}
               download={fileURL}>
               <i className="bi bi-download me-1"></i>Download

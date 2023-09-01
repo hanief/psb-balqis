@@ -15,9 +15,33 @@ export function useProfile() {
     return data
   })
 
+  async function create(registrationData) {
+    if (!user) {
+      const { data: { user: newUser } } = await supabase.auth.signUp({
+        email: `${Date.now()}@utama.app`,
+        password: `${Date.now()}!`
+      })
+
+      if (newUser) {
+        const { data } = await supabase
+          .from("registrations")
+          .upsert(registrationData)
+          .eq("user_id", newUser?.id)
+      }
+    } else if (user) {
+      const { data } = await supabase
+        .from("registrations")
+        .update(registrationData)
+        .eq("user_id", user?.id)
+    }
+    
+    return data
+  }
+
   return {
     user,
     profile: data,
+    create,
     ...rest
   }
 }

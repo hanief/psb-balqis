@@ -23,7 +23,7 @@ export default function Layout({children}) {
           <Image className='my-2' src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
           <h1 className="display-1 my-4">Maaf website PSB BALQIS sedang dalam perawatan.</h1>
           <div className="d-inline-flex gap-2 my-5">
-            <Link href="https://balqisjogja.com" className="d-inline-flex align-items-center btn btn-primary btn-lg px-4" type="button">
+            <Link href="https://balqisjogja.com" className="d-inline-flex align-items-center btn btn-balqis btn-lg px-4" type="button">
               <i className="bi bi-box-arrow-up-right me-2"></i>Kembali ke website Balqis
             </Link>
           </div>
@@ -63,8 +63,8 @@ export default function Layout({children}) {
 
   return (
     <>
+      <div><Toaster/></div>
       <main className='pb-4'>
-        <div><Toaster/></div>
         <header className='py-2 text-white bg-balqis'>
           <div className="container d-flex flex-wrap align-items-center">
             <span className=''><i className='bi-whatsapp'></i></span>
@@ -72,7 +72,7 @@ export default function Layout({children}) {
             <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
           </div>
         </header>
-        <nav className="py-3 mb-4 border-bottom">
+        <nav className="py-3 mb-4 border-bottom bg-success-subtle">
           <div className="container d-flex flex-wrap justify-content-center align-items-center">
             <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
@@ -81,7 +81,7 @@ export default function Layout({children}) {
         </nav>
         {children}
       </main>
-      <footer className="py-3 bg-success-subtle container-fluid">
+      <footer className="py-3 bg-secondary-subtle container-fluid">
         <Container>
           <Row className='d-flex justify-content-between'>
             <Col md="6" lg="4">

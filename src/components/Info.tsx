@@ -50,7 +50,7 @@ export default function InfoPage() {
   ]
 
   return (
-    <Row className="my-2">
+    <Row className="my-4">
       <Col md="3" className="mb-2">
         <ListGroup>
           {posts.map((post, index) => (

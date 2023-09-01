@@ -35,17 +35,6 @@ export default function DataForm({
         <CardBody>
           <CardTitle tag="h5" className='mb-4'>Jalur Pendaftaran</CardTitle>
           <ValidatedSelect
-            options={jenjangOptions}
-            name="jenjang"
-            label="Jenjang Sekolah"
-            placeholder='Pilih Jenjang Sekolah'
-            required={rules?.jenjang}
-            isSearchable={false}
-            onChange={onChange}
-            value={registration?.jenjang}
-            valid={validities?.jenjang}
-          />
-          <ValidatedSelect
             options={jalurPendaftaranOptions}
             name="jalur_pendaftaran"
             label="Jenis Pendaftaran"
