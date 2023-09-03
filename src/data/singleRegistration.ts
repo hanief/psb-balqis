@@ -256,7 +256,8 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
       .select()
       .ilike('nama_lengkap', `%${name}%`)
       .eq('tanggal_lahir', birthdate)
-      .order('created_at')
+      .is('deleted_at', null)
+      .order('created_at', {ascending: false})
 
     return data
   }
