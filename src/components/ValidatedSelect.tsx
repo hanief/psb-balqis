@@ -3,7 +3,7 @@ import Select, { components, DropdownIndicatorProps } from 'react-select'
 import { useEffect, useState } from "react"
 import { convertToTitleCase } from "@/utils"
 
-export default function ValidatedInput({ name, label = '', options, value, required = false, onChange, ...props }) {
+export default function ValidatedSelect({ name, label = '', options, value, required = false, onChange, ...props }) {
   const [localValue, setLocalValue] = useState(value || '')
   const [isDirty, setIsDirty] = useState(false)
 

@@ -21,7 +21,16 @@ export default function DaftarPage() {
     }
   }, [])
 
-  const { registration, create, update, uploadBukti, downloadBukti, deleteBukti } = useRegistration(columnsObject)
+  const { 
+    registration, 
+    create, 
+    change, 
+    changeMultiple, 
+    update,
+    uploadBukti, 
+    downloadBukti, 
+    deleteBukti 
+  } = useRegistration()
   const [activeStep, setActiveStep] = useState(0)
   const [isDataFormValid, setIsDataFormValid] = useState(false)
   const [localRegistration, setLocalRegistration] = useState(columnsObject)
@@ -57,14 +66,6 @@ export default function DaftarPage() {
     return activeStep >= steps.length - 1 || !isDataFormValid
   }
 
-  async function handlePreviousButtonPush() {
-    setActiveStep(activeStep - 1)
-
-    if (activeStep < 3 && registration?.id) {
-      await update(localRegistration)
-    }
-  }
-
   async function handleNextButtonPush() {
     if (activeStep >= steps.length - 1) return
 
@@ -77,28 +78,50 @@ export default function DaftarPage() {
     }
   }
 
+  // async function handleUpdate(updatedData) {
+  //   setLocalRegistration({...registration, ...updatedData})
+  // }
+
   function handleChange(name, value) {
     const dataChanges = {
       [name]: value
     }
-
-    setLocalRegistration({
+    const newData = {
       ...localRegistration,
       ...dataChanges
-    })
+    }
+
+    setLocalRegistration(newData)
   }
 
   function handleMultipleChanges(changes) {
-    const newRegistration = {}
+    const newRegistration = {...localRegistration}
 
     changes.forEach(({ key, value }) => {
       newRegistration[key] = value
     })
 
-    setLocalRegistration({
-      ...localRegistration,
-      ...newRegistration
-    })
+    setLocalRegistration(newRegistration)
+  }
+
+  async function handleUploadBukti(file, type) {
+    if (registration?.id) {
+      await update(localRegistration)
+    }
+
+    const data = await uploadBukti(file, type)
+
+    setLocalRegistration(data)
+  }
+  
+  async function handleDeleteBukti(file) {
+    if (registration?.id) {
+      await update(localRegistration)
+    }
+
+    const data = await deleteBukti(file)
+    
+    setLocalRegistration(data)
   }
 
   return (
@@ -109,15 +132,6 @@ export default function DaftarPage() {
       </Head>
       <Row>
         <Col className={`d-flex justify-content-between align-items-center my-2`}>
-          {/* {activeStep > 0 && (
-            <Button
-              className="d-flex align-items-center me-auto"
-              color={activeStep === 0 ? "secondary" : "success"}
-              disabled={activeStep === 0}
-              onClick={handlePreviousButtonPush}>
-              <i className='bi bi-chevron-left'></i><span className='ms-1'>Kembali</span>
-            </Button>
-          )} */}
           {activeStep < 3 && (
             <Button
               className="d-flex align-items-center ms-auto"
@@ -142,9 +156,10 @@ export default function DaftarPage() {
           <DataJalur 
             registration={localRegistration}
             onChange={handleChange}
-            onUploadBukti={uploadBukti}
+            onChangeMultiple={handleMultipleChanges}
+            onUploadBukti={handleUploadBukti}
             onDownloadBukti={downloadBukti}
-            onDeleteBukti={deleteBukti}
+            onDeleteBukti={handleDeleteBukti}
             onValidityChange={setIsDataFormValid}
           />
         )}
@@ -159,9 +174,22 @@ export default function DaftarPage() {
         {activeStep === 3 && (
           <Bayar 
             registration={registration}
-            onUploadBukti={uploadBukti}
+            onUploadBukti={handleUploadBukti}
           />
         )}
+        </Col>
+      </Row>
+      <Row>
+        <Col className={`d-flex justify-content-between align-items-center my-2`}>
+          {activeStep < 3 && (
+            <Button
+              className="d-flex align-items-center ms-auto"
+              color={isNextButtonDisabled() ? "secondary" : "success"}
+              disabled={isNextButtonDisabled() }
+              onClick={handleNextButtonPush}>
+              <span className='me-1'>Lanjutkan</span><i className='bi bi-chevron-right'></i>
+            </Button>
+          )}
         </Col>
       </Row>
     </Container>

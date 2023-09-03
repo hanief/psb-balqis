@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardTitle, Col, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
+import { Button, Card, CardBody, CardTitle, Col, FormFeedback, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
 import Select from 'react-select'
 import { useMemo } from "react"
 import { 
@@ -20,6 +20,7 @@ export default function DataForm({
   rules,
   validities,
   onChange,
+  onMultipleChanges,
   uploadBukti,
   deleteBukti,
   downloadBukti
@@ -40,7 +41,19 @@ export default function DataForm({
             placeholder='Pilih Jenis Pendaftaran'
             required={rules?.jalur_pendaftaran}
             isSearchable={false}
-            onChange={onChange}
+            onChange={(name, value) => {
+              onMultipleChanges([
+                {key: 'jalur_pendaftaran', value: value},
+                {key: 'jalur_beasiswa_prestasi', value: ''},
+                {key: 'nama_prestasi', value: ''},
+                {key: 'tingkat_prestasi', value: ''},
+                {key: 'tahun_prestasi', value: ''},
+                {key: 'bukti_prestasi', value: ''},
+                {key: 'jalur_beasiswa_khusus', value: ''},
+                {key: 'bukti_dhuafa', value: ''},
+                {key: 'bukti_yatim', value: ''},
+              ])
+            }}
             value={registration?.jalur_pendaftaran}
             valid={validities?.jalur_pendaftaran}
           />
@@ -53,7 +66,18 @@ export default function DataForm({
                 placeholder='Pilih Jalur Beasiswa Prestasi'
                 required={rules?.jalur_beasiswa_prestasi}
                 isSearchable={false}
-                onChange={onChange}
+                onChange={(name, value)  => {
+                  onMultipleChanges([
+                    {key: 'jalur_beasiswa_prestasi', value: value},
+                    {key: 'nama_prestasi', value: ''},
+                    {key: 'tingkat_prestasi', value: ''},
+                    {key: 'tahun_prestasi', value: ''},
+                    {key: 'bukti_prestasi', value: ''},
+                    {key: 'jalur_beasiswa_khusus', value: ''},
+                    {key: 'bukti_dhuafa', value: ''},
+                    {key: 'bukti_yatim', value: ''},
+                  ])
+                }}
                 value={registration?.jalur_beasiswa_prestasi}
                 valid={validities?.jalur_beasiswa_prestasi}
               />
@@ -118,6 +142,7 @@ export default function DataForm({
                     name="bukti_prestasi"
                     placeholder="Bukti Prestasi"
                     accept="image/*,.pdf"
+                    invalid={!validities?.bukti_prestasi}
                     onChange={event => {
                       const file = event.target.files[0]
                       const type = 'prestasi'
@@ -125,6 +150,7 @@ export default function DataForm({
                       uploadBukti(file, type)
                     }}
                   />
+                  <FormFeedback>{validities?.bukti_prestasi && 'Bukti prestasi harus diisi'}</FormFeedback>
                 </FormGroup>
               )}
             </>
@@ -132,14 +158,22 @@ export default function DataForm({
           {registration?.jalur_pendaftaran === 'afirmasi' && (
             <>
               <FormGroup>
-                <Label for="jalur_beasiswa_khusus">Jenis Beasiswa Afirmasi</Label>
-                <Select
+                <ValidatedSelect
                   options={jalurBeasiswaKhususOptions}
-                  placeholder='Pilih Jalur Beasiswa Afirmasi'
-                  id="jalur_beasiswa_khusus"
                   name="jalur_beasiswa_khusus"
-                  value={jalurBeasiswaKhususOptions.find(jalur => jalur.value === registration?.jalur_beasiswa_khusus) || null}
-                  onChange={option => onChange('jalur_beasiswa_khusus', option.value)}
+                  label="Jalur Beasiswa Afirmasi"
+                  placeholder='Pilih Jalur Beasiswa Afirmasi'
+                  required={rules?.jalur_beasiswa_khusus}
+                  isSearchable={false}
+                  onChange={(name, value)  => {
+                    onMultipleChanges([
+                      {key: 'jalur_beasiswa_khusus', value: value},
+                      {key: 'bukti_dhuafa', value: ''},
+                      {key: 'bukti_yatim', value: ''},
+                    ])
+                  }}
+                  value={registration?.jalur_beasiswa_khusus}
+                  valid={validities?.jalur_beasiswa_khusus}
                 />
               </FormGroup>
               
@@ -151,7 +185,7 @@ export default function DataForm({
                     <Button
                       color="success" 
                       onClick={() => {
-                        downloadBukti(registration?.bukti_prestasi)
+                        downloadBukti(registration?.jalur_beasiswa_khusus === 'dhuafa' ? registration?.bukti_dhuafa : registration?.bukti_yatim)
                       }}>
                         <i className='bi-download'></i>
                     </Button>
@@ -167,24 +201,44 @@ export default function DataForm({
               ) : (
                 <FormGroup>
                   {registration?.jalur_beasiswa_khusus === 'dhuafa' && (
-                    <Label for="bukti_prestasi">Upload Bukti Prestasi (Sertifikat, Ijazah, dll)</Label>
+                    <>
+                      <Label for="bukti_dhuafa">Upload Bukti Prestasi (Sertifikat, Ijazah, dll)</Label>
+                      <Input 
+                        className='mb-1'
+                        type="file"
+                        id={`bukti_${registration?.jalur_beasiswa_khusus}`}
+                        name={`bukti_${registration?.jalur_beasiswa_khusus}`}
+                        invalid={!validities?.bukti_dhuafa}
+                        placeholder="Bukti"
+                        accept="image/*,.pdf"
+                        onChange={event => {
+                          const file = event.target.files[0]
+                          const type = registration?.jalur_beasiswa_khusus
+                          uploadBukti(file, type)
+                        }}
+                      />
+                      <FormFeedback>{!validities?.bukti_dhuafa && 'Bukti Prestasi harus diisi'}</FormFeedback>
+                    </>
                   )}
                   {registration?.jalur_beasiswa_khusus === 'yatim' && (
-                    <Label for="bukti_prestasi">Upload SK Yatim Piatu dari sekolah</Label>
-                  )}
-                  {registration?.jalur_beasiswa_khusus && (
-                    <Input 
-                      className='mb-1'
-                      type="file"
-                      id="bukti_prestasi"
-                      placeholder="Bukti"
-                      accept="image/*,.pdf"
-                      onChange={event => {
-                        const file = event.target.files[0]
-                        const type = registration?.jalur_beasiswa_khusus
-                        uploadBukti(file, type)
-                      }}
-                    />
+                    <>
+                      <Label for="bukti_yatim">Upload SK Yatim Piatu dari sekolah</Label>
+                      <Input 
+                        className='mb-1'
+                        type="file"
+                        id={`bukti_${registration?.jalur_beasiswa_khusus}`}
+                        name={`bukti_${registration?.jalur_beasiswa_khusus}`}
+                        invalid={!validities?.bukti_yatim}
+                        placeholder="Bukti"
+                        accept="image/*,.pdf"
+                        onChange={event => {
+                          const file = event.target.files[0]
+                          const type = registration?.jalur_beasiswa_khusus
+                          uploadBukti(file, type)
+                        }}
+                      />
+                      <FormFeedback>{!validities?.bukti_yatim && 'SK Yatim Piatu harus diisi'}</FormFeedback>
+                    </>
                   )}
                 </FormGroup>
               )}

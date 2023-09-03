@@ -17,7 +17,7 @@ export default function Data({
       'nama_ayah': true,
       'nomor_hp_ayah': true,
       'nama_ibu': true,
-      'nomor_hp_ibu': true,
+      'nomor_hp_ibu': false,
       'alamat': true,
       'provinsi': true,
       'kabupaten': true,
@@ -33,18 +33,23 @@ export default function Data({
 
   const validities = useMemo(() => {
     return Object.keys(requiredRules).reduce((acc, field) => {
-      acc[field] = requiredRules[field] && localRegistration && localRegistration[field]
+      if (requiredRules[field] === true) {
+        if (localRegistration[field]) {
+          acc[field] = localRegistration[field].length > 0
+        } else {
+          acc[field] = false
+        }
+      } else {
+        acc[field] = true
+      }
+
       return acc
     }, {})
-  }, [localRegistration])
+  }, [requiredRules, localRegistration])
 
   const isValid = useMemo(() => {
-    return Object.keys(requiredRules).every(field => {
-      if (!requiredRules[field]) return true
-
-      return localRegistration && localRegistration[field]
-    })
-  }, [localRegistration])
+    return Object.keys(validities).every(key => validities[key] === true)
+  }, [validities])
   
   useEffect(() => {
     if (isValid && showValiditiesWarning) {
@@ -64,7 +69,6 @@ export default function Data({
   } 
   
   function handleMultipleChanges(changes) {
-    console.log('changes', changes)
     const newRegistration = {}
     changes.forEach(change => {
       newRegistration[change.key] = change.value
