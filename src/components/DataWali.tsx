@@ -1,21 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSingleRegistration } from '@/data/singleRegistration'
-import { useUser } from '@supabase/auth-helpers-react'
 import DataFormWali from './DataFormWali'
-import { Alert, Button } from 'reactstrap'
-import { convertToTitleCase } from "@/utils"
 
-export default function Data({onValidityChange}) {
-  const user = useUser()
-
-  const {
-    registration, 
-    change,
-    changeMultiple,
-    uploadBukti, 
-    deleteBukti,
-    downloadBukti
-  } = useSingleRegistration(user?.id)
+export default function Data({
+  registration, 
+  onChange, 
+  onChangeMultiple, 
+  onValidityChange
+}) {
 
   const [showValiditiesWarning, setShowValiditiesWarning] = useState(false)
 
@@ -27,6 +18,12 @@ export default function Data({onValidityChange}) {
       'nomor_hp_ayah': true,
       'nama_ibu': true,
       'nomor_hp_ibu': true,
+      'alamat': true,
+      'provinsi': true,
+      'kabupaten': true,
+      'kecamatan': true,
+      'desa': true,
+      'kodepos': true
     }
   }, [localRegistration])
 
@@ -62,19 +59,15 @@ export default function Data({onValidityChange}) {
       ...localRegistration,
       [name]: value
     })
-    if (requiredRules[name] && value) {
-      change(name, value)
-    }
+
+    onChange(name, value)
   } 
   
   function handleMultipleChanges(changes) {
+    console.log('changes', changes)
     const newRegistration = {}
-    let isValid = true
     changes.forEach(change => {
       newRegistration[change.key] = change.value
-      if (requiredRules[change.key] && !change.value) {
-        isValid = false
-      }
     })
 
     setLocalRegistration({
@@ -82,9 +75,7 @@ export default function Data({onValidityChange}) {
       ...newRegistration
     })
 
-    if (isValid) {
-      changeMultiple(changes)
-    }
+    onChangeMultiple(changes)
   }
 
   return (
@@ -95,9 +86,6 @@ export default function Data({onValidityChange}) {
         validities={validities}
         onChange={handleChange}
         onMultipleChanges={handleMultipleChanges}
-        downloadBukti={downloadBukti}
-        deleteBukti={deleteBukti}
-        uploadBukti={uploadBukti}
       />
     </> 
   )

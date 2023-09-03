@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap"
-import { supabase } from "@/lib/supabase"
+import { useSupabaseClient  } from "@supabase/auth-helpers-react"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
 export default function FileViewerModal({type, url, isOpen, toggle}) {
+  const supabase = useSupabaseClient()
   const [fileURL, setFileURL] = useState(null)
   
   useEffect(() => {

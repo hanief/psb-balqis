@@ -1,16 +1,12 @@
-import { useSingleRegistration } from "@/data/singleRegistration";
 import { Button, Card, CardBody, FormGroup, Input, Label, Spinner } from "reactstrap";
-import { useUser } from "@supabase/auth-helpers-react";
+import Link from "next/link";
 
-export default function Bayar() {
-  const user = useUser()
-  const {registration, uploadBukti, deleteBukti} = useSingleRegistration(user?.id)
-  
+export default function Bayar({ registration, onUploadBukti }) {  
   if (registration?.pembayaran_diterima) {
     return (
       <Card>
-        <CardBody>
-          <h2>Terima kasih.</h2>
+        <CardBody className="text-center">
+          <h2 className="display-3">Terima kasih.</h2>
           <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>
         </CardBody>
       </Card>
@@ -20,17 +16,13 @@ export default function Bayar() {
   if (registration?.bukti_pembayaran) {
     return (
       <Card>
-        <CardBody>
-          <h2>Terima kasih.</h2>
-          <p>Anda sudah mengunggah bukti pembayaran.</p>
-          <p>Panitia PSB akan mengkonfirmasi pembayaran anda.</p>
-          <Button
-            color="danger" 
-            onClick={() => {
-              deleteBukti('pembayaran')
-            }}>
-              Hapus bukti pembayaran
-          </Button>
+        <CardBody className="text-center">
+          <h2 className="display-3">Terima kasih.</h2>
+          <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
+          <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
+          <br />
+          <p>Anda dapat melihat status pendaftaran setiap saat dengan mengunjungi halaman:</p>
+          <Link className="btn btn-balqis" href={'/status'}>Cek Status Pendaftaran</Link>
         </CardBody>
       </Card>
     )
@@ -39,26 +31,16 @@ export default function Bayar() {
   return (
     <Card>
       <CardBody>
-        <h2>Terima kasih.</h2>
-        <p className="card-text">
-          Anda sudah mendaftarkan diri untuk menjadi santri BALQIS Jogja.
-        </p>
-        <p className="card-text">
-          Selanjutnya, mohon melakukan pembayaran sebesar <strong>Rp. 250.000</strong> untuk biaya pendaftaran.
-        </p>
-        <p>
-          Pembayaran dapat dilakukan melalui transfer ke rekening berikut:
-        </p>
-        <ul className="list-unstyled">
-          <li>Bank: <strong>Bank Syariah Indonesia (BSI)</strong></li>
-          <li>No. Rekening: <strong>7088404267</strong></li>
-          <li>Atas Nama: <strong>Yayasan Baitul Qur&apos;an Yogyakarta</strong></li>
+        <p>Selanjutnya, mohon melakukan pembayaran biaya pendaftaran sebesar <strong>Rp. 250.000</strong> ke rekening berikut:</p>
+        <ul className="list-unstyled border border-success rounded p-2">
+          <li><strong>Bank Syariah Indonesia (BSI)</strong></li>
+          <li><strong><em>Nomor 7088404267</em></strong></li>
+          <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
         </ul>
         <p className="card-text">
-          Setelah melakukan pembayaran, silahkan upload bukti pembayaran melalui form berikut:
+          Setelah melakukan pembayaran, mohon upload bukti pembayaran melalui form berikut:
         </p>
         <FormGroup>
-          <Label for="bukti_pembayaran">Upload berkas bukti pembayaran</Label>
           <Input 
             className='mb-1'
             type="file"
@@ -68,7 +50,7 @@ export default function Bayar() {
             onChange={event => {
               const file = event.target.files[0]
               const type = 'pembayaran'
-              uploadBukti(file, type)
+              onUploadBukti(file, type)
             }}
           />
         </FormGroup>

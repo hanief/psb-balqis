@@ -5,10 +5,7 @@ import NextImage from 'next/image'
 import { toPng } from 'html-to-image'
 import { useUser } from "@supabase/auth-helpers-react";
 
-export default function Tes() {
-  const user = useUser()
-  const {registration} = useSingleRegistration(user?.id)
-
+export default function Tes({ registration }) {
   function downloadKartu() {
     const node = document.getElementById('kartu')
     toPng(node, {
@@ -30,7 +27,9 @@ export default function Tes() {
   return (
     <Card>
       <CardBody>
-        <h2 className="text-success">Kartu Pendaftaran</h2>
+        <h2>Terima kasih</h2>
+        <p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
+        <p>Selanjutnya, calon santri wajib mengikuti tes masuk sekolah.</p>
         <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>
         <div style={{width: '330px'}}>
           <Button block className="my-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>
@@ -75,6 +74,7 @@ export default function Tes() {
         </div>
         
         <hr />
+        
         <h2 className="text-success">Pelaksanaan tes</h2>
         <p>Tes masuk akan dilaksanakan pada tanggal <strong>23-24 September 2023</strong>.</p>
         <hr/>

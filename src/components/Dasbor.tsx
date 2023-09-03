@@ -2,11 +2,11 @@ import { Button, Card, CardBody, Col, Container, FormGroup, Input, InputGroup, I
 import { useEffect, useState } from "react";
 import { columns } from '@/data/columns'
 import { convertToTitleCase } from "@/utils";
-import { useProfile } from "@/data/profiles";
 import { useRegistrations } from "@/data/registrations";
 import dynamic from "next/dynamic"
 import useDashboardColumnDefinitions from '@/data/dashboardColumnDefinition'
 import MultiSelect from "./MultiSelect";
+import { useUser } from "@supabase/auth-helpers-react";
 
 const DataViewerModal = dynamic(() => import('@/components/DataViewerModal'), { ssr: false })
 const DeleteConfirmationModal = dynamic(() => import('@/components/DeleteConfirmationModal'), { ssr: false })
@@ -14,7 +14,7 @@ const ExpandedRow = dynamic(() => import('@/components/ExpandedRow'), { ssr: fal
 const DataTable = dynamic(() => import("react-data-table-component"), { ssr: false })
 
 export default function Dasbor() {
-  const { user } = useProfile()
+  const user = useUser()
   const [searchKeyword, setSearchKeyword] = useState('')
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')

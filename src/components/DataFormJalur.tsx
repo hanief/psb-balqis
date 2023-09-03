@@ -20,7 +20,6 @@ export default function DataForm({
   rules,
   validities,
   onChange,
-  onMultipleChanges,
   uploadBukti,
   deleteBukti,
   downloadBukti

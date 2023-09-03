@@ -1,13 +1,5 @@
 import { Button, Card, CardBody, CardTitle, Col, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
-import Select from 'react-select'
 import { useMemo } from "react"
-import { 
-  jalurPendaftaranOptions, 
-  jenjangOptions, 
-  jalurBeasiswaKhususOptions,
-  jalurBeasiswaPrestasiOptions,
-  jenisKelaminOptions
-} from '@/data/options'
 import { Wilayah } from '@/types'
 import data from '@/data/wilayah.json'
 import ValidatedInput from "@/components/ValidatedInput"
@@ -20,10 +12,7 @@ export default function DataForm({
   rules,
   validities,
   onChange,
-  onMultipleChanges,
-  uploadBukti,
-  deleteBukti,
-  downloadBukti
+  onMultipleChanges
 }) {
   const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
   const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
@@ -35,8 +24,7 @@ export default function DataForm({
         <CardBody>
           <CardTitle tag="h5" className='mb-4'>Data Orang Tua/Wali Santri</CardTitle>
           <FormGroup>
-            <Label for='nama_ayah'>Ayah / Wali 1</Label>
-            
+            <Label for='nama_ayah'>Ayah / Wali 1</Label>    
             <Row>
               <Col lg="6">
                 <ValidatedInput
@@ -69,7 +57,7 @@ export default function DataForm({
                 <ValidatedInput
                   type="text"
                   name="nama_ibu"
-                  placeholder="Nomor HP"
+                  placeholder="Nama Lengkap"
                   value={registration?.nama_ibu}
                   required={rules?.nama_ibu}
                   valid={validities?.nama_ibu}
@@ -90,6 +78,7 @@ export default function DataForm({
             </Row>
           </FormGroup>
 
+          <Label for='alamat'>Alamat Rumah</Label>
           <ValidatedInput
             type="text"
             name="alamat"

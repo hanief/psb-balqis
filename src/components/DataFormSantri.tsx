@@ -44,7 +44,7 @@ export default function DataForm({
             name="jenis_kelamin"
             label="Jenis Kelamin"
             placeholder='Pilih Jenis Kelamin'
-            required={rules.jenis_kelamin}
+            required={rules?.jenis_kelamin}
             valid={validities?.jenis_kelamin}
             isSearchable={false}
             onChange={onChange}

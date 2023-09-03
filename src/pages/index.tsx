@@ -54,9 +54,9 @@ export default function Home() {
                 <Link href="/daftar" className="btn btn-balqis btn-lg px-4">
                   Daftar Sekarang
                 </Link>
-                {/* <Link href="/cek" className="btn btn-success btn-lg px-4">
+                <Link href="/status" className="btn btn-success btn-lg px-4">
                   Cek Status
-                </Link> */}
+                </Link>
               </div>
             </div>
           </div>

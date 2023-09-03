@@ -23,7 +23,7 @@ export default function DataViewerModal({
     uploadBukti, 
     deleteBukti, 
     downloadBukti
-  } = useSingleRegistration(initialRegistration?.user_id, onUpdate, initialRegistration)
+  } = useSingleRegistration(initialRegistration?.user_id, initialRegistration, onUpdate)
 
   const [localRegistration, setLocalRegistration] = useState(registration)
 

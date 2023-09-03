@@ -2,10 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button, Col, Container, Row } from 'reactstrap'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useProfile } from '@/data/profiles'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
-import { useRouter } from 'next/router'
 import { isAdmin } from '@/utils'
 
 export default function Layout({children}) {
@@ -72,9 +70,9 @@ export default function Layout({children}) {
             <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
           </div>
         </header>
-        <nav className="py-3 mb-4 border-bottom bg-success-subtle">
-          <div className="container d-flex flex-wrap justify-content-center align-items-center">
-            <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none">
+        <nav className="navbar navbar-expand-lg py-3 mb-4 border-bottom bg-success-subtle">
+          <div className="container">
+            <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none navbar-brand">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </Link>
           </div>
