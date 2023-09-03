@@ -45,6 +45,7 @@ export default function DataForm({
         rules={rules}
         validities={validities}
         onChange={onChange}
+        onMultipleChanges={onMultipleChanges}
         uploadBukti={uploadBukti}
         deleteBukti={deleteBukti}
         downloadBukti={downloadBukti}

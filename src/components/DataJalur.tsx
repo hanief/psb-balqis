@@ -9,7 +9,7 @@ export default function DataJalur({registration, onChange, onChangeMultiple, onU
   useEffect(() => {
     setLocalRegistration(registration)
   }, [registration])
-  
+
   const requiredRules = useMemo(() => {
     return {
       'jalur_pendaftaran': true,
@@ -39,8 +39,6 @@ export default function DataJalur({registration, onChange, onChangeMultiple, onU
       return acc
     }, {})
 
-    console.log('localRegistration', localRegistration)
-    console.log('valids', valids)
     return valids
   }, [requiredRules])
 
