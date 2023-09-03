@@ -27,7 +27,7 @@ export default function Tes({ registration }) {
       <CardBody>
         <h2>Terima kasih</h2>
         <p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
-        <p>Selanjutnya, calon santri wajib mengikuti tes masuk sekolah.</p>
+        <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>
         <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>
         <div style={{width: '330px'}}>
           <Button block className="my-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>
@@ -70,34 +70,6 @@ export default function Tes({ registration }) {
             </CardBody>
           </Card>
         </div>
-        
-        <hr />
-        
-        <h2 className="text-success">Pelaksanaan tes</h2>
-        <p>Tes masuk akan dilaksanakan pada tanggal <strong>23-24 September 2023</strong>.</p>
-        <hr/>
-
-        <h2 className="text-success">Materi tes</h2>
-        <h4>Tes Akademik dan Pesantren</h4>
-        <ul>
-          <li>Meliputi 4 mapel:  B. Indonesia, B. Inggris, IPA, Matematika, PAI, dan B. Arab</li>
-          <li>Masing-masing mapel 10 soal dan dikerjakan dalam 90 menit</li>
-        </ul>
-
-        <h4>Tes Tahfidz dan Wawancara Santri</h4>
-        <ul>
-          <li>Tes bacaan Al-Qur&apos;an</li>
-          <li>Peserta menyetorkan hafalan yang sudah dihafalkan di rumah: Q.S. Ar-Ra&apos;du ayat 1-5 (pendaftar SMP), Q.S. Ar-Ra’du ayat 1-13 (pendaftar SMA)</li>
-          <li>Wawancara santri terkait kemandirian dan kesiapan mondok</li>
-        </ul>
-
-        <h4>Wawancara Wali Santri</h4>
-        <ul>
-          <li>Wali santri terlebih dahulu mengisi kuisoner pada <a href="https://bit.ly/kuesionerwali2324">link ini</a></li>
-          <li>Wali santri mencetak surat pernyataan kemudian mengisi dan menyerahkan ketika wawancara (format terlampir)</li>
-          <li>Bagi yang seleksi secara daring, wajib mengirimkan scan surat pernyataan yang telah diisi sebelumnya</li>
-          <li>Setiap wali wajib mengambil salinan 3 surat pernyataan di tempat registrasi diakhir sesi sebelum kembali ke rumah</li>
-        </ul>
       </CardBody>
     </Card>
   )
