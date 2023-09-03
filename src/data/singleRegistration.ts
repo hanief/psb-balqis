@@ -4,15 +4,15 @@ import toast from 'react-hot-toast'
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { debounce } from "lodash"
 
-export function useSingleRegistration(userId = null, initialRegistration = null, onUpdate = null) {
+export function useSingleRegistration(id = null, initialRegistration = null, onUpdate = null) {
   const supabase = useSupabaseClient()
   const [registration, setRegistration] = useState(initialRegistration)
 
-  const {data, mutate} = useSWR(userId && `/registrations/${userId}`, async () => {
+  const {data, mutate} = useSWR(id && `/registrations/${id}`, async () => {
     const { data } = await supabase
       .from("registrations")
       .select()
-      .eq("user_id", userId)
+      .eq("id", id)
       .limit(1)
 
     return data
@@ -30,7 +30,7 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
   //   }
   // }, [initialRegistration])
 
-  const uploadFn = useCallback(update, [userId])
+  const uploadFn = useCallback(update, [id])
 
   const handleUpdate = useMemo(() => debounce(uploadFn, 750), [uploadFn])
 
@@ -49,34 +49,13 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
     handleUpdate(updatedData)
   }
 
-  async function create(registrationData) {    
-    if (!userId) {
-      const email = `${Date.now()}@utama.app`
-      const password = `${Date.now()}!`
-
-      const { data: { user: newUser } } = await supabase.auth.signUp({
-        email,
-        password
-      })
-    
-      await supabase
-        .from("registrations")
-        .insert({...registrationData, user_id: newUser?.id})
-    } else {
-      await supabase
-        .from("registrations")
-        .update(registrationData)
-        .eq('user_id', userId)
-    }
-  }
-
   async function update(newDatum) {
-    if (!userId) throw new Error('userId is required')
+    if (!id) throw new Error('id is required')
 
-    const oldDatum = data?.find(datum => datum.user_id === userId)
+    const oldDatum = data?.find(datum => datum.id === id)
     const updatedDatum = {...oldDatum, ...newDatum}
     const updatedData = data?.map(datum => {
-      if (datum.user_id === userId) {
+      if (datum.id === id) {
         return updatedDatum
       }
 
@@ -87,7 +66,7 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
       await supabase
         .from("registrations")
         .update(newDatum)
-        .eq("user_id", userId)
+        .eq("id", id)
 
       return updatedData
     }, {
@@ -106,9 +85,9 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
   }
 
   async function uploadBukti(file, type) {
-    if (!userId) throw new Error('userId is required')
+    if (!id) throw new Error('id is required')
 
-    const oldDatum = data?.find(datum => datum.user_id === userId)
+    const oldDatum = data?.find(datum => datum.id === id)
 
     const fileNameSplit = file?.name?.split('.')
     const fileExtension = fileNameSplit[fileNameSplit.length-1]
@@ -120,7 +99,7 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
 
     const updatedDatum = {...oldDatum, ...newDatum}
     const updatedData = data?.map(datum => {
-      if (datum.user_id === userId) {
+      if (datum.id === id) {
         return updatedDatum
       } else {
         return datum
@@ -139,7 +118,7 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
       await supabase
         .from('registrations')
         .update(newDatum)
-        .eq('user_id', userId)
+        .eq('id', id)
 
       return updatedData
     }, {
@@ -172,10 +151,10 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
 
   async function deleteBukti(type) {
     const newDatum = {[`bukti_${type}`]: ''}
-    const oldDatum = data?.find(datum => datum.user_id === userId)
+    const oldDatum = data?.find(datum => datum.id === id)
     const updatedDatum = {...oldDatum, ...newDatum}
     const updatedData = data?.map(datum => {
-      if (datum.user_id === userId) {
+      if (datum.id === id) {
         return updatedDatum
       } else {
         return datum
@@ -186,7 +165,7 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
       await supabase
         .from('registrations')
         .update(newDatum)
-        .eq('user_id', userId)
+        .eq('id', id)
 
       return updatedData
     }, {
@@ -208,8 +187,6 @@ export function useSingleRegistration(userId = null, initialRegistration = null,
     registration,
     change,
     changeMultiple,
-    create,
-    update,
     uploadBukti,
     downloadBukti,
     deleteBukti,

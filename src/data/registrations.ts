@@ -55,10 +55,10 @@ export function useRegistrations() {
     return data
   }
 
-  async function update(userId, newDatum) {
-    const oldDatum = data?.find(datum => datum.user_id === userId)
+  async function update(id, newDatum) {
+    const oldDatum = data?.find(datum => datum.id === id)
     const updatedData = data?.map(datum => {
-      if (datum.user_id === userId) {
+      if (datum.id === id) {
         return {...oldDatum, ...newDatum}
       }
 
@@ -69,7 +69,7 @@ export function useRegistrations() {
       await supabase
         .from("registrations")
         .update(newDatum)
-        .eq("user_id", userId)
+        .eq("id", id)
 
       return updatedData
     }, {
@@ -85,13 +85,13 @@ export function useRegistrations() {
     return promise
   }
 
-  async function remove(userId) {
-    const updatedData = data?.filter(datum => datum.user_id !== userId)
+  async function remove(id) {
+    const updatedData = data?.filter(datum => datum.id !== id)
 
     return mutate(async () => {
       await supabase.from('registrations')
         .update({deleted_at: new Date().toISOString()})
-        .eq('user_id', userId)
+        .eq('id', id)
 
       return updatedData
     }, {
@@ -101,7 +101,7 @@ export function useRegistrations() {
 
   function refreshData(updatedDatum) {
     const updatedData = data?.map(datum => {
-      if (datum.user_id === updatedDatum.user_id) {
+      if (datum.id === updatedDatum.id) {
         return updatedDatum
       }
 

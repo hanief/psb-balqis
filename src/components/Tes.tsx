@@ -1,9 +1,7 @@
-import { useSingleRegistration } from "@/data/singleRegistration";
 import { Button, Card, CardBody } from "reactstrap";
 import {DateTime} from 'luxon'
 import NextImage from 'next/image'
 import { toPng } from 'html-to-image'
-import { useUser } from "@supabase/auth-helpers-react";
 
 export default function Tes({ registration }) {
   function downloadKartu() {

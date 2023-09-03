@@ -24,7 +24,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nama_lengkap'),
       selector: row => row.nama_lengkap,
       sortable: true,
-      minWidth: '200px',
+      minWidth: '400px',
     },
     {
       id: 'jenjang',
@@ -48,6 +48,7 @@ export default function useDashboardColumnDefinition(
       format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATETIME_MED),
       selector: row => row.created_at,
       sortable: true,
+      minWidth: '200px'
     },
     {
       id: 'bukti_pembayaran',
@@ -71,7 +72,7 @@ export default function useDashboardColumnDefinition(
         type="checkbox" 
         checked={row.pembayaran_diterima} 
         onChange={e => {
-          update(row.user_id, {pembayaran_diterima: e.target.checked})
+          update(row.id, {pembayaran_diterima: e.target.checked})
         }}
       />
     },
@@ -90,13 +91,13 @@ export default function useDashboardColumnDefinition(
             Ubah
           </Button>
           {row.deleted_at ? (
-            <Button color="outline-success" onClick={() => update(row.user_id, {deleted_at: null})}>
+            <Button color="outline-success" onClick={() => update(row.id, {deleted_at: null})}>
               <i className="bi bi-recycle"></i>
             </Button>
           ) : (
             <Button color="outline-danger" onClick={() => setDeleteConfirmationProps({
               isOpen: true,
-              onConfirm: () => remove(row.user_id),
+              onConfirm: () => remove(row.id),
             })}>
               <i className="bi bi-trash"></i>
             </Button>
