@@ -160,7 +160,6 @@ export default function DaftarPage() {
           <Bayar 
             registration={registration}
             onUploadBukti={uploadBukti}
-            onDeleteBukti={deleteBukti}
           />
         )}
         </Col>
