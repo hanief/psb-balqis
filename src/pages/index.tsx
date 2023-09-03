@@ -48,14 +48,14 @@ export default function Home() {
             <div className="p-5 text-center">
               <h1 className="text-body-emphasis display-5">Penerimaan Santri Baru</h1>
               <p className="col-lg-8 mx-auto fs-5 text-muted">
-                BALQIS Jogja siap menerima pendaftaran untuk tahun ajaran 2024/2025.
+                SMPIT-SMAIT Baitul Qur&apos;an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.
               </p>
               <div className="d-grid gap-2">
                 <Link href="/daftar" className="btn btn-balqis btn-lg px-4">
                   Daftar Sekarang
                 </Link>
                 <Link href="/status" className="btn btn-success btn-lg px-4">
-                  Cek Status
+                  Cek Status Pendaftaran
                 </Link>
               </div>
             </div>
