@@ -17,7 +17,7 @@ export default function ContactButton() {
           <div className="wa__popup_intro" style={{color: 'rgb(217, 235, 198)'}}>Untuk menghubungi CS, bisa melalui WA dibawah ini</div>
         </div>
         <div className="wa__popup_content wa__popup_content_left">
-          <div className="wa__popup_notice">Insyaalaah CS akan segera merespon</div>
+          <div className="wa__popup_notice">InsyaAllah CS akan segera merespon</div>
           <div className="wa__popup_content_list">
             <div className="wa__popup_content_item">
               <a target="_blank" href="https://api.whatsapp.com/send?phone=6287871956868&amp;text=Assalamualaikum CS 1 Balqis Jogja, saya mau bertanya soal PSB Balqis Jogja, mohon dibantu.." rel="nofollow noopener noreferrer" className="wa__stt wa__stt_online">
