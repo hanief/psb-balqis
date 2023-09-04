@@ -5,6 +5,8 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
 import { isAdmin } from '@/utils'
+import { useState } from 'react'
+import ContactButton from './ContactButton'
 
 export default function Layout({children}) {
   const user = useUser()
@@ -110,6 +112,7 @@ export default function Layout({children}) {
           </Row>
         </Container>
       </footer>
+      <ContactButton />
     </>  
   )
 }

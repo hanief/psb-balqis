@@ -25,7 +25,6 @@ export default function Tes({ registration }) {
   return (
     <Card>
       <CardBody>
-        <h2>Terima kasih</h2>
         <p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
         <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>
         <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>

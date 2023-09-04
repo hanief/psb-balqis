@@ -41,11 +41,55 @@ export default function Status() {
     setDidSearched(true)
   }
 
+  if (registration?.status_pendaftaran === 'diterima') {
+    return (
+      <Container>
+        <Row>
+          <Col>
+            <h1 className="text-center">Selamat!</h1>
+            <Card>
+              <CardBody>
+                <p>Calon Santri atas nama {registration?.nama_lengkap} telah diterima{registration?.syarat_penerimaan && (' dengan syarat')} di Pesantren Balqis Jogja untuk periode 2024/2025.</p>
+                {registration?.syarat_penerimaan && (
+                  <div>
+                    <h5>Sebagai syarat penerimaan sebagai santri:</h5>
+                    <p>{registration?.syarat_penerimaan}</p>
+                  </div>
+                )}
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    )
+  }
+
+  if (registration?.status_pendaftaran === 'ditolak') {
+    return (
+      <Container>
+        <Row>
+          <Col className="text-center">
+            <h2>Mohon maaf,</h2>
+            <h1>{registration?.nama_lengkap}.</h1>
+            <Card>
+              <CardBody>
+                <p>Setelah memperhatikan dan menimbang syarat pendaftaran dan hasil tes masuk, dengan berat hati kami memutuskan anda <strong>tidak diterima</strong>.</p>
+                <p>Terima kasih telah mendaftar dan melalui proses pendaftaran.</p>
+                <p>Semoga Allah swt. memberikan kebaikan dan keberkahan kepada anda.</p>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    )
+  }
+
   if (registration?.pembayaran_diterima) {
     return (
       <Container>
         <Row>
           <Col>
+            <h1 className="text-center">Terima kasih.</h1>
             <Tes registration={registration}/>
           </Col>
         </Row>
@@ -63,6 +107,7 @@ export default function Status() {
             <CardBody className="text-center">
               <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
               <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
+              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>
             </CardBody>
           </Card>
         </Col>
@@ -77,7 +122,8 @@ export default function Status() {
       <Container>
       <Row>
         <Col>
-          <h1 className="text-center">Anda telah terdaftar, {registration?.nama_lengkap}</h1>
+          <h3 className="text-center">Anda terdaftar, {registration?.nama_lengkap}</h3>
+          <h1 className="text-center">Anda terdaftar, {registration?.nama_lengkap}</h1>
           <Card>
             <CardBody>
               <p>Akan tetapi, kami belum menerima biaya pendaftaran atau bukti pembayarannya</p>
@@ -139,6 +185,11 @@ export default function Status() {
                   value={tanggalLahir}
                   invalid={!tanggalLahir}
                   onChange={event => setTanggalLahir(event.target.value)}
+                  onKeyUp={event => {
+                    if (event.key === 'Enter') {
+                      handleFindButtonPush()
+                    }
+                  }}
                 />
                 <FormFeedback>Tanggal Lahir harus diisi</FormFeedback>
               </FormGroup>
