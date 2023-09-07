@@ -79,6 +79,7 @@ export function useContents() {
   return {
     contents: data || defaultContents,
     artikels: data?.filter(datum => datum?.type === 'artikel' && datum?.deleted_at === null),
+    konten: data?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null),
     createArtikel,
     updateArtikel,
     deleteArtikel
