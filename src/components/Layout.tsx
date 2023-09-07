@@ -79,23 +79,25 @@ export default function Layout({children}) {
           </div>
         </header>
         <Navbar className="navbar-expand-lg py-3 mb-4 border-bottom bg-success-subtle">
-          <Link href="/" className="navbar-brand me-auto">
-            <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-          </Link>
-          <NavbarToggler onClick={toggleNavbar} className="me-2" />
-          <Collapse isOpen={!collapsed} navbar>
-            <Nav navbar>
-              <NavItem>
-                <NavLink href="/daftar" active={asPath === '/daftar'}>Daftar</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="/status" active={asPath === '/status'}>Cek Status</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://balqisjogja.com" target='_blank'>Web Balqis</NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
+          <Container>
+            <Link href="/" className="navbar-brand me-auto">
+              <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+            </Link>
+            <NavbarToggler onClick={toggleNavbar} className="me-2" />
+            <Collapse isOpen={!collapsed} navbar>
+              <Nav navbar>
+                <NavItem>
+                  <NavLink href="/daftar" active={asPath === '/daftar'}>Daftar</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="/status" active={asPath === '/status'}>Cek Status</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="https://balqisjogja.com" target='_blank'>Web Balqis</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+          </Container>
         </Navbar>
         {children}
       </main>
