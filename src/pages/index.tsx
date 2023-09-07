@@ -13,7 +13,7 @@ const Carousel = dynamic(() => import('@/components/Carousel'), { ssr: false })
 
 export default function Home() {
   const user = useUser()
-  const { contents } = useContents()
+  const { getKonten } = useContents()
 
   if (isAdmin()) {
     return (
@@ -50,7 +50,7 @@ export default function Home() {
             <div className="p-5 text-center">
               <h1 className="text-body-emphasis display-5">Penerimaan Santri Baru</h1>
               <p className="col-lg-8 mx-auto fs-5 text-muted">
-                SMPIT-SMAIT Baitul Qur&apos;an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.
+                {getKonten('home_callout')?.content}
               </p>
               <div className="d-grid gap-2">
                 <Link href="/daftar" className="btn btn-balqis btn-lg px-4">

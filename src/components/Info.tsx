@@ -1,28 +1,27 @@
 import { Col, ListGroup, ListGroupItem, Row } from "reactstrap";
-import Jadwal from '@/posts/Jadwal.mdx'
-import Jalur from '@/posts/Jalur.mdx'
-import Beasiswa from '@/posts/Beasiswa.mdx'
-import MateriTes from '@/posts/MateriTes.mdx'
-import Biaya from '@/posts/Biaya.mdx'
-import Program from '@/posts/Program.mdx'
-import { useState } from "react";
-import Brosur from "@/posts/Brosur";
+import { useEffect, useState } from "react";
 import { useContents } from "@/data/contents";
 
 export default function InfoPage() {
   const { artikels } = useContents()
   const [active, setActive] = useState(null)
 
+  useEffect(() => {
+    if (active === null && artikels?.length > 0) {
+      setActive(artikels[0])
+    }
+  }, [artikels, active])
+
   return (
     <Row className="my-4">
       <Col md="3" className="mb-2">
         <ListGroup>
-          {artikels.map(artikel => (
+          {artikels?.map(artikel => (
             <ListGroupItem
               className="list-group-item-success" 
               key={artikel.id} 
               action
-              active={artikel.id === active.id} 
+              active={artikel.id === active?.id} 
               tag="a"
               href="#posts"
               onClick={() => setActive(artikel)}
@@ -33,9 +32,9 @@ export default function InfoPage() {
         </ListGroup>
       </Col>
       <Col id="posts">
-        <div id={active.slug}>
-          <h1>{active.title}</h1>
-          {active.content}
+        <div id={active?.slug}>
+          <h1>{active?.title}</h1>
+          {active?.content}
         </div>
       </Col>
     </Row>

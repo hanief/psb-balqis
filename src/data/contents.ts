@@ -5,7 +5,7 @@ import { getRandomString } from "@/utils"
 export const defaultContents = [{
   id: getRandomString(),
   slug: 'home_callout',
-  type: 'ui',
+  type: 'konten',
   title: 'home callout',
   content : 'SMPIT-SMAIT Baitul Qur&apos;an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.'
 }]
@@ -76,12 +76,21 @@ export function useContents() {
     return promise
   }
 
+  function getKonten(slug) {
+    const contents = data || defaultContents
+
+    return contents?.find(datum => {
+      return datum.type === 'konten' && datum.slug === slug
+    })
+  }
+
   return {
     contents: data || defaultContents,
     artikels: data?.filter(datum => datum?.type === 'artikel' && datum?.deleted_at === null),
-    konten: data?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null),
+    konten: data?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null) || defaultContents,
     createArtikel,
     updateArtikel,
-    deleteArtikel
+    deleteArtikel,
+    getKonten
   }
 }
