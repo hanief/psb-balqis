@@ -1,6 +1,8 @@
 import { Col, ListGroup, ListGroupItem, Row } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useContents } from "@/data/contents";
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 export default function InfoPage() {
   const { artikels } = useContents()
@@ -34,7 +36,9 @@ export default function InfoPage() {
       <Col id="posts">
         <div id={active?.slug}>
           <h1>{active?.title}</h1>
-          {active?.content}
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {active?.content}
+          </ReactMarkdown>
         </div>
       </Col>
     </Row>
