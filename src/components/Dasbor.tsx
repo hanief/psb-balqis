@@ -7,6 +7,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 const DasborData = dynamic(() => import('@/components/DasborData'), { ssr: false })
 const DasborArtikel = dynamic(() => import('@/components/DasborArtikel'), { ssr: false })
 const DasborKonten = dynamic(() => import('@/components/DasborKonten'), { ssr: false })
+const DasborSlide = dynamic(() => import('@/components/DasborSlide'), { ssr: false })
 const DataViewerModal = dynamic(() => import('@/components/DataViewerModal'), { ssr: false })
 const DeleteConfirmationModal = dynamic(() => import('@/components/DeleteConfirmationModal'), { ssr: false })
 
@@ -51,7 +52,7 @@ export default function Dasbor() {
             Artikel
           </NavLink>
         </NavItem>
-        <NavItem>
+        {/* <NavItem>
           <NavLink href="#" active={activeTab === "3"} onClick={() => setActiveTab("3")}>
             Konten
           </NavLink>
@@ -60,7 +61,7 @@ export default function Dasbor() {
           <NavLink href="#" active={activeTab === "4"} onClick={() => setActiveTab("4")}>
             Slide
           </NavLink>
-        </NavItem>
+        </NavItem> */}
       </Nav>
       <TabContent activeTab={activeTab} className="mt-2">
         <TabPane tabId="1">
@@ -72,12 +73,12 @@ export default function Dasbor() {
         <TabPane tabId="2">
           <DasborArtikel />
         </TabPane>
-        <TabPane tabId="3">
+        {/* <TabPane tabId="3">
           <DasborKonten />
         </TabPane>
         <TabPane tabId="4">
-          <DasborKonten />
-        </TabPane>
+          <DasborSlide />
+        </TabPane> */}
       </TabContent>
       
       {dataViewerProps.isOpen && (
