@@ -36,7 +36,7 @@ export default function InfoPage() {
       <Col id="posts">
         <div id={active?.slug}>
           <h1>{active?.title}</h1>
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
             {active?.content}
           </ReactMarkdown>
         </div>
