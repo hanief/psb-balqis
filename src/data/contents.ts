@@ -44,7 +44,7 @@ export function useContents() {
       return datum
     })
 
-    const {id, ...updatedArtikel} = artikel
+    const {id, created_at, updated_at, ...updatedArtikel} = artikel
     const promise = mutate(async () => {
       await supabase
         .from('contents')

@@ -21,3 +21,35 @@ create policy "Admin can update contents." on contents
   for update using (auth.jwt() ->> 'email' = 'admin@utama.app');
 
 insert into storage.buckets (id, name) values ('contents', 'contents');
+
+CREATE POLICY "Give admin select access to contents slide" 
+ON storage.objects 
+FOR SELECT 
+TO public 
+USING (bucket_id = 'contents' 
+  AND ((storage.foldername(name))[1] = 'slide') 
+  AND auth.jwt() ->> 'email' = 'admin@utama.app');
+
+CREATE POLICY "Give admin insert access to contents slide" 
+ON storage.objects 
+FOR INSERT 
+TO public 
+WITH CHECK (bucket_id = 'contents' 
+  AND ((storage.foldername(name))[1] = 'slide') 
+  AND auth.jwt() ->> 'email' = 'admin@utama.app');
+
+CREATE POLICY "Give admin update access to contents slide" 
+ON storage.objects 
+FOR UPDATE 
+TO public 
+USING (bucket_id = 'contents' 
+  AND ((storage.foldername(name))[1] = 'slide') 
+  AND auth.jwt() ->> 'email' = 'admin@utama.app');
+
+CREATE POLICY "Give admin delete access to contents slide" 
+ON storage.objects 
+FOR DELETE 
+TO public 
+USING (bucket_id = 'contents' 
+  AND ((storage.foldername(name))[1] = 'slide') 
+  AND auth.jwt() ->> 'email' = 'admin@utama.app');
