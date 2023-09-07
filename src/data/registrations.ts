@@ -2,7 +2,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import toast from 'react-hot-toast'
 import useSWR from "swr"
 import { columns } from "@/data/columns"
-import { formatDataWithWilayahNames } from "@/utils"
+import { convertToTitleCase, formatDataWithWilayahNames } from "@/utils"
 import XLSX from 'xlsx'
 
 export function useRegistrations() {
@@ -45,7 +45,7 @@ export function useRegistrations() {
     } 
     
     const {data} = await selectOp.order('created_at', {ascending: false})
-    const formattedData = formatDataWithWilayahNames(data)
+    const formattedData = formatData(data)
   
     const worksheet = XLSX.utils.json_to_sheet(formattedData)
     const workbook = XLSX.utils.book_new()
@@ -53,6 +53,26 @@ export function useRegistrations() {
     XLSX.writeFile(workbook, `pendaftar${(columnForFilter && filterKeyword) && ('_' + columnForFilter + '_' + filterKeyword)}.xlsx`)
 
     return data
+  }
+
+  function formatData(data) {
+    let formattedData = data
+    formattedData = formatDataWithWilayahNames(data)
+    formattedData = capitalizeData(formattedData)
+    return formattedData
+  }
+
+  function capitalizeData(data) {
+    return data?.map(datum => {
+      return {
+        ...datum,
+        jalur_pendaftaran: convertToTitleCase(datum.jalur_pendaftaran),
+        jenjang: datum.jenjang?.toUpperCase(),
+        jenis_kelamin: convertToTitleCase(datum.jenis_kelamin),
+        jalur_beasiswa_prestasi: convertToTitleCase(datum.jalur_beasiswa_prestasi),
+        jalur_beasiswa_khusus: convertToTitleCase(datum.jalur_beasiswa_khusus),
+      }
+    })
   }
 
   async function update(id, newDatum) {
