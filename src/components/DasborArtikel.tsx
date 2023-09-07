@@ -34,6 +34,9 @@ export default function DasborKonten() {
       content: content
     }
     createArtikel(artikel)
+
+    setNewArtikel(null)
+    setEditorState(null)
   }
 
   function handleDeleteNew() {
@@ -62,10 +65,21 @@ export default function DasborKonten() {
     }
 
     updateArtikel(artikel)
+
+    setActiveArtikel(null)
+    setEditorState(null)
   } 
+
+  function handleCancelActiveArtikel() {
+    setActiveArtikel(null)
+    setEditorState(null)
+  }
   
   function handleDeleteActiveArtikel() {
     deleteArtikel(activeArtikel)
+    
+    setActiveArtikel(null)
+    setEditorState(null)
   }
 
   return (
@@ -164,6 +178,7 @@ export default function DasborKonten() {
           </FormGroup>
           <div className="d-flex gap-2">
             <Button color="success" onClick={handleSaveActiveArtikel}>Simpan</Button>
+            <Button color="secondary" onClick={handleCancelActiveArtikel}>Batal</Button>
             <Button color="danger" onClick={handleDeleteActiveArtikel}>Hapus</Button>
           </div>
         </div>

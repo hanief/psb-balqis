@@ -7,70 +7,35 @@ import Biaya from '@/posts/Biaya.mdx'
 import Program from '@/posts/Program.mdx'
 import { useState } from "react";
 import Brosur from "@/posts/Brosur";
+import { useContents } from "@/data/contents";
 
 export default function InfoPage() {
-  const [active, setActive] = useState(0)
-
-  const posts = [
-    {
-      title: 'Brosur',
-      slug: 'brosur',
-      component: <Brosur/>,
-    },
-    {
-      title: 'Timeline',
-      slug: 'timeline',
-      component: <Jadwal/>,
-    },
-    {
-      title: 'Jalur Masuk',
-      slug: 'jalur',
-      component: <Jalur/>,
-    },
-    {
-      title: 'Beasiswa',
-      slug: 'beasiswa',
-      component: <Beasiswa/>,
-    },
-    {
-      title: 'Biaya Pendidikan',
-      slug: 'biaya',
-      component: <Biaya/>,
-    },
-    {
-      title: 'Program Unggulan',
-      slug: 'program',
-      component: <Program/>,
-    },
-    {
-      title: 'Materi Tes Seleksi',
-      slug: 'tes',
-      component: <MateriTes/>,
-    }
-  ]
+  const { artikels } = useContents()
+  const [active, setActive] = useState(null)
 
   return (
     <Row className="my-4">
       <Col md="3" className="mb-2">
         <ListGroup>
-          {posts.map((post, index) => (
+          {artikels.map(artikel => (
             <ListGroupItem
               className="list-group-item-success" 
-              key={index} 
+              key={artikel.id} 
               action
-              active={index === active} 
+              active={artikel.id === active.id} 
               tag="a"
               href="#posts"
-              onClick={() => setActive(index)}
+              onClick={() => setActive(artikel)}
             >
-              {post.title}
+              {artikel.title}
             </ListGroupItem>
           ))}
         </ListGroup>
       </Col>
       <Col id="posts">
-        <div id={posts[active].slug}>
-          {posts[active].component}
+        <div id={active.slug}>
+          <h1>{active.title}</h1>
+          {active.content}
         </div>
       </Col>
     </Row>

@@ -2,6 +2,7 @@ create table contents (
   id bigint primary key generated always as identity,
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
+  deleted_at timestamptz default null,
   slug text,
   content text,
   type text,
@@ -18,3 +19,5 @@ create policy "Admin can insert contents." on contents
 
 create policy "Admin can update contents." on contents
   for update using (auth.jwt() ->> 'email' = 'admin@utama.app');
+
+insert into storage.buckets (id, name) values ('contents', 'contents');

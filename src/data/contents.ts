@@ -59,12 +59,13 @@ export function useContents() {
     return promise
   }
 
-  function deleteArtikel(artikel) {
+  async function deleteArtikel(artikel) {
     const newContents = data.filter(datum => datum.id !== artikel.id)
+
     const promise = mutate(async () => {
       const { data: newData } = await supabase
         .from('contents')
-        .delete()
+        .update({deleted_at: new Date().toISOString()})
         .eq('id', artikel.id)
 
       return newContents
@@ -77,7 +78,7 @@ export function useContents() {
 
   return {
     contents: data || defaultContents,
-    artikels: data?.filter(datum => datum?.type === 'artikel'),
+    artikels: data?.filter(datum => datum?.type === 'artikel' && datum?.deleted_at === null),
     createArtikel,
     updateArtikel,
     deleteArtikel
