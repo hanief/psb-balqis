@@ -15,6 +15,7 @@ export default function DasborKonten() {
   const [newArtikel, setNewArtikel] = useState(null)
 
   function handleAddNew() {
+    setActiveArtikel(null)
     if (!newArtikel) {
       setNewArtikel({
         id: getRandomString(),
@@ -33,11 +34,17 @@ export default function DasborKonten() {
     setNewArtikel(null)
   }
 
+  function handleCancelNew() {
+    setNewArtikel(null)
+    setActiveArtikel(null)
+  }
+
   function handleDeleteNew() {
     setNewArtikel(null)
   }
 
   function handleSetActiveArtikel(artikel) {
+    setNewArtikel(null)
     setActiveArtikel(artikel)
   }
 
@@ -49,6 +56,7 @@ export default function DasborKonten() {
 
   function handleCancelActiveArtikel() {
     setActiveArtikel(null)
+    setNewArtikel(null)
   }
   
   function handleDeleteActiveArtikel() {
@@ -65,6 +73,17 @@ export default function DasborKonten() {
             Buat artikel baru
           </Button>
           <ListGroup>
+            {newArtikel && (
+              <ListGroupItem
+                className="list-group-item-primary" 
+                action
+                active={newArtikel} 
+                tag="a"
+                href="#posts"
+              >
+                {newArtikel?.title}
+              </ListGroupItem>
+            )}
             {artikels?.map(artikel => (
               <ListGroupItem
                 className="list-group-item-success" 
@@ -78,17 +97,6 @@ export default function DasborKonten() {
                 {artikel.title}
               </ListGroupItem>
             ))}
-            {newArtikel && (
-              <ListGroupItem
-                className="list-group-item-success" 
-                action
-                active={newArtikel} 
-                tag="a"
-                href="#posts"
-              >
-                {newArtikel?.title}
-              </ListGroupItem>
-            )}
           </ListGroup>
         </Col>
         <Col id="posts">
@@ -110,14 +118,8 @@ export default function DasborKonten() {
             </FormGroup>
             <FormGroup>
               <Label for="content">Isi</Label>
-              {/* <Input 
-                type="textarea"
-                rows="10"
-                value={newArtikel?.content}
-                onChange={event => setNewArtikel({...newArtikel, content: event.target.value})}
-              /> */}
-
               <MDEditor
+                height={500}
                 value={newArtikel?.content}
                 onChange={newContent => {
                   setNewArtikel({
@@ -127,9 +129,9 @@ export default function DasborKonten() {
                 }}
               />
             </FormGroup>
-            <div className="d-flex gap-2">
+            <div className="d-flex justify-content-between gap-2">
               <Button color="primary" onClick={handleSaveNew}>Simpan</Button>
-              <Button color="danger" onClick={handleDeleteNew}>Hapus</Button>
+              <Button color="secondary" onClick={handleCancelNew}>Batal</Button>
             </div>
           </div>
           )}
@@ -152,13 +154,8 @@ export default function DasborKonten() {
             </FormGroup>
             <FormGroup>
               <Label for="content">Isi</Label>
-              {/* <Input 
-                type="textarea"
-                rows="10"
-                value={activeArtikel?.content}
-                onChange={event => setActiveArtikel({...activeArtikel, content: event.target.value})}
-              /> */}
               <MDEditor
+                height={500}
                 value={activeArtikel?.content}
                 onChange={newContent => {
                   setActiveArtikel({
@@ -168,7 +165,7 @@ export default function DasborKonten() {
                 }}
               />
             </FormGroup>
-            <div className="d-flex gap-2">
+            <div className="d-flex justify-content-between gap-2">
               <Button color="success" onClick={handleSaveActiveArtikel}>Simpan</Button>
               <Button color="secondary" onClick={handleCancelActiveArtikel}>Batal</Button>
               <Button color="danger" onClick={handleDeleteActiveArtikel}>Hapus</Button>
