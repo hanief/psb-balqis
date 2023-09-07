@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { isAdmin } from '@/utils'
 import { useUser } from '@supabase/auth-helpers-react'
 import dynamic from 'next/dynamic'
+import { useContents } from '@/data/contents'
 
 const Dasbor = dynamic(() => import('@/components/Dasbor'), { ssr: false })
 const AdminLogin = dynamic(() => import('@/components/AdminLogin'), { ssr: false })
@@ -12,7 +13,8 @@ const Carousel = dynamic(() => import('@/components/Carousel'), { ssr: false })
 
 export default function Home() {
   const user = useUser()
-  
+  const { contents } = useContents()
+
   if (isAdmin()) {
     return (
       <Container className='my-5'>
@@ -48,7 +50,7 @@ export default function Home() {
             <div className="p-5 text-center">
               <h1 className="text-body-emphasis display-5">Penerimaan Santri Baru</h1>
               <p className="col-lg-8 mx-auto fs-5 text-muted">
-                SMPIT-SMAIT Baitul Qur&apos;an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.
+                {contents?.home_callout}
               </p>
               <div className="d-grid gap-2">
                 <Link href="/daftar" className="btn btn-balqis btn-lg px-4">

@@ -40,15 +40,17 @@ export default function Layout({children}) {
           <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
         </Head>
         <div><Toaster/></div>
-        <nav className="py-3 border-bottom text-center bg-success-subtle bg-gradient">
-          <Link href="/" className='me-2'>
-            <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-          </Link>
-          {user && (
-            <Button size='sm' className='mt-2' color="outline-success" onClick={() => {
-              supabase.auth.signOut()
-            }}>Sign Out</Button>
-          )}
+        <nav className="py-3 border-bottom bg-success-subtle bg-gradient">
+          <Container className='d-flex justify-content-between'>
+            <Link href="/" className='me-2'>
+              <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+            </Link>
+            {user && (
+              <Button size='sm' className='mt-2' color="outline-success" onClick={() => {
+                supabase.auth.signOut()
+              }}>Sign Out</Button>
+            )}
+          </Container>
         </nav>
         <Container fluid>
           <Row>
