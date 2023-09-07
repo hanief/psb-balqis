@@ -1,17 +1,21 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Button, Col, Collapse, Container, Nav, NavItem, NavLink, Navbar, NavbarToggler, Row } from 'reactstrap'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
 import { isAdmin } from '@/utils'
 import { useState } from 'react'
 import ContactButton from './ContactButton'
+import { useRouter } from 'next/router'
 
 export default function Layout({children}) {
   const user = useUser()
   const supabase = useSupabaseClient()
+  const [collapsed, setCollapsed] = useState(true);
+  const { query, asPath } = useRouter()
 
+  const toggleNavbar = () => setCollapsed(!collapsed) 
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
       <Container className="container my-5 justify-content-center">
@@ -74,13 +78,25 @@ export default function Layout({children}) {
             <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
           </div>
         </header>
-        <nav className="navbar navbar-expand-lg py-3 mb-4 border-bottom bg-success-subtle">
-          <div className="container">
-            <Link href="/" className="d-flex align-items-center link-body-emphasis text-decoration-none navbar-brand">
-              <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-            </Link>
-          </div>
-        </nav>
+        <Navbar className="navbar-expand-lg py-3 mb-4 border-bottom bg-success-subtle">
+          <Link href="/" className="navbar-brand me-auto">
+            <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+          </Link>
+          <NavbarToggler onClick={toggleNavbar} className="me-2" />
+          <Collapse isOpen={!collapsed} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink href="/daftar" active={asPath === '/daftar'}>Daftar</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="/status" active={asPath === '/status'}>Cek Status</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="https://balqisjogja.com" target='_blank'>Web Balqis</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
         {children}
       </main>
       <footer className="py-3 bg-secondary-subtle container-fluid">
