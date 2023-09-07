@@ -1,17 +1,12 @@
 import { useContents } from "@/data/contents";
 import { useState } from "react";
 import { Button, Col, Container, FormGroup, Input, Label, ListGroup, ListGroupItem, Row } from "reactstrap";
-import { Editor } from 'react-draft-wysiwyg'
-import { EditorState, ContentState, convertToRaw } from 'draft-js'
 import { getRandomString } from '@/utils'
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 
 export default function DasborKonten() {
   const { artikels, createArtikel, updateArtikel, deleteArtikel } = useContents()
   const [activeArtikel, setActiveArtikel] = useState(null)
   const [newArtikel, setNewArtikel] = useState(null)
-  const [editorState, setEditorState] = useState(null)
 
   function handleAddNew() {
     if (!newArtikel) {
@@ -23,63 +18,37 @@ export default function DasborKonten() {
         title: 'Artikel baru'
       })
 
-      setEditorState(EditorState.createEmpty())
     }
   }
 
   function handleSaveNew() {
-    const content = draftToHtml(convertToRaw(editorState.getCurrentContent()))
-    const artikel = {
-      ...newArtikel,
-      content: content
-    }
-    createArtikel(artikel)
+    createArtikel(newArtikel)
 
     setNewArtikel(null)
-    setEditorState(null)
   }
 
   function handleDeleteNew() {
     setNewArtikel(null)
-    setEditorState(null)
   }
 
   function handleSetActiveArtikel(artikel) {
     setActiveArtikel(artikel)
-
-    const blocksFromHtml = htmlToDraft(artikel.content)
-    const { contentBlocks, entityMap } = blocksFromHtml;
-    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-    setEditorState(EditorState.createWithContent(contentState))
-  }
-
-  function handleEditorStateChange(editorState) {
-    setEditorState(editorState)
   }
 
   function handleSaveActiveArtikel() {
-    const content = draftToHtml(convertToRaw(editorState.getCurrentContent()))
-    const artikel = {
-      ...activeArtikel,
-      content: content
-    }
-
-    updateArtikel(artikel)
+    updateArtikel(activeArtikel)
 
     setActiveArtikel(null)
-    setEditorState(null)
   } 
 
   function handleCancelActiveArtikel() {
     setActiveArtikel(null)
-    setEditorState(null)
   }
   
   function handleDeleteActiveArtikel() {
     deleteArtikel(activeArtikel)
     
     setActiveArtikel(null)
-    setEditorState(null)
   }
 
   return (
@@ -135,11 +104,11 @@ export default function DasborKonten() {
             </FormGroup>
             <FormGroup>
               <Label for="content">Isi</Label>
-              <Editor 
-                editorState={editorState}
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={handleEditorStateChange}
+              <Input 
+                type="textarea"
+                rows="10"
+                value={newArtikel?.content}
+                onChange={event => setNewArtikel({...newArtikel, content: event.target.value})}
               />
             </FormGroup>
             <div className="d-flex gap-2">
@@ -167,11 +136,11 @@ export default function DasborKonten() {
             </FormGroup>
             <FormGroup>
               <Label for="content">Isi</Label>
-              <Editor 
-                editorState={editorState}
-                wrapperClassName="demo-wrapper"
-                editorClassName="demo-editor"
-                onEditorStateChange={handleEditorStateChange}
+              <Input 
+                type="textarea"
+                rows="10"
+                value={activeArtikel?.content}
+                onChange={event => setActiveArtikel({...activeArtikel, content: event.target.value})}
               />
             </FormGroup>
             <div className="d-flex gap-2">
