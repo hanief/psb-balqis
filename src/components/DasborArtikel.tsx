@@ -9,7 +9,7 @@ const MDEditor = dynamic(
   { ssr: false }
 )
 
-export default function DasborKonten() {
+export default function DasborArtikel({setDeleteConfirmationProps}) {
   const { artikels, createArtikel, updateArtikel, deleteArtikel } = useContents()
   const [activeArtikel, setActiveArtikel] = useState(null)
   const [newArtikel, setNewArtikel] = useState(null)
@@ -60,9 +60,13 @@ export default function DasborKonten() {
   }
   
   function handleDeleteActiveArtikel() {
-    deleteArtikel(activeArtikel)
-    
-    setActiveArtikel(null)
+    setDeleteConfirmationProps({
+      isOpen: true,
+      onConfirm: () => {
+        deleteArtikel(activeArtikel)
+        setActiveArtikel(null)
+      }
+    })
   }
 
   return (
@@ -75,18 +79,19 @@ export default function DasborKonten() {
           <ListGroup>
             {newArtikel && (
               <ListGroupItem
-                className="list-group-item-primary" 
+                className="list-group-item-primary d-flex justify-content-between align-items-center" 
                 action
                 active={newArtikel} 
                 tag="a"
                 href="#posts"
               >
                 {newArtikel?.title}
+                <i className="bi-chevron-right"></i>
               </ListGroupItem>
             )}
             {artikels?.map(artikel => (
               <ListGroupItem
-                className="list-group-item-success" 
+                className="list-group-item-success d-flex justify-content-between align-items-center" 
                 key={artikel.id} 
                 action
                 active={!newArtikel && activeArtikel?.id === artikel.id} 
@@ -95,6 +100,7 @@ export default function DasborKonten() {
                 onClick={() => handleSetActiveArtikel(artikel)}
               >
                 {artikel.title}
+                <i className="bi-chevron-right"></i>
               </ListGroupItem>
             ))}
           </ListGroup>

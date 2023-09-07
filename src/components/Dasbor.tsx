@@ -52,7 +52,7 @@ export default function Dasbor() {
             Artikel
           </NavLink>
         </NavItem>
-        {/* <NavItem>
+        <NavItem>
           <NavLink href="#" active={activeTab === "3"} onClick={() => setActiveTab("3")}>
             Konten
           </NavLink>
@@ -61,7 +61,7 @@ export default function Dasbor() {
           <NavLink href="#" active={activeTab === "4"} onClick={() => setActiveTab("4")}>
             Slide
           </NavLink>
-        </NavItem> */}
+        </NavItem>
       </Nav>
       <TabContent activeTab={activeTab} className="mt-2">
         <TabPane tabId="1">
@@ -71,14 +71,18 @@ export default function Dasbor() {
           />
         </TabPane>
         <TabPane tabId="2">
-          <DasborArtikel />
+          <DasborArtikel 
+            setDeleteConfirmationProps={setDeleteConfirmationProps}
+          />
         </TabPane>
-        {/* <TabPane tabId="3">
+        <TabPane tabId="3">
           <DasborKonten />
         </TabPane>
         <TabPane tabId="4">
-          <DasborSlide />
-        </TabPane> */}
+          <DasborSlide 
+            setDeleteConfirmationProps={setDeleteConfirmationProps}
+          />
+        </TabPane>
       </TabContent>
       
       {dataViewerProps.isOpen && (
