@@ -2,6 +2,12 @@ import { useContents } from "@/data/contents";
 import { useState } from "react";
 import { Button, Col, Container, FormGroup, Input, Label, ListGroup, ListGroupItem, Row } from "reactstrap";
 import { getRandomString } from '@/utils'
+import dynamic from "next/dynamic"
+
+const MDEditor = dynamic(
+  () => import("@uiw/react-md-editor"),
+  { ssr: false }
+)
 
 export default function DasborKonten() {
   const { artikels, createArtikel, updateArtikel, deleteArtikel } = useContents()
@@ -104,11 +110,21 @@ export default function DasborKonten() {
             </FormGroup>
             <FormGroup>
               <Label for="content">Isi</Label>
-              <Input 
+              {/* <Input 
                 type="textarea"
                 rows="10"
                 value={newArtikel?.content}
                 onChange={event => setNewArtikel({...newArtikel, content: event.target.value})}
+              /> */}
+
+              <MDEditor
+                value={newArtikel?.content}
+                onChange={newContent => {
+                  setNewArtikel({
+                    ...newArtikel,
+                    content: newContent,
+                  })
+                }}
               />
             </FormGroup>
             <div className="d-flex gap-2">
@@ -136,11 +152,20 @@ export default function DasborKonten() {
             </FormGroup>
             <FormGroup>
               <Label for="content">Isi</Label>
-              <Input 
+              {/* <Input 
                 type="textarea"
                 rows="10"
                 value={activeArtikel?.content}
                 onChange={event => setActiveArtikel({...activeArtikel, content: event.target.value})}
+              /> */}
+              <MDEditor
+                value={activeArtikel?.content}
+                onChange={newContent => {
+                  setActiveArtikel({
+                    ...activeArtikel,
+                    content: newContent,
+                  })
+                }}
               />
             </FormGroup>
             <div className="d-flex gap-2">

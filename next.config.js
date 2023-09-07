@@ -6,6 +6,8 @@ const withMDX = require('@next/mdx')({
   },
 })
 
+const removeImports = require('next-remove-imports')()
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
@@ -21,4 +23,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withMDX(nextConfig)
+module.exports = withMDX(removeImports(nextConfig))
