@@ -158,6 +158,7 @@ export function useFileContents() {
 
   return {
     slides: data?.filter(datum => datum.name !== '.emptyFolderPlaceholder'),
+    slidesURL: data?.filter(datum => datum.name !== '.emptyFolderPlaceholder').map(datum => `https://cfubtesizbmwfhtuzzav.supabase.co/storage/v1/object/public/contents/slide/${datum.name}`),
     downloadFile,
     deleteFile,
     uploadFile
