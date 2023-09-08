@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button, Col, Collapse, Container, Nav, NavItem, NavLink, Navbar, NavbarToggler, Row } from 'reactstrap'
+import { Button, Col, Collapse, Container, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, Row } from 'reactstrap'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
@@ -15,6 +15,7 @@ export default function Layout({children}) {
   const [collapsed, setCollapsed] = useState(true);
   const { query, asPath } = useRouter()
 
+  console.log('asPath', asPath)
   const toggleNavbar = () => setCollapsed(!collapsed) 
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
@@ -78,28 +79,51 @@ export default function Layout({children}) {
             <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
           </div>
         </header>
-        <Navbar className="navbar-expand-lg py-3 mb-4 border-bottom bg-success-subtle">
+        <nav className="navbar navbar-expand-lg bg-success-subtle">
           <Container>
-            <Link href="/" className="navbar-brand me-auto">
+            <NavbarBrand tag={Link} href='/'>
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
-            </Link>
-            <NavbarToggler onClick={toggleNavbar} className="me-2" />
+            </NavbarBrand>
+            <NavbarToggler onClick={toggleNavbar}/>
             <Collapse isOpen={!collapsed} navbar>
-              <Nav navbar>
+              <Nav navbar className='ms-auto'>
                 <NavItem>
-                  <NavLink href="/daftar" active={asPath === '/daftar'}>Daftar</NavLink>
+                  <NavLink 
+                    className='text-success' 
+                    tag={Link} 
+                    href="/daftar" 
+                    active={asPath === '/daftar'}
+                  >
+                    Daftar
+                  </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/status" active={asPath === '/status'}>Cek Status</NavLink>
+                  <NavLink 
+                    className='text-success'
+                    tag={Link} 
+                    href="/status" 
+                    active={asPath === '/status'}
+                  >
+                    Cek Status
+                  </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="https://balqisjogja.com" target='_blank'>Web Balqis</NavLink>
+                  <NavLink 
+                    className='text-success'
+                    tag={Link} 
+                    href="https://balqisjogja.com" 
+                    target='_blank'
+                  >
+                    Web Balqis<i className='bi-box-arrow-up-right ms-1'></i>
+                  </NavLink>
                 </NavItem>
               </Nav>
             </Collapse>
           </Container>
-        </Navbar>
-        {children}
+        </nav>
+        <div className='mt-2'>
+          {children}
+        </div>
       </main>
       <footer className="py-3 bg-secondary-subtle container-fluid">
         <Container>
