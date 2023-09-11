@@ -76,9 +76,14 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
   )
 
   return (
-    <Container>
-      <Row className="gap-0 row-gap-2">
-        <Col xs="4" md="2">
+    <Container fluid>
+      <Row className="">
+        <Col>
+          <h1 className="">Pendaftar</h1>
+        </Col>
+      </Row>
+      <Row className="gap-0 row-gap-2 mt-2">
+        <Col xs="6" md="3">
           <Button
             color="outline-success"
             className="me-1"
@@ -87,30 +92,7 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
             <i className="bi-download me-1"></i>Unduh
           </Button>
         </Col>
-        <Col xs="8" md="4" className="d-flex align-items-center justify-content-start">
-          <MultiSelect
-            options={tableColumns}
-            getOptionLabel={option => option.name}
-            formatOptionLabel={option => convertToTitleCase(option.name)}
-            getOptionValue={option => option.name}
-            hideSelectedOptions={false}
-            selectedOptions={tableColumns.filter(column => column.show)}
-            setSelectedOptions={options => {
-              const selectedNames = options.map(option => option.name)
-              const newTableColumns = tableColumns.map(column => {
-                return {
-                  ...column,
-                  show: selectedNames.includes(column.name),
-                }
-              })
-
-              setTableColumns(newTableColumns)
-            }}
-            selectedOptionsLabel="kolom"
-            isMulti
-          />
-        </Col>
-        <Col xs="6" md="2" className="d-flex align-items-center justify-content-end">
+        <Col xs="6" md="3" className="d-flex align-items-center justify-content-end">
           <FormGroup switch>
             <Input 
               type="switch" 
@@ -121,7 +103,7 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
             <Label check>Lihat terhapus</Label>
           </FormGroup>
         </Col>
-        <Col md="4" className="d-flex align-items-center">
+        <Col md="6" className="d-flex align-items-center">
           <InputGroup>
             <select
               className="form-select"

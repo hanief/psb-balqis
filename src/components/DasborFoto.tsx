@@ -3,7 +3,7 @@ import { Button, Col, Container, Row, Table } from "reactstrap"
 import UploadFileModal from "./UploadFileModal"
 import { useState } from "react"
 
-export default function DasborSlide({setDeleteConfirmationProps}) {
+export default function DasborFoto({setDeleteConfirmationProps}) {
   const { slides, downloadFile, deleteFile } = useFileContents()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -22,15 +22,20 @@ export default function DasborSlide({setDeleteConfirmationProps}) {
   }
 
   return (
-    <Container>
-      <Row className="my-4">
-        <Col className="mb-2">
-          <Button className="btn-balqis mb-2" onClick={handleAddNew}>Tambah foto baru</Button>
-          <Table>
+    <Container fluid>
+      <Row>
+        <Col className="d-flex justify-content-between">
+          <h1>Foto</h1>
+          <Button className="btn-balqis mb-2" onClick={handleAddNew}><i className="bi-plus-circle me-2"></i>Tambah foto baru</Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Table className="table-bordered">
             <thead>
               <tr>
                 <th>No</th>
-                <th>FileName</th>
+                <th>File</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -40,8 +45,12 @@ export default function DasborSlide({setDeleteConfirmationProps}) {
                   <td>{index+1}</td>
                   <td>{file.name}</td>
                   <td className="d-flex gap-2">
-                    <Button color="success" onClick={() => downloadFile(file.name)}>Unduh</Button>
-                    <Button color="danger" onClick={() => handleDeleteFile(file.name)}>Hapus</Button>
+                    <Button color="success" onClick={() => downloadFile(file.name)}>
+                      <i className="bi-download me-2"></i>Unduh
+                    </Button>
+                    <Button color="danger" onClick={() => handleDeleteFile(file.name)}>
+                      <i className="bi-trash me-2"></i>Hapus
+                    </Button>
                   </td>
                 </tr>
               ))}

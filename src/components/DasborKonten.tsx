@@ -1,79 +1,78 @@
 import { useContents } from "@/data/contents";
 import { useState } from "react";
-import { Button, Col, Container, FormGroup, Input, Label, ListGroup, ListGroupItem, Row } from "reactstrap";
+import { Button, Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label, ListGroup, ListGroupItem, Row, Table } from "reactstrap";
 import dynamic from "next/dynamic"
 
-const MDEditor = dynamic(
-  () => import("@uiw/react-md-editor"),
-  { ssr: false }
-)
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"),{ ssr: false })
 
 export default function DasborKonten() {
-  const { kontens, createArtikel, updateArtikel, deleteArtikel } = useContents()
+  const { kontens, updateArtikel } = useContents()
   const [activeArtikel, setActiveArtikel] = useState(null)
 
-  function handleSetActiveArtikel(artikel) {
-    setActiveArtikel(artikel)
-  }
-
-  function handleSaveActiveArtikel() {
+  function handleSave() {
     updateArtikel(activeArtikel)
 
     setActiveArtikel(null)
   } 
 
-  function handleCancelActiveArtikel() {
-    setActiveArtikel(null)
-  }
-  
-  function handleDeleteActiveArtikel() {
-    deleteArtikel(activeArtikel)
-    
+  function handleCancel() {
     setActiveArtikel(null)
   }
 
   return (
-    <Container>
-      <Row className="my-4">
-        <Col md="3" className="mb-2">
-          <ListGroup>
-            {kontens?.map(artikel => (
-              <ListGroupItem
-                className="list-group-item-success d-flex justify-content-between align-items-center" 
-                key={artikel.id} 
-                action
-                active={activeArtikel?.id === artikel.id} 
-                tag="a"
-                href="#posts"
-                onClick={() => handleSetActiveArtikel(artikel)}
-              >
-                {artikel.title}
-                <i className="bi-chevron-right"></i>
-              </ListGroupItem>
-            ))}
-          </ListGroup>
+    <Container fluid>
+      <Row>
+        <Col>
+          <h1>Konten Situs</h1>
         </Col>
-        <Col id="posts">
-          {activeArtikel && (
-          <div id={activeArtikel?.slug}>
-            <FormGroup>
-              <Label for="content">Isi</Label>
-              <MDEditor
-                height={500}
-                value={activeArtikel?.content}
-                onChange={newContent => {
-                  setActiveArtikel({
-                    ...activeArtikel,
-                    content: newContent,
-                  })
-                }}
-              />
-            </FormGroup>
-            <div className="d-flex justify-content-between gap-2">
-              <Button color="success" onClick={handleSaveActiveArtikel}>Simpan</Button>
-              <Button color="secondary" onClick={handleCancelActiveArtikel}>Batal</Button>
-            </div>
-          </div>
+      </Row>
+      <Row>
+        <Col>
+          {!activeArtikel ? (
+            <Table className="table-bordered">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Judul Artikel</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+              {kontens?.map((konten, index) => (
+                <tr
+                  key={konten.id} 
+                >
+                  <td>{index + 1}</td>
+                  <td>{konten.title}</td>
+                  <td className="d-flex gap-2">
+                    <Button color="primary" onClick={() => setActiveArtikel(konten)}><i className="bi-pencil me-2"></i>Ubah</Button>
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </Table>
+          ) : (
+            <Card>
+              <CardHeader className="d-flex justify-content-end gap-2 mb-2">
+                <Button color="success" onClick={handleSave}><i className="bi-save me-2"></i>Simpan</Button>
+                <Button color="secondary" onClick={handleCancel}><i className="bi-x-lg me-2"></i>Batal</Button>
+              </CardHeader>
+              <CardBody>
+                <FormGroup>
+                  <Label for="content">Isi</Label>
+                  <MDEditor
+                    height={500}
+                    value={activeArtikel?.content}
+                    onChange={newContent => {
+                      setActiveArtikel({
+                        ...activeArtikel,
+                        content: newContent,
+                      })
+                    }}
+                  />
+                </FormGroup>
+              </CardBody>
+            </Card>
           )}
         </Col>
       </Row>
