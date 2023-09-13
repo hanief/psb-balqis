@@ -1,4 +1,4 @@
-import { useFileContents } from "@/data/contents"
+import { useFileContents } from "@/data/fileContents"
 import Image from "next/image"
 import { Carousel } from 'react-responsive-carousel'
 

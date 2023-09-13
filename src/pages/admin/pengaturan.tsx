@@ -1,12 +1,8 @@
-import { useState } from "react";
+import { useSettings } from "@/data/settings";
 import { Card, CardBody, Col, Container, FormGroup, Input, Label, Row } from "reactstrap";
 
 export default function PengaturanPage() {
-  const [settings, setSettings] = useState({
-    pendaftaran_buka: true,
-    mulai_pendaftaran: '2023-01-01',
-    akhir_pendaftaran: '2023-12-01',
-  })
+  const {settings, updateSetting} = useSettings()
 
   return (
     <Container fluid>
@@ -24,17 +20,14 @@ export default function PengaturanPage() {
                   id="status_pendaftaran"
                   name="status_pendaftaran"
                   type="switch"
-                  checked={settings?.pendaftaran_buka}
+                  checked={settings?.pendaftaran_buka === 'true'}
                   onChange={event => {
-                    setSettings({
-                      ...settings,
-                      pendaftaran_buka: event.target.checked
-                    })
+                    updateSetting('pendaftaran_buka', event.target.checked ? 'true' : 'false')
                   }}
                 />
                 <Label for="status_pendaftaran">Pendaftaran terbuka</Label>
               </FormGroup>
-              {settings?.pendaftaran_buka && (
+              {settings?.pendaftaran_buka === 'true' && (
                 <>              
                   <FormGroup>
                     <Label for="mulai_pendaftaran">Tanggal Mulai Pendaftaran</Label>
@@ -43,11 +36,8 @@ export default function PengaturanPage() {
                       name="mulai_pendaftaran"
                       type="date"
                       value={settings?.mulai_pendaftaran}
-                      onChange={event => {
-                        setSettings({
-                          ...settings,
-                          mulai_pendaftaran: event.target.value
-                        })
+                      onBlur={event => {
+                        updateSetting('mulai_pendaftaran', event.target.value)
                       }}
                     />
                   </FormGroup>
@@ -58,11 +48,8 @@ export default function PengaturanPage() {
                       name="akhir_pendaftaran"
                       type="date"
                       value={settings?.akhir_pendaftaran}
-                      onChange={event => {
-                        setSettings({
-                          ...settings,
-                          akhir_pendaftaran: event.target.value
-                        })
+                      onBlur={event => {
+                        updateSetting('akhir_pendaftaran', event.target.value)
                       }}
                     />
                   </FormGroup>

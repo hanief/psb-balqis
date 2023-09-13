@@ -1,5 +1,4 @@
-import { useFileContents } from "@/data/contents";
-import { useState } from "react";
+import { useFileContents } from "@/data/fileContents";
 import { Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 export default function UploadFileModal({isOpen, toggle}) {

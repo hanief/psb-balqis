@@ -1,15 +1,37 @@
 import useSWR from "swr"
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { getRandomString } from "@/utils"
-import toast from "react-hot-toast"
+import { useEffect, useState } from "react"
 
-export const defaultContents = [{
-  id: getRandomString(),
-  slug: 'home_callout',
-  type: 'konten',
-  title: 'home callout',
-  content : 'SMPIT-SMAIT Baitul Qur&apos;an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.'
-}]
+export const defaultContents = [
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'beranda',
+    title: 'Beranda',
+    content : `SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'bayar_pembayaran_konfirmasi',
+    title: 'Bayar - Pembayaran Konfirmasi',
+    content : `<h2 className="display-3">Terima kasih.</h2>
+      <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'beranda_bukti_diupload',
+    title: 'Beranda - Bukti Diupload',
+    content : `<h2 className="display-3">Terima kasih.</h2>
+      <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran anda.</p>
+      <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
+      <br />
+      <p>Anda dapat melihat status pendaftaran setiap saat dengan mengunjungi halaman:</p>
+      <Link className="btn btn-balqis" href={'/status'}>Cek Status Pendaftaran</Link>`
+  }
+]
 
 export function useContents() {
   const supabase = useSupabaseClient()
@@ -93,74 +115,5 @@ export function useContents() {
     updateArtikel,
     deleteArtikel,
     getKonten
-  }
-}
-
-export function useFileContents() {
-  const supabase = useSupabaseClient()
-
-  const { data, mutate } = useSWR('/file-contents', async () => {
-    const { data } = await supabase
-      .storage
-      .from('contents')
-      .list('slide', {
-        limit: 100
-      })
-
-    return data
-  })
-
-  async function deleteFile(file) {
-    return mutate(async () => {
-      await supabase
-        .storage
-        .from('contents')
-        .remove(['slide/' + file])
-
-      return data
-    })
-  }
-
-  async function downloadFile(file) {
-    const { data } = await supabase
-      .storage
-      .from('contents')
-      .download('slide/' + file)
-
-    let blob = new Blob([data]);
-    let link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = file;
-    link.click()
-  }
-
-  async function uploadFile(file) {
-    const promise = mutate(async () => {
-      await supabase
-        .storage
-        .from('contents')
-        .upload('slide/'+file?.name, file, {
-          cacheControl: '3600',
-          upsert: true
-        })
-
-      return data
-    })
-
-    toast.promise(promise, {
-      loading: 'Mengunggah file...',
-      success: 'Tersimpan',
-      error: 'Gagal menyimpan'
-    })
-
-    return promise
-  }
-
-  return {
-    slides: data?.filter(datum => datum.name !== '.emptyFolderPlaceholder'),
-    slidesURL: data?.filter(datum => datum.name !== '.emptyFolderPlaceholder').map(datum => `https://cfubtesizbmwfhtuzzav.supabase.co/storage/v1/object/public/contents/slide/${datum.name}`),
-    downloadFile,
-    deleteFile,
-    uploadFile
   }
 }
