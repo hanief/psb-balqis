@@ -1,4 +1,4 @@
-import { useFileContents } from "@/data/contents";
+import { useFileContents } from "@/data/fileContents";
 import { useState } from "react";
 import { Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 

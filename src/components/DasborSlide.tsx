@@ -1,4 +1,4 @@
-import { useFileContents } from "@/data/contents"
+import { useFileContents } from "@/data/fileContents"
 import { Button, Col, Container, Row, Table } from "reactstrap"
 import UploadFileModal from "./UploadFileModal"
 import { useState } from "react"

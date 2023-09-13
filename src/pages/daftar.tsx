@@ -6,6 +6,7 @@ import { useRegistration } from '@/data/singleRegistration'
 import { columnsObject } from '@/data/columns'
 import { isAdmin } from '@/utils'
 import { useRouter } from 'next/router'
+import { useSettings } from '@/data/settings'
 
 const DataSantri = dynamic(() => import('@/components/DataSantri'), { ssr: false })
 const DataJalur = dynamic(() => import('@/components/DataJalur'), { ssr: false })
@@ -14,6 +15,7 @@ const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
 
 export default function DaftarPage() {
   const router = useRouter()
+  const {settings} = useSettings()
 
   useEffect(() => {
     if (isAdmin()) {
@@ -78,10 +80,6 @@ export default function DaftarPage() {
     }
   }
 
-  // async function handleUpdate(updatedData) {
-  //   setLocalRegistration({...registration, ...updatedData})
-  // }
-
   function handleChange(name, value) {
     const dataChanges = {
       [name]: value
@@ -124,6 +122,22 @@ export default function DaftarPage() {
     setLocalRegistration(data)
   }
 
+  if (settings?.pendaftaran_buka === 'false') {
+    return (
+      <Container className='my-2'>
+        <Head>
+          <title>PSB Balqis Jogja - Pendaftaran</title>
+          <meta name="description" content="Penerimaan Santri Baru Balqis Jogja"/>
+        </Head>
+        <Row>
+          <Col>
+            <h1 className='text-center'>Pendaftaran belum dibuka</h1>
+            <p className='text-center'>Mohon maaf, kami belum membuka pendaftaran santri baru pada periode ini. Silakan coba kembali di lain kesempatan.</p>
+          </Col>
+        </Row>
+      </Container>
+    )
+  }
   return (
     <Container>
       <Head>

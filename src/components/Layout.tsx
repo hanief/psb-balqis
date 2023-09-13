@@ -8,14 +8,15 @@ import { isAdmin } from '@/utils'
 import { useState } from 'react'
 import ContactButton from './ContactButton'
 import { useRouter } from 'next/router'
+import { useSettings } from '@/data/settings'
 
 export default function Layout({children}) {
   const user = useUser()
   const supabase = useSupabaseClient()
+  const {settings} = useSettings()
   const [collapsed, setCollapsed] = useState(true);
   const { query, asPath } = useRouter()
 
-  console.log('asPath', asPath)
   const toggleNavbar = () => setCollapsed(!collapsed) 
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
@@ -87,6 +88,7 @@ export default function Layout({children}) {
             <NavbarToggler onClick={toggleNavbar}/>
             <Collapse isOpen={!collapsed} navbar>
               <Nav navbar className='ms-auto'>
+                {settings?.pendaftaran_buka === 'true' && (
                 <NavItem>
                   <NavLink 
                     className='text-success' 
@@ -97,6 +99,7 @@ export default function Layout({children}) {
                     Daftar
                   </NavLink>
                 </NavItem>
+                )}
                 <NavItem>
                   <NavLink 
                     className='text-success'
