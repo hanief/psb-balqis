@@ -333,23 +333,13 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
       [`bukti_${type}`]: path
     }
 
-    const updatedData = {...data, ...newData}
-
-    const promise = mutate(async () => {
-      const resp = await supabase
-        .storage
-        .from('proofs')
-        .upload(path, file, {
-          cacheControl: '3600',
-          upsert: true
-        })
-
-      return updatedData
-    }, {
-      optimisticData: updatedData
-    })
-
-    if (onUpdate) onUpdate(updatedData)
+    const promise = supabase
+      .storage
+      .from('proofs')
+      .upload(path, file, {
+        cacheControl: '3600',
+        upsert: true
+      })
 
     toast.promise(promise, {
       loading: 'Mengunggah file...',
