@@ -20,7 +20,6 @@ export default function Layout({children}) {
 
   useEffect(() => {
     if (typeof window !== undefined) {
-      console.log('window?.screen.width', window?.screen.width)
       setIsSidebarCollapsed(window?.screen.width < 400)
     }
   }, [])
