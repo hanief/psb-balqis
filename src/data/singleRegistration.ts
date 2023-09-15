@@ -3,6 +3,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import toast from 'react-hot-toast'
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { debounce } from "lodash"
+import { ulid } from "ulid"
 
 export function useSingleRegistration(id = null, initialRegistration = null, onUpdate = null) {
   const supabase = useSupabaseClient()
@@ -133,7 +134,7 @@ export function useSingleRegistration(id = null, initialRegistration = null, onU
       error: 'Gagal menyimpan'
     })
 
-    return promise
+    return newDatum
   }
 
   async function downloadBukti(fileName) {
@@ -280,20 +281,17 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
       }
     }
 
+    const {id, created_at, ...regData} = registrationData
+
     const { data } = await supabase
       .from("registrations")
-      .insert({
-        nama_lengkap: registrationData?.nama_lengkap,
-        jenjang: registrationData?.jenjang,
-        tempat_lahir: registrationData?.tempat_lahir,
-        tanggal_lahir: registrationData?.tanggal_lahir,
-        jenis_kelamin: registrationData?.jenis_kelamin,
-        asal_sekolah: registrationData?.asal_sekolah,
-      })
+      .insert(regData)
       .select()
       .single()
 
     setRegistration(data)
+
+    return data
   }
 
   async function update(newData) {
@@ -327,11 +325,9 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
   }
 
   async function uploadBukti(file, type) {
-    if (!registration?.id) throw new Error('registration.id is required')
-
     const fileNameSplit = file?.name?.split('.')
     const fileExtension = fileNameSplit[fileNameSplit.length-1]
-    const path = `${type}/${data?.id}.${fileExtension}`
+    const path = `${type}/${ulid()}.${fileExtension}`
 
     const newData = {
       [`bukti_${type}`]: path
@@ -340,20 +336,14 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
     const updatedData = {...data, ...newData}
 
     const promise = mutate(async () => {
-      const { error } = await supabase
+      const resp = await supabase
         .storage
         .from('proofs')
         .upload(path, file, {
           cacheControl: '3600',
           upsert: true
         })
-      
-      if (!error) {
-        await supabase
-          .from('registrations')
-          .update(newData)
-          .eq('id', registration?.id)
-      }
+
       return updatedData
     }, {
       optimisticData: updatedData
@@ -367,7 +357,7 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
       error: 'Gagal menyimpan'
     })
 
-    return promise
+    return newData
   }
 
   async function downloadBukti(fileName) {
@@ -388,10 +378,12 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
     const updatedData = {...data, ...newDatum}
 
     const promise = mutate(async () => {
-      await supabase
-        .from('registrations')
-        .update(newDatum)
-        .eq('id', registration?.id)
+      if (registration?.id) {
+        await supabase
+          .from('registrations')
+          .update(newDatum)
+          .eq('id', registration?.id)
+      }
 
       return updatedData
     }, {

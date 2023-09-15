@@ -5,7 +5,7 @@ export const columnsObject = {
   'tanggal_lahir': '',
   'asal_sekolah': '',
   'jenjang': '',
-  'jalur_pendaftaran': '',
+  'jalur_pendaftaran': 'reguler',
   'jalur_beasiswa': '',
   'jalur_beasiswa_khusus': '',
   'jalur_beasiswa_prestasi': '',

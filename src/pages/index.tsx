@@ -52,7 +52,7 @@ export default function Home() {
             <div className="p-5 text-center">
               <h1 className="text-body-emphasis display-5">Penerimaan Santri Baru</h1>
               <p className="col-lg-8 mx-auto fs-5 text-muted">
-                {getKonten('beranda')?.content}
+                {getKonten('beranda')}
               </p>   
               <div className="d-grid gap-2">
                 {settings?.pendaftaran_buka === 'true' && (

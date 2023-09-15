@@ -7,6 +7,7 @@ import { columnsObject } from '@/data/columns'
 import { isAdmin } from '@/utils'
 import { useRouter } from 'next/router'
 import { useSettings } from '@/data/settings'
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 
 const DataSantri = dynamic(() => import('@/components/DataSantri'), { ssr: false })
 const DataJalur = dynamic(() => import('@/components/DataJalur'), { ssr: false })
@@ -14,6 +15,8 @@ const DataWali = dynamic(() => import('@/components/DataWali'), { ssr: false })
 const Bayar = dynamic(() => import('@/components/Bayar'), { ssr: false })
 
 export default function DaftarPage() {
+  const user = useUser()
+  const supabase = useSupabaseClient()
   const router = useRouter()
   const {settings} = useSettings()
 
@@ -21,21 +24,26 @@ export default function DaftarPage() {
     if (isAdmin()) {
       router.push('/')
     }
+
+    if (!user) {
+      login()
+    }
   }, [])
 
-  const { 
-    registration, 
-    create, 
-    change, 
-    changeMultiple, 
+  const {
+    create,
     update,
-    uploadBukti, 
-    downloadBukti, 
-    deleteBukti 
+    uploadBukti,
+    downloadBukti,
+    deleteBukti
   } = useRegistration()
   const [activeStep, setActiveStep] = useState(0)
   const [isDataFormValid, setIsDataFormValid] = useState(false)
   const [localRegistration, setLocalRegistration] = useState(columnsObject)
+
+  // useEffect(() => {
+  //   console.log('localRegistration', localRegistration)
+  // }, [localRegistration])
 
   const steps = useMemo(() => [
     {
@@ -64,20 +72,33 @@ export default function DaftarPage() {
     },
   ], [activeStep])
 
+  async function login() {
+    const creds = {
+      email: 'pendaftar@utama.app',
+      password: 'p3nd4ft4R!'
+    }
+
+    const { error } = await supabase
+      .auth
+      .signInWithPassword(creds)
+
+    if (error) {
+      await supabase
+        .auth
+        .signUp(creds)
+    }
+  }
+
   function isNextButtonDisabled() {
     return activeStep >= steps.length - 1 || !isDataFormValid
   }
 
   async function handleNextButtonPush() {
-    if (activeStep >= steps.length - 1) return
-
     setActiveStep(activeStep + 1)
 
-    if (activeStep === 0 && !registration?.id) {
+    if (activeStep === 2) {
       await create(localRegistration)
-    } else if (registration?.id) {
-      await update(localRegistration)
-    }
+    } 
   }
 
   function handleChange(name, value) {
@@ -103,23 +124,20 @@ export default function DaftarPage() {
   }
 
   async function handleUploadBukti(file, type) {
-    if (registration?.id) {
-      await update(localRegistration)
+    const data = await uploadBukti(file, type)
+    const newRegistrationData = {
+      ...localRegistration,
+      ...data
     }
 
-    const data = await uploadBukti(file, type)
-
-    setLocalRegistration(data)
+    setLocalRegistration(newRegistrationData)
+    update(data)
   }
   
   async function handleDeleteBukti(file) {
-    if (registration?.id) {
-      await update(localRegistration)
-    }
-
-    const data = await deleteBukti(file)
+    // const data = await deleteBukti(file)
     
-    setLocalRegistration(data)
+    // setLocalRegistration(data)
   }
 
   if (settings?.pendaftaran_buka === 'false') {
@@ -138,6 +156,7 @@ export default function DaftarPage() {
       </Container>
     )
   }
+  
   return (
     <Container>
       <Head>
@@ -187,7 +206,7 @@ export default function DaftarPage() {
         )}
         {activeStep === 3 && (
           <Bayar 
-            registration={registration}
+            registration={localRegistration}
             onUploadBukti={handleUploadBukti}
           />
         )}
