@@ -25,7 +25,7 @@ export const defaultContents = [
     id: getRandomString(),
     type: 'konten',
     slug: 'bayar_bukti_diupload',
-    title: '',
+    title: 'Bayar - Bukti Diupload',
     content : `<h2 className="display-3">Terima kasih.</h2>
       <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran anda.</p>
       <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>`,
@@ -196,7 +196,7 @@ export function useContents() {
   return {
     contents,
     artikels: data?.filter(datum => datum?.type === 'artikel' && datum?.deleted_at === null),
-    kontens: contents?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null),
+    kontens: data?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null),
     createArtikel,
     updateArtikel,
     deleteArtikel,

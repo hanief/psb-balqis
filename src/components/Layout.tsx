@@ -94,22 +94,20 @@ export default function Layout({children}) {
           </Button>
         </aside>
         )}
-        <main>
+        <main className="container-fluid">
           <Head>
             <title>Admin PSB BALQIS Jogja</title>
             <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
           </Head>
           <div><Toaster/></div>
-          <Container fluid>
-            {user && (
-              <Navbar className='bg-light'>
-                <Container fluid>
-                  <Button color='outline-success' onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}><i className='bi-list'></i></Button>
-                </Container>
-              </Navbar>
-            )}
-            {children}
-          </Container>
+          {user && (
+            <Navbar className='bg-light mb-2'>
+              <Container fluid>
+                <Button color='outline-success' onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}><i className='bi-list'></i></Button>
+              </Container>
+            </Navbar>
+          )}
+          {children}
         </main>
       </div>
     )
