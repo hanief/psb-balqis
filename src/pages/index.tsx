@@ -6,6 +6,7 @@ import { useUser } from '@supabase/auth-helpers-react'
 import dynamic from 'next/dynamic'
 import { useContents } from '@/data/contents'
 import { useSettings } from '@/data/settings'
+import { Fragment } from 'react'
 
 const Dasbor = dynamic(() => import('@/components/Dasbor'), { ssr: false })
 const AdminLogin = dynamic(() => import('@/components/AdminLogin'), { ssr: false })
@@ -19,21 +20,17 @@ export default function Home() {
 
   if (isAdmin()) {
     return (
-      <Container className='my-5'>
-        <Head>
-          <title>PSB Balqis Jogja - Pendaftaran</title>
-          <meta name="description" content="Penerimaan Santri Baru Balqis Jogja"/>
-        </Head>
+      <Fragment>
         {user ? (
           <Dasbor />
         ) : (
-          <Row className='justify-content-center mb-6'>
-            <Col sm="6">
+          <Row className='justify-content-center mt-5'>
+            <Col sm="4">
               <AdminLogin />
             </Col>
           </Row>
         )}
-      </Container>
+      </Fragment>
     )
   }
 

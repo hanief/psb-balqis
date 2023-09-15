@@ -5,17 +5,19 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
 import { isAdmin } from '@/utils'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import ContactButton from './ContactButton'
 import { useRouter } from 'next/router'
 import { useSettings } from '@/data/settings'
+import { getFromLocalStorage } from '@/utils'
 
 export default function Layout({children}) {
   const user = useUser()
   const supabase = useSupabaseClient()
   const {settings} = useSettings()
-  const [collapsed, setCollapsed] = useState(true);
-  const { query, asPath } = useRouter()
+  const [collapsed, setCollapsed] = useState(true)
+  const router = useRouter()
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   const toggleNavbar = () => setCollapsed(!collapsed) 
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
@@ -40,37 +42,76 @@ export default function Layout({children}) {
 
   if (isAdmin()) {
     return (
-      <main className='bg-light'>
+      <main className='d-flex flex-nowrap'>
         <Head>
           <title>Admin PSB BALQIS Jogja</title>
           <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
         </Head>
         <div><Toaster/></div>
-        <nav className="py-3 border-bottom bg-success-subtle bg-gradient">
-          <Container className='d-flex justify-content-between'>
-            <Link href="/" className='me-2'>
+        {user && (
+        <aside className="d-flex flex-column p-3 text-bg-dark" style={{
+          left: isSidebarCollapsed ? '-280px' : '0',
+          width: '280px', 
+          height: '100vh',
+          transition: 'left 0.5s'
+        }}>
+          <div className="d-flex align-items-center justify-content-between mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <Link href="/">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </Link>
-            {user && (
-              <Button size='sm' className='mt-2' color="outline-success" onClick={() => {
-                supabase.auth.signOut()
-              }}>Sign Out</Button>
-            )}
-          </Container>
-        </nav>
-        <Container fluid>
-          <Row>
-            <Col>
-              {children}
-            </Col>
-          </Row>
+          </div>
+          <hr/>
+          <Nav pills className="flex-column mb-auto">
+            <NavItem>
+              <Link href="/" className={`nav-link ${router.asPath === '/' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/'}>
+                <i className='bi-house me-2 text-white'></i>Beranda
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href="/admin/pendaftar" className={`nav-link ${router.asPath === '/admin/pendaftar' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/admin/data'}>
+                <i className='bi-people me-2 text-white'></i>Pendaftar
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href="/admin/artikel" className={`nav-link ${router.asPath === '/admin/artikel' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/admin/artikel'}>
+                <i className='bi-body-text me-2 text-white'></i>Artikel
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href="/admin/konten" className={`nav-link ${router.asPath === '/admin/konten' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/admin/konten'}>
+                <i className='bi-type me-2 text-white'></i>Konten
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href="/admin/foto" className={`nav-link ${router.asPath === '/admin/foto' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/admin/foto'}>
+                <i className='bi-image me-2 text-white'></i>Foto
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href="/admin/pengaturan" className={`nav-link ${router.asPath === '/admin/pengaturan' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/admin/pengaturan'}>
+                <i className='bi-gear me-2 text-white'></i>Pengaturan
+              </Link>
+            </NavItem>
+          </Nav>
+          <hr/>
+          <Button className="dropdown-item" onClick={() => {
+            router.push('/')
+            supabase.auth.signOut()
+          }}>
+            <i className='bi-door-closed me-2 text-white'></i>Keluar
+          </Button>
+        </aside>
+        )}
+        
+        <Container fluid className='my-2'>
+          {children}
         </Container>
       </main>
     )
   }
 
   return (
-    <>
+    <Fragment>
       <div><Toaster/></div>
       <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
@@ -94,7 +135,7 @@ export default function Layout({children}) {
                     className='text-success' 
                     tag={Link} 
                     href="/daftar" 
-                    active={asPath === '/daftar'}
+                    active={router?.asPath === '/daftar'}
                   >
                     Daftar
                   </NavLink>
@@ -105,7 +146,7 @@ export default function Layout({children}) {
                     className='text-success'
                     tag={Link} 
                     href="/status" 
-                    active={asPath === '/status'}
+                    active={router?.asPath === '/status'}
                   >
                     Cek Status
                   </NavLink>
@@ -160,6 +201,6 @@ export default function Layout({children}) {
         </Container>
       </footer>
       <ContactButton />
-    </>  
+    </Fragment>  
   )
 }

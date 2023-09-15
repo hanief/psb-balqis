@@ -53,3 +53,23 @@ export function convertToTitleCase(str) {
 export function isAdmin() {
   return process.env.NEXT_PUBLIC_IS_ADMIN === 'true'
 }
+
+export function getFromLocalStorage(key) {
+  if (typeof window === undefined) {
+    return null
+  }
+
+  const value = window?.localStorage.getItem(key)
+
+  return JSON.parse(value)
+}
+
+export function saveFromLocalStorage(key, value) {
+  if (typeof window === undefined) {
+    return
+  }
+
+  const jsonValue = JSON.stringify(value)
+
+  window?.localStorage.setItem(key, jsonValue)
+}
