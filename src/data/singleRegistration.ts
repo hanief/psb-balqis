@@ -295,7 +295,7 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
   }
 
   async function update(newData) {
-    if (!registration?.id) throw new Error('registration.id is required')
+    if (!registration?.id) return
 
     const {id, created_at, deleted_at, updated_at, user_id, ...strippedNewData} = newData
     const updatedData = {...data, ...strippedNewData}
@@ -355,6 +355,8 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
       loading: 'Mengunggah file...',
       success: 'Tersimpan',
       error: 'Gagal menyimpan'
+    }, {
+      id: 'update'
     })
 
     return newData
@@ -396,9 +398,11 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
       loading: 'Menghapus...',
       success: 'Terhapus',
       error: 'Gagal menghapus'
+    }, {
+      id: 'delete'
     })
 
-    return promise
+    return newDatum
   }
 
   return {

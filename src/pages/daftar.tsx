@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap'
 import Head from 'next/head'
 import { useRegistration } from '@/data/singleRegistration'
 import { columnsObject } from '@/data/columns'
@@ -40,10 +40,6 @@ export default function DaftarPage() {
   const [activeStep, setActiveStep] = useState(0)
   const [isDataFormValid, setIsDataFormValid] = useState(false)
   const [localRegistration, setLocalRegistration] = useState(columnsObject)
-
-  // useEffect(() => {
-  //   console.log('localRegistration', localRegistration)
-  // }, [localRegistration])
 
   const steps = useMemo(() => [
     {
@@ -135,9 +131,14 @@ export default function DaftarPage() {
   }
   
   async function handleDeleteBukti(file) {
-    // const data = await deleteBukti(file)
-    
-    // setLocalRegistration(data)
+    const data = await deleteBukti(file)
+    const newRegistrationData = {
+      ...localRegistration,
+      ...data
+    }
+
+    setLocalRegistration(newRegistrationData)
+    update(data)
   }
 
   if (settings?.pendaftaran_buka === 'false') {
@@ -149,8 +150,12 @@ export default function DaftarPage() {
         </Head>
         <Row>
           <Col>
-            <h1 className='text-center'>Pendaftaran belum dibuka</h1>
-            <p className='text-center'>Mohon maaf, kami belum membuka pendaftaran santri baru pada periode ini. Silakan coba kembali di lain kesempatan.</p>
+          <Card>
+            <CardBody>
+              <h1 className='text-center mt-auto'>Pendaftaran belum dibuka</h1>
+              <p className='text-center mb-auto'>Mohon maaf, kami belum membuka pendaftaran santri baru pada periode ini. Silakan coba kembali di lain kesempatan.</p>
+            </CardBody>
+          </Card>
           </Col>
         </Row>
       </Container>
