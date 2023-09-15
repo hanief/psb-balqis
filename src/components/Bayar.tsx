@@ -2,7 +2,7 @@ import { Card, CardBody, FormGroup, Input } from "reactstrap";
 import Link from "next/link";
 import { useContents } from "@/data/contents";
 import ReactMarkdown from "react-markdown";
-
+import rehypeRaw from 'rehype-raw'
 export default function Bayar({ registration, onUploadBukti }) {  
   const { getKonten } = useContents()
   
@@ -10,7 +10,8 @@ export default function Bayar({ registration, onUploadBukti }) {
     return (
       <Card>
         <CardBody className="text-center">
-          <ReactMarkdown>
+          <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+
             {getKonten('bayar_pembayaran_konfirmasi')}
           </ReactMarkdown>
         </CardBody>
@@ -22,7 +23,8 @@ export default function Bayar({ registration, onUploadBukti }) {
     return (
       <Card>
         <CardBody className="text-center">
-          <ReactMarkdown>
+          <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+
             {getKonten('bayar_bukti_diupload')}
           </ReactMarkdown>
           <br />
@@ -36,7 +38,9 @@ export default function Bayar({ registration, onUploadBukti }) {
   return (
     <Card>
       <CardBody>
-        <ReactMarkdown>{getKonten('bayar_upload')}</ReactMarkdown>
+        <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+          {getKonten('bayar_upload')}
+        </ReactMarkdown>
         <p className="card-text">
           Setelah melakukan pembayaran, mohon upload bukti pembayaran melalui form berikut:
         </p>

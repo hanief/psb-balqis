@@ -1,6 +1,7 @@
 import useSWR from "swr"
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { getRandomString } from "@/utils"
+import { useMemo } from "react"
 
 export const defaultContents = [
   {
@@ -8,7 +9,8 @@ export const defaultContents = [
     type: 'konten',
     slug: 'beranda',
     title: 'Beranda',
-    content : `SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`
+    content: `SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
@@ -16,16 +18,18 @@ export const defaultContents = [
     slug: 'bayar_pembayaran_konfirmasi',
     title: 'Bayar - Pembayaran Konfirmasi',
     content : `<h2 className="display-3">Terima kasih.</h2>
-      <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>`
+      <p>Kami telah menerima bukti pembayaran yang anda unggah.</p>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
     type: 'konten',
     slug: 'bayar_bukti_diupload',
-    title: 'Bayar - Bukti Diupload',
+    title: '',
     content : `<h2 className="display-3">Terima kasih.</h2>
       <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran anda.</p>
-      <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>`
+      <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
@@ -37,7 +41,8 @@ export const defaultContents = [
         <li><strong>Bank Syariah Indonesia (BSI)</strong></li>
         <li><strong><em>Nomor 7088404267</em></strong></li>
         <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
-      </ul>`
+      </ul>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
@@ -50,25 +55,18 @@ export const defaultContents = [
                 <li><strong>Bank Syariah Indonesia (BSI)</strong></li>
                 <li><strong><em>Nomor 7088404267</em></strong></li>
                 <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
-              </ul>`
+              </ul>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
     type: 'konten',
     slug: 'status_menunggu_konfirmasi',
     title: 'Status - Menunggu Konfirmasi',
-    content : `<p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
+    content : `<p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran anda.</p>
               <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
-              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>`
-  },
-  {
-    id: getRandomString(),
-    type: 'konten',
-    slug: 'status_menunggu_konfirmasi',
-    title: 'Status - Menunggu Konfirmasi',
-    content : `<p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
-              <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
-              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>`
+              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
@@ -76,7 +74,8 @@ export const defaultContents = [
     slug: 'status_terdaftar',
     title: 'Status - Terdaftar',
     content : `<p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
-        <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>`
+        <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
@@ -85,14 +84,16 @@ export const defaultContents = [
     title: 'Status - Ditolak',
     content : `<p>Setelah memperhatikan dan menimbang syarat pendaftaran dan hasil tes masuk, dengan berat hati kami memutuskan anda <strong>tidak diterima</strong>.</p>
                 <p>Terima kasih telah mendaftar dan melalui proses pendaftaran.</p>
-                <p>Semoga Allah swt. memberikan kebaikan dan keberkahan kepada anda.</p>`
+                <p>Semoga Allah swt. memberikan kebaikan dan keberkahan kepada anda.</p>`,
+    deleted_at: null
   },
   {
     id: getRandomString(),
     type: 'konten',
     slug: 'status_diterima',
     title: 'Status - Diterima',
-    content : `<p>Selamat anda diterima sebagai santri.</p>`
+    content : `<p>Selamat anda diterima sebagai santri.</p>`,
+    deleted_at: null
   },
 ]
 
@@ -104,6 +105,24 @@ export function useContents() {
 
     return data
   })
+
+  const contents = useMemo(() => {
+    if (!data) {
+      return defaultContents
+    }
+
+    return defaultContents.map(content => {
+      const remoteContent = data?.find(datum => datum.slug === content.slug)
+      if (remoteContent) {
+        return {
+          ...content,
+          content: remoteContent.content
+        }
+      }
+
+      return content
+    })
+  }, [data])
 
   async function createArtikel(artikel) {
     const promise = mutate(async () => {
@@ -163,8 +182,6 @@ export function useContents() {
   }
 
   function getKonten(slug) {
-    const contents = data || defaultContents
-
     const content = contents?.find(datum => {
       return datum.type === 'konten' && datum.slug === slug
     })
@@ -177,9 +194,9 @@ export function useContents() {
   }
 
   return {
-    contents: data || defaultContents,
+    contents,
     artikels: data?.filter(datum => datum?.type === 'artikel' && datum?.deleted_at === null),
-    kontens: data?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null) || defaultContents,
+    kontens: contents?.filter(datum => datum?.type !== 'artikel' && datum?.deleted_at === null),
     createArtikel,
     updateArtikel,
     deleteArtikel,

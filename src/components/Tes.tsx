@@ -4,6 +4,7 @@ import NextImage from 'next/image'
 import { toPng } from 'html-to-image'
 import { useContents } from "@/data/contents";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 export default function Tes({ registration }) {
   const { getKonten } = useContents()
@@ -29,7 +30,8 @@ export default function Tes({ registration }) {
   return (
     <Card>
       <CardBody>
-        <ReactMarkdown>
+        <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+
           {getKonten('status_terdaftar')}
         </ReactMarkdown>
         <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>

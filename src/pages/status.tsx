@@ -6,6 +6,7 @@ import { isAdmin } from "@/utils"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
+import rehypeRaw from 'rehype-raw'
 import { Alert, Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from "reactstrap"
 
 export default function Status() {
@@ -52,7 +53,7 @@ export default function Status() {
             <h1 className="text-center">Selamat!</h1>
             <Card>
               <CardBody>
-              <ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
                 {getKonten('status_diterima')}
               </ReactMarkdown>
                 <p>Calon Santri atas nama {registration?.nama_lengkap} telah diterima{registration?.syarat_penerimaan && (' dengan syarat')} di Pesantren Balqis Jogja</p>
@@ -79,7 +80,8 @@ export default function Status() {
             <h1>{registration?.nama_lengkap}.</h1>
             <Card>
               <CardBody>
-              <ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+
                 {getKonten('status_menunggu_konfirmasi')}
               </ReactMarkdown>
               </CardBody>
@@ -111,7 +113,8 @@ export default function Status() {
           <h1 className="text-center">Terima kasih.</h1>
           <Card>
             <CardBody className="text-center">
-              <ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+
                 {getKonten('status_menunggu_konfirmasi')}
               </ReactMarkdown>
               </CardBody>
@@ -130,7 +133,8 @@ export default function Status() {
           <h1 className="text-center">Anda terdaftar, {registration?.nama_lengkap}</h1>
           <Card>
             <CardBody>
-              <ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+
                 {getKonten('status_menunggu_pembayaran')}
               </ReactMarkdown>
               <p className="card-text">
