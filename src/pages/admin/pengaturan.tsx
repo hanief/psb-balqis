@@ -27,34 +27,6 @@ export default function PengaturanPage() {
                 />
                 <Label for="status_pendaftaran">Pendaftaran terbuka</Label>
               </FormGroup>
-              {settings?.pendaftaran_buka === 'true' && (
-                <>              
-                  <FormGroup>
-                    <Label for="mulai_pendaftaran">Tanggal Mulai Pendaftaran</Label>
-                    <Input
-                      id="mulai_pendaftaran"
-                      name="mulai_pendaftaran"
-                      type="date"
-                      value={settings?.mulai_pendaftaran}
-                      onBlur={event => {
-                        updateSetting('mulai_pendaftaran', event.target.value)
-                      }}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="akhir_pendaftaran">Tanggal Mulai Pendaftaran</Label>
-                    <Input
-                      id="akhir_pendaftaran"
-                      name="akhir_pendaftaran"
-                      type="date"
-                      value={settings?.akhir_pendaftaran}
-                      onBlur={event => {
-                        updateSetting('akhir_pendaftaran', event.target.value)
-                      }}
-                    />
-                  </FormGroup>
-                </>
-              )}
             </CardBody>
           </Card>
         </Col>

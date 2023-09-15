@@ -2,8 +2,12 @@ import { Button, Card, CardBody } from "reactstrap";
 import {DateTime} from 'luxon'
 import NextImage from 'next/image'
 import { toPng } from 'html-to-image'
+import { useContents } from "@/data/contents";
+import ReactMarkdown from "react-markdown";
 
 export default function Tes({ registration }) {
+  const { getKonten } = useContents()
+  
   function downloadKartu() {
     const node = document.getElementById('kartu')
     toPng(node, {
@@ -25,8 +29,9 @@ export default function Tes({ registration }) {
   return (
     <Card>
       <CardBody>
-        <p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
-        <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>
+        <ReactMarkdown>
+          {getKonten('status_terdaftar')}
+        </ReactMarkdown>
         <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>
         <div style={{width: '330px'}}>
           <Button block className="my-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>

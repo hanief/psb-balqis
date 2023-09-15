@@ -1,12 +1,15 @@
 import Bayar from "@/components/Bayar"
 import Tes from "@/components/Tes"
+import { useContents } from "@/data/contents"
 import { useRegistration } from "@/data/singleRegistration"
 import { isAdmin } from "@/utils"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import ReactMarkdown from "react-markdown"
 import { Alert, Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner } from "reactstrap"
 
 export default function Status() {
+  const { getKonten } = useContents()
   const [tanggalLahir, setTanggalLahir] = useState('')
   const [namaLengkap, setNamaLengkap] = useState('')
   const [registrations, setRegistrations] = useState([])
@@ -49,7 +52,10 @@ export default function Status() {
             <h1 className="text-center">Selamat!</h1>
             <Card>
               <CardBody>
-                <p>Calon Santri atas nama {registration?.nama_lengkap} telah diterima{registration?.syarat_penerimaan && (' dengan syarat')} di Pesantren Balqis Jogja untuk periode 2024/2025.</p>
+              <ReactMarkdown>
+                {getKonten('status_diterima')}
+              </ReactMarkdown>
+                <p>Calon Santri atas nama {registration?.nama_lengkap} telah diterima{registration?.syarat_penerimaan && (' dengan syarat')} di Pesantren Balqis Jogja</p>
                 {registration?.syarat_penerimaan && (
                   <div>
                     <h5>Sebagai syarat penerimaan sebagai santri:</h5>
@@ -73,9 +79,9 @@ export default function Status() {
             <h1>{registration?.nama_lengkap}.</h1>
             <Card>
               <CardBody>
-                <p>Setelah memperhatikan dan menimbang syarat pendaftaran dan hasil tes masuk, dengan berat hati kami memutuskan anda <strong>tidak diterima</strong>.</p>
-                <p>Terima kasih telah mendaftar dan melalui proses pendaftaran.</p>
-                <p>Semoga Allah swt. memberikan kebaikan dan keberkahan kepada anda.</p>
+              <ReactMarkdown>
+                {getKonten('status_menunggu_konfirmasi')}
+              </ReactMarkdown>
               </CardBody>
             </Card>
           </Col>
@@ -105,15 +111,14 @@ export default function Status() {
           <h1 className="text-center">Terima kasih.</h1>
           <Card>
             <CardBody className="text-center">
-              <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
-              <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
-              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>
-            </CardBody>
+              <ReactMarkdown>
+                {getKonten('status_menunggu_konfirmasi')}
+              </ReactMarkdown>
+              </CardBody>
           </Card>
         </Col>
       </Row>
       </Container>
-      
     )
   }
 
@@ -122,17 +127,12 @@ export default function Status() {
       <Container>
       <Row>
         <Col>
-          <h3 className="text-center">Anda terdaftar, {registration?.nama_lengkap}</h3>
           <h1 className="text-center">Anda terdaftar, {registration?.nama_lengkap}</h1>
           <Card>
             <CardBody>
-              <p>Akan tetapi, kami belum menerima biaya pendaftaran atau bukti pembayarannya</p>
-              <p>Mohon melakukan pembayaran biaya pendaftaran sebesar <strong>Rp. 250.000</strong> ke rekening berikut:</p>
-              <ul className="list-unstyled border border-success rounded p-2">
-                <li><strong>Bank Syariah Indonesia (BSI)</strong></li>
-                <li><strong><em>Nomor 7088404267</em></strong></li>
-                <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
-              </ul>
+              <ReactMarkdown>
+                {getKonten('status_menunggu_pembayaran')}
+              </ReactMarkdown>
               <p className="card-text">
                 Jika anda telah melakukan pembayaran, silakan upload bukti pembayaran melalui form berikut:
               </p>

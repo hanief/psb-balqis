@@ -5,11 +5,10 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
 import { isAdmin } from '@/utils'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import ContactButton from './ContactButton'
 import { useRouter } from 'next/router'
 import { useSettings } from '@/data/settings'
-import { getFromLocalStorage } from '@/utils'
 
 export default function Layout({children}) {
   const user = useUser()
@@ -19,7 +18,15 @@ export default function Layout({children}) {
   const router = useRouter()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      console.log('window?.screen.width', window?.screen.width)
+      setIsSidebarCollapsed(window?.screen.width < 400)
+    }
+  }, [])
+
   const toggleNavbar = () => setCollapsed(!collapsed) 
+
   if (process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true') {
     return (
       <Container className="container my-5 justify-content-center">
@@ -42,19 +49,9 @@ export default function Layout({children}) {
 
   if (isAdmin()) {
     return (
-      <main className='d-flex flex-nowrap'>
-        <Head>
-          <title>Admin PSB BALQIS Jogja</title>
-          <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
-        </Head>
-        <div><Toaster/></div>
-        {user && (
-        <aside className="d-flex flex-column p-3 text-bg-dark" style={{
-          left: isSidebarCollapsed ? '-280px' : '0',
-          width: '280px', 
-          height: '100vh',
-          transition: 'left 0.5s'
-        }}>
+      <div className='d-flex flex-nowrap'>
+        {user && !isSidebarCollapsed && (
+        <aside className="d-flex flex-column p-3 text-bg-dark" style={{height: '100vh'}}>
           <div className="d-flex align-items-center justify-content-between mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <Link href="/">
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
@@ -64,11 +61,6 @@ export default function Layout({children}) {
           <Nav pills className="flex-column mb-auto">
             <NavItem>
               <Link href="/" className={`nav-link ${router.asPath === '/' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/'}>
-                <i className='bi-house me-2 text-white'></i>Beranda
-              </Link>
-            </NavItem>
-            <NavItem>
-              <Link href="/admin/pendaftar" className={`nav-link ${router.asPath === '/admin/pendaftar' ? 'active' : 'text-white'}`} aria-current={router.asPath === '/admin/data'}>
                 <i className='bi-people me-2 text-white'></i>Pendaftar
               </Link>
             </NavItem>
@@ -102,11 +94,24 @@ export default function Layout({children}) {
           </Button>
         </aside>
         )}
-        
-        <Container fluid className='my-2'>
-          {children}
-        </Container>
-      </main>
+        <main>
+          <Head>
+            <title>Admin PSB BALQIS Jogja</title>
+            <meta name="description" content="Penerimaan Santri Baru BALQIS Jogja"/>
+          </Head>
+          <div><Toaster/></div>
+          <Container fluid>
+            {user && (
+              <Navbar className='bg-light'>
+                <Container fluid>
+                  <Button color='outline-success' onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}><i className='bi-list'></i></Button>
+                </Container>
+              </Navbar>
+            )}
+            {children}
+          </Container>
+        </main>
+      </div>
     )
   }
 

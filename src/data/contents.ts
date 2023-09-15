@@ -38,7 +38,62 @@ export const defaultContents = [
         <li><strong><em>Nomor 7088404267</em></strong></li>
         <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
       </ul>`
-  }
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'status_menunggu_pembayaran',
+    title: 'Status - Menunggu Pembayaran',
+    content : `<p>Kami belum menerima biaya pendaftaran atau bukti pembayarannya</p>
+              <p>Mohon melakukan pembayaran biaya pendaftaran sebesar <strong>Rp. 250.000</strong> ke rekening berikut:</p>
+              <ul className="list-unstyled border border-success rounded p-2">
+                <li><strong>Bank Syariah Indonesia (BSI)</strong></li>
+                <li><strong><em>Nomor 7088404267</em></strong></li>
+                <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
+              </ul>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'status_menunggu_konfirmasi',
+    title: 'Status - Menunggu Konfirmasi',
+    content : `<p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
+              <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
+              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'status_menunggu_konfirmasi',
+    title: 'Status - Menunggu Konfirmasi',
+    content : `<p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran atas nama <strong>{registration?.nama_lengkap}</strong>.</p>
+              <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
+              <p>Silakan kembali lagi ke halaman ini untuk cek status pendaftaran di kemudian hari.</p>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'status_terdaftar',
+    title: 'Status - Terdaftar',
+    content : `<p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
+        <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'status_ditolak',
+    title: 'Status - Ditolak',
+    content : `<p>Setelah memperhatikan dan menimbang syarat pendaftaran dan hasil tes masuk, dengan berat hati kami memutuskan anda <strong>tidak diterima</strong>.</p>
+                <p>Terima kasih telah mendaftar dan melalui proses pendaftaran.</p>
+                <p>Semoga Allah swt. memberikan kebaikan dan keberkahan kepada anda.</p>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'status_diterima',
+    title: 'Status - Diterima',
+    content : `<p>Selamat anda diterima sebagai santri.</p>`
+  },
 ]
 
 export function useContents() {
