@@ -22,14 +22,11 @@ export const defaultContents = [
   {
     id: getRandomString(),
     type: 'konten',
-    slug: 'beranda_bukti_diupload',
-    title: 'Beranda - Bukti Diupload',
+    slug: 'bayar_bukti_diupload',
+    title: 'Bayar - Bukti Diupload',
     content : `<h2 className="display-3">Terima kasih.</h2>
       <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran anda.</p>
-      <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>
-      <br />
-      <p>Anda dapat melihat status pendaftaran setiap saat dengan mengunjungi halaman:</p>
-      <Link className="btn btn-balqis" href={'/status'}>Cek Status Pendaftaran</Link>`
+      <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>`
   }
 ]
 
