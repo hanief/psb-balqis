@@ -27,6 +27,18 @@ export const defaultContents = [
     content : `<h2 className="display-3">Terima kasih.</h2>
       <p>Kami telah menerima bukti pembayaran dan mencatat pendaftaran anda.</p>
       <p>Selanjutnya, Panitia PSB akan melakukan konfirmasi atas pembayaran yang anda lakukan.</p>`
+  },
+  {
+    id: getRandomString(),
+    type: 'konten',
+    slug: 'bayar_upload',
+    title: 'Bayar - Upload',
+    content : `<p>Selanjutnya, mohon melakukan pembayaran biaya pendaftaran sebesar <strong>Rp. 250.000</strong> ke rekening berikut:</p>
+      <ul className="list-unstyled border border-success rounded p-2">
+        <li><strong>Bank Syariah Indonesia (BSI)</strong></li>
+        <li><strong><em>Nomor 7088404267</em></strong></li>
+        <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
+      </ul>`
   }
 ]
 
