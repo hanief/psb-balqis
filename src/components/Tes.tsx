@@ -31,8 +31,10 @@ export default function Tes({ registration }) {
     <Card>
       <CardBody>
         <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
-
           {getKonten('status_terdaftar')}
+        </ReactMarkdown>
+        <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+          {registration?.status_terdaftar_text}
         </ReactMarkdown>
         <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>
         <div style={{width: '330px'}}>
