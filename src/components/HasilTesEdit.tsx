@@ -1,10 +1,30 @@
 import { Card, CardBody, CardTitle, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import Select from "react-select";
 import { statusPenerimaanOptions } from "@/data/options";
+import dynamic from "next/dynamic"
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"),{ ssr: false })
 
 export default function HasilTesEdit({registration, onChange}) {
   return (
     <Row className='row-cols-1 row-cols-md-2 g-4'>
+      <Col>
+        <Card>
+          <CardBody>
+            <CardTitle tag="h5" className='mb-4'>Pelaksanaan Tes</CardTitle>
+            <FormGroup>
+              <Label for='status_terdaftar_text'>Catatan Personal Tes</Label>
+              <MDEditor
+                height={500}
+                value={registration?.status_terdaftar_text}
+                onChange={newContent => {
+                  onChange('status_terdaftar_text', newContent)
+                }}
+              />
+            </FormGroup>
+          </CardBody>
+        </Card>
+      </Col>
       <Col>
         <Card>
           <CardBody>
@@ -81,13 +101,12 @@ export default function HasilTesEdit({registration, onChange}) {
             </FormGroup>
             <FormGroup>
               <Label for='syarat_penerimaan'>Syarat Penerimaan</Label>
-              <Input
-                id="syarat_penerimaan"
-                name="syarat_penerimaan"
-                type="textarea"
-                required={true}
+              <MDEditor
+                height={500}
                 value={registration?.syarat_penerimaan}
-                onChange={event => onChange('syarat_penerimaan', event.target.value)}
+                onChange={newContent => {
+                  onChange('syarat_penerimaan', newContent)
+                }}
               />
             </FormGroup>
           </CardBody>

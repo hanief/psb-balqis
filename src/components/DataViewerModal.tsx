@@ -35,25 +35,11 @@ export default function DataViewerModal({
       'asal_sekolah': true,
       'jenjang': true,
       'jalur_pendaftaran': true,
-      // 'jalur_beasiswa': true,
-      // 'jalur_beasiswa_khusus': localRegistration?.jalur_pendaftaran === 'afirmasi',
-      // 'jalur_beasiswa_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
-      // 'nama_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
-      // 'tingkat_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
-      // 'tahun_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
-      // 'bukti_prestasi': localRegistration?.jalur_pendaftaran === 'prestasi',
-      // 'bukti_dhuafa': localRegistration?.jalur_beasiswa_khusus === 'dhuafa',
-      // 'bukti_yatim':  localRegistration?.jalur_beasiswa_khusus === 'yatim',
       'nama_ayah': true,
       'nomor_hp_ayah': true,
       'nama_ibu': true,
       'nomor_hp_ibu': true,
-      'alamat': true,
-      // 'provinsi': true,
-      // 'kabupaten': true,
-      // 'kecamatan': true,
-      // 'desa': true,
-      // 'kodepos': true,
+      'alamat': true
     }
   }, [localRegistration])
 
