@@ -34,7 +34,8 @@ export const columnsObject = {
   'status_pendaftaran': 'pending',
   'syarat_penerimaan': '',
   'catatan_internal': '',
-  'status_terdaftar_text': ''
+  'status_terdaftar_text': '',
+  'program_jenjang': ''
 }
 
 export const columns = Object.keys(columnsObject)
@@ -75,5 +76,6 @@ export interface RegistrationColumn {
   'status_pendaftaran': string,
   'syarat_penerimaan': string,
   'catatan_internal': string,
-  'status_terdaftar_text': string
+  'status_terdaftar_text': string,
+  'program_jenjang': string
 }

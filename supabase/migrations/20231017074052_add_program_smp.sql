@@ -1,0 +1,1 @@
+ALTER TABLE registrations ADD COLUMN program_jenjang text;

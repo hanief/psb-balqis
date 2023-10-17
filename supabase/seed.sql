@@ -8,4 +8,4 @@ values
 ('artikel', 'biaya', 'Biaya Pendidikan', 'Biaya Pendidikan'),
 ('artikel', 'program', 'Program Unggulan', 'Program Unggulan'),
 ('artikel', 'tes', 'Materi Tes Seleksi', 'Materi Tes Seleksi'),
-('konten', 'beranda', 'Beranda', `SMPIT-SMAIT Baitul Quran Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`);
+('konten', 'beranda', 'Beranda', 'SMPIT-SMAIT Baitul Quran Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.');
