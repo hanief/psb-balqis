@@ -39,6 +39,22 @@ export default function DataForm({
             value={registration?.jenjang}
             valid={validities?.jenjang}
           />
+          {registration?.jenjang === 'smp' && (
+            <ValidatedSelect
+              options={[
+                {value: '3', label: '3 tahun'},
+                {value: '6', label: '6 tahun'}
+              ]}
+              name="program_jenjang"
+              label="Program"
+              placeholder='Pilih Program'
+              required={rules?.program_jenjang}
+              isSearchable={false}
+              onChange={onChange}
+              value={registration?.program_jenjang}
+              valid={validities?.program_jenjang}
+            />
+          )}
           <ValidatedSelect
             options={jenisKelaminOptions}
             name="jenis_kelamin"

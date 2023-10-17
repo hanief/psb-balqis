@@ -34,6 +34,7 @@ export default function DataViewerModal({
       'tanggal_lahir': true,
       'asal_sekolah': true,
       'jenjang': true,
+      'program_jenjang': true,
       'jalur_pendaftaran': true,
       'nama_ayah': true,
       'nomor_hp_ayah': true,
