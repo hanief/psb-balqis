@@ -25,7 +25,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nama_lengkap'),
       selector: row => row.nama_lengkap,
       sortable: true,
-      minWidth: '400px',
+      minWidth: '100px',
     },
     {
       id: 'jenjang',
@@ -46,28 +46,28 @@ export default function useDashboardColumnDefinition(
       id: 'created_at',
       name: 'Tanggal',
       omit: !displayedColumns.includes('created_at'),
-      format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATETIME_MED),
+      format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATE_SHORT),
       selector: row => row.created_at,
       sortable: true,
-      minWidth: '200px'
+      minWidth: '100px'
     },
     {
       id: 'bukti_pembayaran',
-      name: 'Bukti Pembayaran',
+      name: 'Bukti',
       omit: !displayedColumns.includes('pembayaran_diterima'),
       cell: row => {
         if (!row.bukti_pembayaran) return '-'
 
         return (
           <Button color="outline-success" onClick={() => downloadBukti(row)}>
-            Unduh
+            <i className="bi bi-download"></i>
           </Button>
         )
       }
     },
     {
       id: 'pembayaran_diterima',
-      name: 'Konfirmasi Pembayaran',
+      name: 'Konfirmasi',
       omit: !displayedColumns.includes('pembayaran_diterima'),
       cell: row => <Input
         type="checkbox" 
@@ -79,7 +79,7 @@ export default function useDashboardColumnDefinition(
     },
     {
       id: 'actions',
-      name: 'Actions',
+      name: 'Aksi',
       omit: !displayedColumns.includes('actions'),
       cell: row => (
         <>
