@@ -7,6 +7,7 @@ export const jalurPendaftaranOptions = [
 ]
 
 export const jenjangOptions = [
+  { value: 'sd', label: "SD IT Baitul Qur'an Yogyakarta" },
   { value: 'smp', label: "SMP IT Baitul Qur'an Yogyakarta" },
   { value: 'sma', label: "SMA IT Baitul Qur'an Yogyakarta" },
 ]

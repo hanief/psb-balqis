@@ -9,7 +9,7 @@ export const defaultContents = [
     type: 'konten',
     slug: 'beranda',
     title: 'Beranda',
-    content: `SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`,
+    content: `SDIT-SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`,
     deleted_at: null
   },
   {

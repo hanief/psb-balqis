@@ -3,7 +3,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useEffect, useMemo, useState } from "react"
 
 const defaultSettings = {
-  'pendaftaran_buka': 'false',
+  'pendaftaran_buka': 'true',
   'mulai_pendaftaran': '',
   'akhir_pendaftaran': ''
 }
