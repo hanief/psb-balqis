@@ -62,7 +62,9 @@ export default function Tes({ registration }) {
                     </tr>
                     <tr>
                       <th scope="row">Jenjang:</th>
-                      <td>{registration?.jenjang === 'smp' ? 'SMP IT Baitul Quran Yogyakarta' : 'SMA IT Baitul Quran Yogyakarta'}</td>
+                      {registration?.jenjang === 'sd' && <td>SD IT Baitul Quran Yogyakarta</td>}
+                      {registration?.jenjang === 'smp' && <td>SMP IT Baitul Quran Yogyakarta</td>}
+                      {registration?.jenjang === 'sma' && <td>SMA IT Baitul Quran Yogyakarta</td>}
                     </tr>
                     <tr>
                       <th scope="row">Tempat Tanggal Lahir:</th>
