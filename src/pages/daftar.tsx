@@ -91,6 +91,10 @@ export default function DaftarPage() {
 
   async function handleNextButtonPush() {
     setActiveStep(activeStep + 1)
+
+    if (activeStep >= 2) {
+      await create(localRegistration)
+    } 
   }
 
   function handleChange(name, value) {
@@ -116,10 +120,6 @@ export default function DaftarPage() {
   }
 
   async function handleUploadBukti(file, type) {
-    if (activeStep === 3) {
-      await create(localRegistration)
-    } 
-
     const data = await uploadBukti(file, type)
     const newRegistrationData = {
       ...localRegistration,
