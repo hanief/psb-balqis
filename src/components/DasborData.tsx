@@ -25,6 +25,10 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
       show: true,
     },
     {
+      name: 'nik',
+      show: true,
+    },
+    {
       name: 'jenjang',
       show: true,
     },

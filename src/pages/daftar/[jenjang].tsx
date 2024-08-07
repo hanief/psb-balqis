@@ -39,8 +39,12 @@ export default function DaftarPage() {
   } = useRegistration()
   const [activeStep, setActiveStep] = useState(0)
   const [isDataFormValid, setIsDataFormValid] = useState(false)
-  const [localRegistration, setLocalRegistration] = useState(columnsObject)
+  const [localRegistration, setLocalRegistration] = useState({...columnsObject, jenjang: router.query.jenjang})
 
+  useEffect(() => {
+    setLocalRegistration({...localRegistration, jenjang: router.query.jenjang})
+  }, [router.query.jenjang])
+  
   const steps = useMemo(() => [
     {
       label: 'Data Santri',

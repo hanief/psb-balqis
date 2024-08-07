@@ -21,6 +21,7 @@ export default function DataForm({
         rules={rules}
         validities={validities}
         onChange={onChange}
+        isEditing={true}
       />
       <DataFormJalur
         registration={registration}

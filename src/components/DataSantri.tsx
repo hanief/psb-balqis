@@ -9,6 +9,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
   const requiredRules = useMemo(() => {
     return {
       'nama_lengkap': true,
+      'nik': true,
       'jenjang': true,
       'program_jenjang': localRegistration?.jenjang === 'smp',
       'jenis_kelamin': true,

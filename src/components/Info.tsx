@@ -1,4 +1,4 @@
-import { Col, ListGroup, ListGroupItem, Row } from "reactstrap";
+import { Col, Container, ListGroup, ListGroupItem, Nav, NavItem, NavLink, Row } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useContents } from "@/data/contents";
 import ReactMarkdown from 'react-markdown'
@@ -15,32 +15,34 @@ export default function InfoPage() {
   }, [artikels, active])
 
   return (
-    <Row className="my-4">
-      <Col md="3" className="mb-2">
-        <ListGroup>
-          {artikels?.map(artikel => (
-            <ListGroupItem
-              className="list-group-item-success" 
-              key={artikel.id} 
-              action
-              active={artikel.id === active?.id} 
-              tag="a"
-              href="#posts"
-              onClick={() => setActive(artikel)}
-            >
-              {artikel.title}
-            </ListGroupItem>
-          ))}
-        </ListGroup>
-      </Col>
-      <Col id="posts">
-        <div id={active?.slug}>
-          <h1>{active?.title}</h1>
-          <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
-            {active?.content}
-          </ReactMarkdown>
-        </div>
-      </Col>
-    </Row>
+    <Container>
+      <Row className="my-4">
+        <Col className="mb-2">
+          <Nav className="justify-content-center" pills>
+            {artikels?.map(artikel => (
+              <NavItem key={artikel.id}>
+                <NavLink
+                  active={artikel.id === active?.id} 
+                  href="#posts"
+                  onClick={() => setActive(artikel)}
+                >
+                  {artikel.title}
+                </NavLink>
+              </NavItem>
+            ))}
+          </Nav>
+        </Col>
+      </Row>
+      <Row>
+        <Col id="posts">
+          <div id={active?.slug}>
+            <h1>{active?.title}</h1>
+            <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
+              {active?.content}
+            </ReactMarkdown>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   )
 }

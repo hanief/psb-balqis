@@ -263,6 +263,34 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
     return data
   }
 
+  async function getRegistrationsByNIK(nik) {
+    if (!user) {
+      const creds = {
+        email: 'pendaftar@utama.app',
+        password: 'p3nd4ft4R!'
+      }
+
+      const { error } = await supabase
+        .auth
+        .signInWithPassword(creds)
+
+      if (error) {
+        await supabase
+          .auth
+          .signUp(creds)
+      }
+    }
+
+    const { data } = await supabase
+      .from('registrations')
+      .select()
+      .eq('nik', nik)
+      .is('deleted_at', null)
+      .order('created_at', {ascending: false})
+
+    return data
+  }
+
   async function create(registrationData) {
     if (!user) {
       const creds = {
@@ -405,6 +433,7 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
     uploadBukti,
     downloadBukti,
     deleteBukti,
-    getRegistrationsByNameAndBirthdate
+    getRegistrationsByNameAndBirthdate,
+    getRegistrationsByNIK
   }
 }

@@ -28,6 +28,14 @@ export default function useDashboardColumnDefinition(
       minWidth: '400px',
     },
     {
+      id: 'nik',
+      name: 'NIK',
+      omit: !displayedColumns.includes('nik'),
+      selector: row => row.nik,
+      sortable: true,
+      minWidth: '400px',
+    },
+    {
       id: 'jenjang',
       name: 'Jenjang',
       omit: !displayedColumns.includes('jenjang'),
