@@ -7,11 +7,12 @@ import ValidatedInput from "@/components/ValidatedInput"
 import ValidatedSelect from "@/components/ValidatedSelect"
 
 
-export default function DataForm({
+export default function DataFormSantri({
   registration,
   rules,
   validities,
   onChange,
+  isEditing = false
 }) {
   return (
     <Col>
@@ -28,6 +29,16 @@ export default function DataForm({
             required={rules?.nama_lengkap}
             onChange={onChange}
           />
+          <ValidatedInput
+            type="text"
+            name="nik"
+            label="NIK (Nomor Induk Kependudukan)" 
+            placeholder="contoh: 31231241324879712"
+            value={registration?.nik}
+            valid={validities?.nik}
+            required={rules?.nik}
+            onChange={onChange}
+          />
           <ValidatedSelect
             options={jenjangOptions}
             name="jenjang"
@@ -36,14 +47,16 @@ export default function DataForm({
             required={rules?.jenjang}
             isSearchable={false}
             onChange={onChange}
+            isDisabled={!isEditing}
             value={registration?.jenjang}
             valid={validities?.jenjang}
           />
           {registration?.jenjang === 'smp' && (
             <ValidatedSelect
               options={[
-                {value: '3', label: '3 tahun'},
-                {value: '6', label: '6 tahun'}
+                {value: 'fullday', label: 'Kelas Fullday'},
+                {value: 'boarding', label: 'Kelas Khusus (Boarding)'},
+                {value: 'unggulan', label: 'Kelas Unggulan (Al Bassam)'}
               ]}
               name="program_jenjang"
               label="Program"

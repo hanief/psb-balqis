@@ -1,9 +1,7 @@
-import Bayar from "@/components/Bayar"
 import Tes from "@/components/Tes"
 import { useContents } from "@/data/contents"
 import { useRegistration } from "@/data/singleRegistration"
 import { isAdmin } from "@/utils"
-import Link from "next/link"
 import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from 'rehype-raw'
@@ -11,12 +9,11 @@ import { Alert, Button, Card, CardBody, Col, Container, FormFeedback, FormGroup,
 
 export default function Status() {
   const { getKonten } = useContents()
-  const [tanggalLahir, setTanggalLahir] = useState('')
-  const [namaLengkap, setNamaLengkap] = useState('')
+  const [nik, setNik] = useState('')
   const [registrations, setRegistrations] = useState([])
   const [isSearching, setIsSearching] = useState(false)
   const [didSearched, setDidSearched] = useState(false)
-  const { registration, setRegistration, uploadBukti, getRegistrationsByNameAndBirthdate } = useRegistration()
+  const { registration, setRegistration, uploadBukti, getRegistrationsByNIK } = useRegistration()
 
   useEffect(() => {
     if (isAdmin()) {
@@ -36,7 +33,7 @@ export default function Status() {
     setIsSearching(true)
     setDidSearched(false)
 
-    const registrations = await getRegistrationsByNameAndBirthdate(namaLengkap, tanggalLahir)
+    const registrations = await getRegistrationsByNIK(nik)
     if (registrations?.length > 0) {
       setRegistrations(registrations)
     }
@@ -56,7 +53,7 @@ export default function Status() {
               <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
                 {getKonten('status_diterima')}
               </ReactMarkdown>
-                <p>Calon Santri atas nama {registration?.nama_lengkap} telah diterima{registration?.syarat_penerimaan && (' dengan syarat')} di Pesantren Balqis Jogja</p>
+                <p>Calon Santri atas nama {registration?.nama_lengkap} dan NIK {registration?.nik} telah diterima {registration?.syarat_penerimaan && (' dengan syarat')} di Pesantren Balqis Jogja</p>
                 {registration?.syarat_penerimaan && (
                   <div>
                     <h5>Sebagai syarat penerimaan sebagai santri:</h5>
@@ -77,7 +74,8 @@ export default function Status() {
         <Row>
           <Col className="text-center">
             <h2>Mohon maaf,</h2>
-            <h1>{registration?.nama_lengkap}.</h1>
+            <h1>Nama: {registration?.nama_lengkap}.</h1>
+            <h1>NIK: {registration?.nik}.</h1>
             <Card>
               <CardBody>
               <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
@@ -169,39 +167,23 @@ export default function Status() {
           <h1 className="text-center">Status Pendaftaran</h1>
           <Card>
             <CardBody>
-              <p>Silakan masukkan nama lengkap dan tanggal lahir calon santri di bawah ini:</p>
+              <p>Silakan masukkan NIK calon santri di bawah ini:</p>
               <FormGroup>
-                <Label for="nama_lengkap">Nama lengkap</Label>
+                <Label for="nik">NIK (Nomor Induk Kependudukan</Label>
                 <Input
                   type="text"
-                  name="nama_lengkap"
-                  value={namaLengkap}
-                  invalid={!namaLengkap}
-                  onChange={event => setNamaLengkap(event.target.value)}
+                  name="nik"
+                  value={nik}
+                  invalid={!nik}
+                  onChange={event => setNik(event.target.value)}
                 />
-                <FormFeedback>Nama Lengkap harus diisi</FormFeedback>
-              </FormGroup>
-              <FormGroup>
-                <Label for="tanggal_lahir">Tanggal Lahir</Label>
-                <Input
-                  type="date"
-                  name="tanggal_lahir"
-                  value={tanggalLahir}
-                  invalid={!tanggalLahir}
-                  onChange={event => setTanggalLahir(event.target.value)}
-                  onKeyUp={event => {
-                    if (event.key === 'Enter') {
-                      handleFindButtonPush()
-                    }
-                  }}
-                />
-                <FormFeedback>Tanggal Lahir harus diisi</FormFeedback>
+                <FormFeedback>NIK harus diisi</FormFeedback>
               </FormGroup>
               <Button color="success" onClick={handleFindButtonPush}>
                 {isSearching ? (<Spinner></Spinner>) : 'Cari'}
               </Button>
               {registrations?.length === 0 && didSearched && (
-                <Alert className="my-2" color="warning">Maaf, kami tidak menemukan data calon santri dengan nama dan tanggal lahir tersebut. Silakan coba kembali</Alert>
+                <Alert className="my-2" color="warning">Maaf, kami tidak menemukan data calon santri dengan NIK tersebut. Silakan coba kembali</Alert>
               )}
             </CardBody>
           </Card>

@@ -35,7 +35,8 @@ export const columnsObject = {
   'syarat_penerimaan': '',
   'catatan_internal': '',
   'status_terdaftar_text': '',
-  'program_jenjang': ''
+  'program_jenjang': '',
+  'nik': ''
 }
 
 export const columns = Object.keys(columnsObject)
@@ -77,5 +78,6 @@ export interface RegistrationColumn {
   'syarat_penerimaan': string,
   'catatan_internal': string,
   'status_terdaftar_text': string,
-  'program_jenjang': string
+  'program_jenjang': string,
+  'nik': string
 }

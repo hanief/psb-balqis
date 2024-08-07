@@ -29,6 +29,7 @@ export default function DataViewerModal({
   const requiredRules = useMemo(() => {
     return {
       'nama_lengkap': true,
+      'nik': true,
       'jenis_kelamin': true,
       'tempat_lahir': true,
       'tanggal_lahir': true,

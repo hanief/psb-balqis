@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button, Col, Collapse, Container, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, Row } from 'reactstrap'
+import { Button, Col, Collapse, Container, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, Row, UncontrolledDropdown } from 'reactstrap'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
@@ -117,59 +117,42 @@ export default function Layout({children}) {
       <div><Toaster/></div>
       <main className='pb-4'>
         <header className='py-2 text-white bg-balqis'>
-          <div className="container d-flex flex-wrap align-items-center">
-            <span className=''><i className='bi-whatsapp'></i></span>
-            <Link className='btn btn-link no-underline text-light btn-sm me-1' href="https://wa.me/+6287871956868">087871956868</Link>/
-            <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
-          </div>
+          <Container className=' d-flex justify-content-between'>
+            <div className="d-flex flex-wrap align-items-center">
+              <span className=''><i className='bi-whatsapp'></i></span>
+              <Link className='btn btn-link no-underline text-light btn-sm me-1' href="https://wa.me/+6287871956868">087871956868</Link>/
+              <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
+            </div>
+            <div className="">
+              <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>Web Balqis<i className='bi-box-arrow-up-right ms-1'></i></Link>
+            </div>
+          </Container>
+          
         </header>
         <nav className="navbar navbar-expand-lg bg-success-subtle">
           <Container>
             <NavbarBrand tag={Link} href='/'>
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
             </NavbarBrand>
-            <NavbarToggler onClick={toggleNavbar}/>
-            <Collapse isOpen={!collapsed} navbar>
-              <Nav navbar className='ms-auto'>
-                {settings?.pendaftaran_buka === 'true' && (
-                <NavItem>
-                  <NavLink 
-                    className='text-success' 
-                    tag={Link} 
-                    href="/daftar" 
-                    active={router?.asPath === '/daftar'}
-                  >
-                    Daftar
-                  </NavLink>
-                </NavItem>
-                )}
-                <NavItem>
-                  <NavLink 
-                    className='text-success'
-                    tag={Link} 
-                    href="/status" 
-                    active={router?.asPath === '/status'}
-                  >
-                    Cek Status
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink 
-                    className='text-success'
-                    tag={Link} 
-                    href="https://balqisjogja.com" 
-                    target='_blank'
-                  >
-                    Web Balqis<i className='bi-box-arrow-up-right ms-1'></i>
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </Collapse>
+            <Nav navbar className='ms-auto'>
+              {router?.pathname !== '/daftar/[jenjang]' && settings?.pendaftaran_buka === 'true' && (
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret className='btn btn-balqis px-3'>
+                    Pendaftaran
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem tag={Link} href='/daftar/sd' active={router?.asPath === '/daftar/sd'}>Daftar SD</DropdownItem>
+                    <DropdownItem tag={Link} href='/daftar/smp' active={router?.asPath === '/daftar/smp'}>Daftar SMP</DropdownItem>
+                    <DropdownItem tag={Link} href='/daftar/sma' active={router?.asPath === '/daftar/sma'}>Daftar SMA</DropdownItem>
+                    <DropdownItem divider></DropdownItem>
+                    <DropdownItem tag={Link} href="/status">Cek status pendaftaran</DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              )}
+            </Nav>
           </Container>
         </nav>
-        <div className='mt-2'>
-          {children}
-        </div>
+        {children}
       </main>
       <footer className="py-3 bg-secondary-subtle container-fluid">
         <Container>

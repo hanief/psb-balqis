@@ -54,7 +54,7 @@ export default function Tes({ registration }) {
                     </tr>
                     <tr>
                       <th scope="row">Nomor Pendaftaran:</th>
-                      <td>2024-{registration?.jenis_kelamin === 'laki-laki' ? '1' : '2'}-{registration?.id}</td>
+                      <td>{(new Date()).getFullYear()}-{registration?.jenis_kelamin === 'laki-laki' ? '1' : '2'}-{registration?.id}</td>
                     </tr>
                     <tr>
                       <th scope="row">Jenis Kelamin:</th>
