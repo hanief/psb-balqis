@@ -53,8 +53,8 @@ export default function Tes({ registration }) {
                       <td>{registration?.nama_lengkap}</td>
                     </tr>
                     <tr>
-                      <th scope="row">Nomor Pendaftaran:</th>
-                      <td>{(new Date()).getFullYear()}-{registration?.jenis_kelamin === 'laki-laki' ? '1' : '2'}-{registration?.id}</td>
+                      <th scope="row">NIK:</th>
+                      <td>{registration.nik}</td>
                     </tr>
                     <tr>
                       <th scope="row">Jenis Kelamin:</th>
