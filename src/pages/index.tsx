@@ -15,8 +15,6 @@ const Carousel = dynamic(() => import('@/components/Carousel'), { ssr: false })
 
 export default function Home() {
   const user = useUser()
-  const { getKonten } = useContents()
-  const { settings } = useSettings()
 
   if (isAdmin()) {
     return (
