@@ -76,7 +76,7 @@ export default function Bayar({ registration, onUploadBukti }) {
                 <table className="table table-success">
                   <tbody>
                     <tr>
-                      <th scope="row">Nama:G</th>
+                      <th scope="row">Nama:</th>
                       <td>{registration?.nama_lengkap}</td>
                     </tr>
                     <tr>
@@ -89,9 +89,9 @@ export default function Bayar({ registration, onUploadBukti }) {
                     </tr>
                     <tr>
                       <th scope="row">Jenjang:</th>
-                      {registration?.jenjang === 'sd' && <td>SD IT Baitul Quran Yogyakarta</td>}
-                      {registration?.jenjang === 'smp' && <td>SMP IT Baitul Quran Yogyakarta</td>}
-                      {registration?.jenjang === 'sma' && <td>SMA IT Baitul Quran Yogyakarta</td>}
+                      {registration?.jenjang === 'sd' && <td>SD Baitul Quran Ponjong</td>}
+                      {registration?.jenjang === 'smp' && <td>SMP Baitul Quran Ponjong</td>}
+                      {registration?.jenjang === 'sma' && <td>SMA Baitul Quran Ponjong</td>}
                     </tr>
                     <tr>
                       <th scope="row">Tempat Tanggal Lahir:</th>

@@ -14,6 +14,17 @@ export default function DataFormSantri({
   onChange,
   isEditing = false
 }) {
+
+  function getAsalSekolahPlaceholder() {
+    if (registration?.jenjang === 'sd') {
+      return 'contoh: TK Ibnu Abbas Rongkop'
+    } else if (registration?.jenjang === 'smp') {
+      return 'contoh: SD Baitul Qur\'an Ponjong'
+    }
+
+    return 'contoh: SMP Baitul Qur\'an Ponjong'
+  }
+
   return (
     <Col>
       <Card>
@@ -106,7 +117,7 @@ export default function DataFormSantri({
             type="text"
             name="asal_sekolah"
             label="Asal Sekolah" 
-            placeholder="contoh: SMA 1 Bantul"
+            placeholder={getAsalSekolahPlaceholder()}
             value={registration?.asal_sekolah}
             valid={validities?.asal_sekolah}
             required={rules?.asal_sekolah}

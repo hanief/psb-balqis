@@ -25,7 +25,7 @@ export default function ContactButton() {
                   <div className="wa__cs_img_wrap" style={{background: 'url("/contact-profile.png") center center / cover no-repeat'}}></div>
                 </div>
                 <div className="wa__popup_txt">
-                  <div className="wa__member_name">Customer Service 1</div>
+                  <div className="wa__member_name">Admin PSB SMP/SMA</div>
                   <div className="wa__member_duty">Balqis Jogja</div>
                 </div>
               </a>
@@ -36,7 +36,7 @@ export default function ContactButton() {
                   <div className="wa__cs_img_wrap" style={{background: 'url("/contact-profile.png") center center / cover no-repeat'}}></div>
                 </div>
                 <div className="wa__popup_txt">
-                  <div className="wa__member_name">Customer Service 2</div>
+                  <div className="wa__member_name">Admin PSB SD</div>
                   <div className="wa__member_duty">Balqis Jogja</div>
                 </div>
               </a>

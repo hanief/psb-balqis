@@ -1,7 +1,7 @@
 import Tes from "@/components/Tes"
 import { useContents } from "@/data/contents"
 import { useRegistration } from "@/data/singleRegistration"
-import { isAdmin } from "@/utils"
+import { isAdmin } from "@/utils/utils"
 import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from 'rehype-raw'

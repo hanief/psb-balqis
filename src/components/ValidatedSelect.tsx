@@ -1,7 +1,7 @@
 import { FormGroup, Label, FormFeedback } from "reactstrap"
 import Select, { components, DropdownIndicatorProps } from 'react-select'
 import { useEffect, useState } from "react"
-import { convertToTitleCase } from "@/utils"
+import { convertToTitleCase } from "@/utils/utils"
 
 export default function ValidatedSelect({ name, label = '', options, value, required = false, onChange, ...props }) {
   const [localValue, setLocalValue] = useState(value || '')

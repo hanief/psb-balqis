@@ -2,7 +2,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import toast from 'react-hot-toast'
 import useSWR from "swr"
 import { columns } from "@/data/columns"
-import { convertToTitleCase, formatDataWithWilayahNames } from "@/utils"
+import { convertToTitleCase, formatDataWithWilayahNames } from "@/utils/utils"
 import XLSX from 'xlsx'
 
 export function useRegistrations() {

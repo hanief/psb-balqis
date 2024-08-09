@@ -1,5 +1,5 @@
 import { columns } from "@/data/columns"
-import { convertToTitleCase, formatDatumWithWilayahNames } from "@/utils"
+import { convertToTitleCase, formatDatumWithWilayahNames } from "@/utils/utils"
 import { Col, Row, Table } from "reactstrap"
 
 export default function ExpandedRow({data}) {

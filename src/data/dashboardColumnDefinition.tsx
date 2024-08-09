@@ -1,6 +1,6 @@
 import { Button, Input } from "reactstrap";
 import { DateTime } from 'luxon'
-import { convertToTitleCase } from "@/utils";
+import { convertToTitleCase } from "@/utils/utils";
 
 export default function useDashboardColumnDefinition(
   downloadBukti, 
@@ -26,6 +26,14 @@ export default function useDashboardColumnDefinition(
       selector: row => row.nama_lengkap,
       sortable: true,
       minWidth: '100px',
+    },
+    {
+      id: 'nik',
+      name: 'NIK',
+      omit: !displayedColumns.includes('nik'),
+      selector: row => row.nik,
+      sortable: true,
+      minWidth: '400px',
     },
     {
       id: 'nik',

@@ -5,7 +5,9 @@ import {
   jalurPendaftaranOptions, 
   jenjangOptions, 
   jalurBeasiswaKhususOptions,
-  jalurBeasiswaPrestasiOptions,
+  jalurBeasiswaPrestasiSDOptions,
+  jalurBeasiswaPrestasiSMPOptions,
+  jalurBeasiswaPrestasiSMAOptions,
   jenisKelaminOptions
 } from '@/data/options'
 import { Wilayah } from '@/types'
@@ -15,7 +17,7 @@ import ValidatedSelect from "@/components/ValidatedSelect"
 
 const provinces = data as Wilayah[]
 
-export default function DataForm({
+export default function DataFormJalur({
   registration,
   rules,
   validities,
@@ -28,6 +30,15 @@ export default function DataForm({
   const kabupatens = useMemo(() => provinces.find(province => province.code === registration?.provinsi)?.cities, [registration?.provinsi])
   const kecamatans = useMemo(() => kabupatens?.find(kabupaten => kabupaten.code === registration?.kabupaten)?.districts, [kabupatens, registration?.kabupaten])
   const desas = useMemo(() => kecamatans?.find(kecamatan => kecamatan.code === registration?.kecamatan)?.villages, [kecamatans, registration?.kecamatan])
+  const jalurBeasiswaPrestasiOptions = () => {
+    if (registration?.jenjang === 'sd') {
+      return jalurBeasiswaPrestasiSDOptions
+    } else if (registration?.jenjang === 'sd') {
+      return jalurBeasiswaPrestasiSMPOptions
+    }
+
+    return jalurBeasiswaPrestasiSMAOptions
+  }
 
   return (
     <Col>
@@ -60,7 +71,7 @@ export default function DataForm({
           {registration?.jalur_pendaftaran === 'prestasi' && (
             <>
               <ValidatedSelect
-                options={jalurBeasiswaPrestasiOptions}
+                options={jalurBeasiswaPrestasiOptions()}
                 name="jalur_beasiswa_prestasi"
                 label="Jalur Beasiswa Prestasi"
                 placeholder='Pilih Jalur Beasiswa Prestasi'

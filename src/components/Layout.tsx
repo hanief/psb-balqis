@@ -4,7 +4,7 @@ import { Button, Col, Collapse, Container, DropdownItem, DropdownMenu, DropdownT
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Head from 'next/head'
 import {Toaster} from 'react-hot-toast'
-import { isAdmin } from '@/utils'
+import { isAdmin } from '@/utils/utils'
 import { Fragment, useEffect, useState } from 'react'
 import ContactButton from './ContactButton'
 import { useRouter } from 'next/router'
@@ -127,9 +127,8 @@ export default function Layout({children}) {
               <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>Web Balqis<i className='bi-box-arrow-up-right ms-1'></i></Link>
             </div>
           </Container>
-          
         </header>
-        <nav className="navbar navbar-expand-lg bg-success-subtle">
+        <nav className="navbar navbar-expand-lg bg-success-subtle sticky-top">
           <Container>
             <NavbarBrand tag={Link} href='/'>
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
@@ -145,7 +144,7 @@ export default function Layout({children}) {
                     <DropdownItem tag={Link} href='/daftar/smp' active={router?.asPath === '/daftar/smp'}>Daftar SMP</DropdownItem>
                     <DropdownItem tag={Link} href='/daftar/sma' active={router?.asPath === '/daftar/sma'}>Daftar SMA</DropdownItem>
                     <DropdownItem divider></DropdownItem>
-                    <DropdownItem tag={Link} href="/status">Cek status pendaftaran</DropdownItem>
+                    <DropdownItem tag={Link} href="/status">Cek status</DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
               )}
@@ -168,8 +167,8 @@ export default function Layout({children}) {
             <Col md="6" lg="4">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li><Link className='link-secondary no-underline' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>CS1: 087871956868</Link></li>
-                <li><Link className='link-secondary no-underline' href="https://wa.me/+6281228594844"><i className='bi bi-whatsapp me-1'></i>CS2: 081228594844</Link></li>
+                <li><Link className='link-secondary no-underline' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>Admin PSB SMP SMA : 087871956868</Link></li>
+                <li><Link className='link-secondary no-underline' href="https://wa.me/+6281228594844"><i className='bi bi-whatsapp me-1'></i>Admin PSB SD : 081228594844</Link></li>
                 <li><Link className='link-secondary no-underline' href="https://balqisjogja.com"><i className='bi bi-box-arrow-up-right me-1'></i>https://balqisjogja.com</Link></li>
               </ul>
             </Col>
