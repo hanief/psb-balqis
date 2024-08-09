@@ -127,9 +127,8 @@ export default function Layout({children}) {
               <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>Web Balqis<i className='bi-box-arrow-up-right ms-1'></i></Link>
             </div>
           </Container>
-          
         </header>
-        <nav className="navbar navbar-expand-lg bg-success-subtle">
+        <nav className="navbar navbar-expand-lg bg-success-subtle sticky-top">
           <Container>
             <NavbarBrand tag={Link} href='/'>
               <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>

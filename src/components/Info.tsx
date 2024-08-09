@@ -18,11 +18,11 @@ export default function InfoPage() {
     <Container>
       <Row className="my-4">
         <Col className="mb-2">
-          <Nav className="justify-content-center" pills>
+          <Nav className="justify-content-center flex-column flex-sm-row row-gap-1 column-gap-1" pills>
             {artikels?.map(artikel => (
-              <NavItem key={artikel.id}>
+              <NavItem key={artikel.id} active={artikel.id === active?.id} >
                 <NavLink
-                  className='mx-1 nav-link-balqis'
+                  className='nav-link-balqis'
                   active={artikel.id === active?.id} 
                   href="#posts"
                   onClick={() => setActive(artikel)}
