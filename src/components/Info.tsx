@@ -1,4 +1,4 @@
-import { Col, Container, ListGroup, ListGroupItem, Nav, NavItem, NavLink, Row } from "reactstrap";
+import { Col, Container, Nav, NavItem, NavLink, Row } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useContents } from "@/data/contents";
 import ReactMarkdown from 'react-markdown'
@@ -22,6 +22,7 @@ export default function InfoPage() {
             {artikels?.map(artikel => (
               <NavItem key={artikel.id}>
                 <NavLink
+                  className='mx-1 nav-link-balqis'
                   active={artikel.id === active?.id} 
                   href="#posts"
                   onClick={() => setActive(artikel)}

@@ -6,6 +6,34 @@
   background-color: $balqis-green;
 }
 
+.bg-outline-balqis {
+  background-color: transparent;
+  border-color: $balqis-green;
+  color: $balqis-green;
+
+  &:hover {
+    background-color: $balqis-green-dark;
+    border-color: $balqis-green-dark;
+    color: $white;
+  }
+}
+
+.nav-link-balqis {
+  background-color: transparent !important;
+  border: solid $balqis-green !important;
+  color: $balqis-green !important;
+
+  &:hover {
+    background-color: $balqis-green-dark !important;
+    color: white !important;
+  }
+
+  &.active {
+    background-color: $balqis-green !important;
+    color: white !important;
+  }
+}
+
 .btn-balqis {
   background-color: $balqis-orange;
   border-color: $balqis-orange;
