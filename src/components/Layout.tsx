@@ -123,21 +123,25 @@ export default function Layout({children}) {
               <Link className='btn btn-link no-underline text-light btn-sm me-1' href="https://wa.me/+6287871956868">087871956868</Link>/
               <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
             </div>
-            <div className="">
-              <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>Web Balqis<i className='bi-box-arrow-up-right ms-1'></i></Link>
+            <div>
+              <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>
+                <Image src="/favicon.ico" alt="Balqis Logo" width="20" height="20"/>
+                <span className="d-none d-sm-block">Web Balqis</span>
+                <i className='bi-box-arrow-up-right ms-1'></i>
+              </Link>
             </div>
           </Container>
         </header>
         <nav className="navbar navbar-expand-lg bg-success-subtle sticky-top">
           <Container>
             <NavbarBrand tag={Link} href='/'>
-              <Image src="/balqis-logo.png" alt="Balqis Logo" width="180" height="52"/>
+              <Image src="/balqis-logo.png" alt="Balqis Logo" width="150" height="43"/>
             </NavbarBrand>
             <Nav navbar className='ms-auto'>
               {router?.pathname !== '/daftar/[jenjang]' && settings?.pendaftaran_buka === 'true' && (
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret className='btn btn-balqis px-3'>
-                    Pendaftaran
+                    Daftar
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem tag={Link} href='/daftar/sd' active={router?.asPath === '/daftar/sd'}>Daftar SD</DropdownItem>
