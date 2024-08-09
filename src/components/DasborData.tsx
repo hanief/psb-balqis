@@ -3,7 +3,7 @@ import MultiSelect from "./MultiSelect"
 import { useState } from "react"
 import dynamic from "next/dynamic"
 import { columns } from "@/data/columns"
-import { convertToTitleCase } from "@/utils"
+import { convertToTitleCase } from "@/utils/utils"
 import { useRegistrations } from "@/data/registrations"
 import useDashboardColumnDefinition from "@/data/dashboardColumnDefinition"
 

@@ -1,6 +1,6 @@
 import { Button, Input } from "reactstrap";
 import { DateTime } from 'luxon'
-import { convertToTitleCase } from "@/utils";
+import { convertToTitleCase } from "@/utils/utils";
 
 export default function useDashboardColumnDefinition(
   downloadBukti, 

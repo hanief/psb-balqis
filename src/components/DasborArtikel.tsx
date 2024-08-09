@@ -1,7 +1,7 @@
 import { useContents } from "@/data/contents";
 import { useState } from "react";
 import { Button, Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label, ListGroup, ListGroupItem, Row, Table } from "reactstrap";
-import { getRandomString } from '@/utils'
+import { getRandomString } from '@/utils/utils'
 import dynamic from "next/dynamic"
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false })

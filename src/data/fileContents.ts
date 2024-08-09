@@ -13,6 +13,8 @@ export function useFileContents() {
         limit: 100
       })
 
+      console.log('data', data)
+
     return data
   })
 

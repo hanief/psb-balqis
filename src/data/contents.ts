@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
-import { getRandomString } from "@/utils"
+import { getRandomString } from "@/utils/utils"
 import { useMemo } from "react"
 
 export const defaultContents = [

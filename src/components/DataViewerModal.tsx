@@ -4,7 +4,7 @@ import HasilTesEdit from "./HasilTesEdit";
 import PembayaranEdit from "./PembayaranEdit";
 import { useSingleRegistration } from "@/data/singleRegistration";
 import DataForm from "./DataForm";
-import { convertToTitleCase } from "@/utils"
+import { convertToTitleCase } from "@/utils/utils"
 
 export default function DataViewerModal({
   isOpen,

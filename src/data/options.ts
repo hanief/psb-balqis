@@ -1,15 +1,14 @@
 
 export const jalurPendaftaranOptions = [
   { value: 'reguler', label: 'Jalur Reguler' },
-  { value: 'prestasi', label: 'Jalur Beasiswa - Prestasi' },
-  { value: 'afirmasi', label: 'Jalur Beasiswa - Afirmasi' },
-  { value: 'alumni', label: 'Jalur Beasiswa - Alumni' },
+  { value: 'prestasi', label: 'Jalur Prestasi' },
+  { value: 'afirmasi', label: 'Jalur Khusus' },
 ]
 
 export const jenjangOptions = [
-  { value: 'sd', label: "SD IT Baitul Qur'an Yogyakarta" },
-  { value: 'smp', label: "SMP IT Baitul Qur'an Yogyakarta" },
-  { value: 'sma', label: "SMA IT Baitul Qur'an Yogyakarta" },
+  { value: 'sd', label: "SD Baitul Qur'an Ponjong" },
+  { value: 'smp', label: "SMP Baitul Qur'an Ponjong" },
+  { value: 'sma', label: "SMA Baitul Qur'an Ponjong" },
 ]
 
 export const jenisKelaminOptions = [
@@ -17,16 +16,26 @@ export const jenisKelaminOptions = [
   { value: 'perempuan', label: 'Perempuan' },
 ]
 
-export const jalurBeasiswaPrestasiOptions = [
-  { value: 'tiga besar', label: 'Peringkat 3 besar kelas' },
-  { value: 'hafidz 15 juz', label: 'Hafidz 15 Juz (Pendaftar SMP)' },
-  { value: 'hafidz 30 juz', label: 'Hafidz 30 Juz (Pendaftar SMA)' },
-  { value: 'tiga besar lomba', label: 'Juara 3 besar Lomba MTQ/OSN/Olimpiade semua cabang' },
+export const jalurBeasiswaPrestasiSDOptions = [
+  { value: 'hafal 1 juz', label: 'Hafal 1 Juz' },
+  { value: 'tiga besar lomba', label: 'Juara 1/2/3 Lomba MTQ atau lainnya minimal tingkat kecamatan' },
+]
+
+export const jalurBeasiswaPrestasiSMPOptions = [
+  { value: 'nilai tertinggi', label: 'Nilai tertinggi kelas (kelas 5/6 SD/MI)' },
+  { value: 'hafal 10 juz', label: 'Hafal 10 Juz' },
+  { value: 'tiga besar lomba', label: 'Juara 1/2/3 Lomba MTQ/OSN/KSM/Olimpiade semua cabang minimal tingkat kabupaten' },
+]
+
+export const jalurBeasiswaPrestasiSMAOptions = [
+  { value: 'tiga besar', label: 'Nilai tertinggi kelas (kelas 8/9 SMP/MTs)' },
+  { value: 'hafal 30 juz', label: 'Hafal 30 Juz' },
+  { value: 'tiga besar lomba', label: 'Juara 1/2/3 Lomba MTQ/OSN/KSM/Olimpiade semua cabang minimal tingkat kabupaten' },
 ]
 
 export const jalurBeasiswaKhususOptions = [
   { value: 'dhuafa', label: 'Dhuafa berprestasi' },
-  { value: 'yatim', label: 'Yatim & Piatu' },
+  { value: 'yatim', label: 'Yatim atau Piatu' },
 ]
 
 export const statusPenerimaanOptions = [

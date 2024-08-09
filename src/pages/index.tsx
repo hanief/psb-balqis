@@ -1,7 +1,7 @@
 import { Col, Container, Row } from 'reactstrap'
 import Link from 'next/link'
 import Head from 'next/head'
-import { isAdmin } from '@/utils'
+import { isAdmin } from '@/utils/utils'
 import { useUser } from '@supabase/auth-helpers-react'
 import dynamic from 'next/dynamic'
 import { useContents } from '@/data/contents'
