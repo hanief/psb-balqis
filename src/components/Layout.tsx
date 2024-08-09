@@ -125,8 +125,8 @@ export default function Layout({children}) {
             </div>
             <div>
               <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>
-                <Image src="/favicon.ico" alt="Balqis Logo" width="20" height="20"/>
-                <span className="d-none d-sm-block">Web Balqis</span>
+                <Image className='mx-1' src="/favicon.ico" alt="Balqis Logo" width="20" height="20"/>
+                <span className="d-none d-sm-inline">Web Balqis</span>
                 <i className='bi-box-arrow-up-right ms-1'></i>
               </Link>
             </div>
