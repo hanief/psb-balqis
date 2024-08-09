@@ -6,18 +6,6 @@
   background-color: $balqis-green;
 }
 
-.bg-outline-balqis {
-  background-color: transparent;
-  border-color: $balqis-green;
-  color: $balqis-green;
-
-  &:hover {
-    background-color: $balqis-green-dark;
-    border-color: $balqis-green-dark;
-    color: $white;
-  }
-}
-
 .nav-link-balqis {
   background-color: transparent !important;
   border: solid $balqis-green !important;
@@ -50,20 +38,6 @@
   color: $balqis-orange;
   border-color: $balqis-orange;
 }
-// .btn-primary {
-//   background-color: rgb(255, 78, 0);
-//   border-color: rgb(255, 78, 0);
-// }
-
-// .btn-outline-primary {
-//   color: rgb(255, 78, 0);
-//   border-color: rgb(255, 78, 0);
-// }
-
-// .btn-primary:hover {
-//   background-color: rgb(190, 57, 0);
-//   border-color: rgb(190, 57, 0);
-// }
 
 .bd-placeholder-img {
   width: 100%;
@@ -73,6 +47,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  filter: brightness(40%) blur(3px);
 }
 
 @media (min-width: 768px) {
@@ -141,4 +116,8 @@
 
 .no-underline {
   text-decoration: none !important;
+}
+
+.translate-middle-x {
+  transform: translateX(-50%);
 }

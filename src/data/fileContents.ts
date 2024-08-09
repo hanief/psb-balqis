@@ -5,6 +5,39 @@ import useSWR from "swr"
 export function useFileContents() {
   const supabase = useSupabaseClient()
 
+  const localSlides = [
+    {
+      id: 1,
+      name: 'slide-1',
+      url: '/slide1.jpg'
+    },
+    {
+      id: 2,
+      name: 'slide-2',
+      url: '/slide2.jpg'
+    },
+    {
+      id: 3,
+      name: 'slide-3',
+      url: '/slide3.jpg'
+    },
+    {
+      id: 4,
+      name: 'slide-4',
+      url: '/slide4.jpg'
+    },
+    {
+      id: 5,
+      name: 'slide-5',
+      url: '/slide5.jpg'
+    },
+    {
+      id: 6,
+      name: 'slide-6',
+      url: '/slide6.jpg'
+    }
+  ]
+
   const { data, mutate } = useSWR('/file-contents', async () => {
     const { data } = await supabase
       .storage
@@ -12,8 +45,6 @@ export function useFileContents() {
       .list('slide', {
         limit: 100
       })
-
-      console.log('data', data)
 
     return data
   })
@@ -65,7 +96,7 @@ export function useFileContents() {
   }
 
   return {
-    slides: data?.filter(datum => datum.name !== '.emptyFolderPlaceholder').map(datum => {
+    slides: process.env.NODE_ENV === 'development' ? localSlides : data?.filter(datum => datum.name !== '.emptyFolderPlaceholder').map(datum => {
       return {
         name: datum.name,
         id: datum.id,

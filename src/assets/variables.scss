@@ -6,3 +6,12 @@ $balqis-green-dark: #1a5024 !default; //$balqis-success-dark
 $balqis-orange-dark: rgb(190, 57, 0) !default; //$balqis-orange-dark
 
 $color-mode-type: media-query;
+$position-values: (
+  0: 0,
+  5: 5%,
+  10: 10%,
+  15: 15%,
+  25: 25%,
+  50: 50%,
+  100: 100%
+);
