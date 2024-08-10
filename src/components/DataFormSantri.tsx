@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardTitle, Col, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
+import { Button, Card, CardBody, CardTitle, Col, Container, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
 import { 
   jenjangOptions,
   jenisKelaminOptions
@@ -29,39 +29,47 @@ export default function DataFormSantri({
     <Col>
       <Card>
         <CardBody>
-          <CardTitle tag="h5" className='mb-4'>Data Calon Santri</CardTitle>
-          <ValidatedInput
-            type="text"
-            name="nama_lengkap"
-            label="Nama Lengkap" 
-            placeholder="contoh: Ahmad Fulan"
-            value={registration?.nama_lengkap}
-            valid={validities?.nama_lengkap}
-            required={rules?.nama_lengkap}
-            onChange={onChange}
-          />
-          <ValidatedInput
-            type="text"
-            name="nik"
-            label="NIK (Nomor Induk Kependudukan)" 
-            placeholder="contoh: 31231241324879712"
-            value={registration?.nik}
-            valid={validities?.nik}
-            required={rules?.nik}
-            onChange={onChange}
-          />
-          <ValidatedSelect
-            options={jenjangOptions}
-            name="jenjang"
-            label="Jenjang Sekolah"
-            placeholder='Pilih Jenjang Sekolah'
-            required={rules?.jenjang}
-            isSearchable={false}
-            onChange={onChange}
-            isDisabled={!isEditing}
-            value={registration?.jenjang}
-            valid={validities?.jenjang}
-          />
+          <CardTitle tag="h5" className='mb-4'>Data Calon Santri {registration?.jenjang?.toUpperCase()} Baitul Quran Ponjong</CardTitle>
+            <Row>
+              <Col xs="12" sm="12" md="6">
+                <ValidatedInput
+                  type="text"
+                  name="nama_lengkap"
+                  label="Nama Lengkap" 
+                  placeholder="contoh: Ahmad Fulan"
+                  value={registration?.nama_lengkap}
+                  valid={validities?.nama_lengkap}
+                  required={rules?.nama_lengkap}
+                  onChange={onChange}
+                />
+              </Col>
+              <Col>
+                <ValidatedInput
+                  type="text"
+                  name="nik"
+                  label="NIK (Nomor Induk Kependudukan)" 
+                  placeholder="contoh: 31231241324879712"
+                  value={registration?.nik}
+                  valid={validities?.nik}
+                  required={rules?.nik}
+                  onChange={onChange}
+                />
+              </Col>
+            </Row>
+          {process.env.NEXT_PUBLIC_IS_ADMIN == 'true' && (
+            <ValidatedSelect
+              options={jenjangOptions}
+              name="jenjang"
+              label="Jenjang Sekolah"
+              placeholder='Pilih Jenjang Sekolah'
+              required={rules?.jenjang}
+              isSearchable={false}
+              onChange={onChange}
+              isDisabled={!isEditing}
+              value={registration?.jenjang}
+              valid={validities?.jenjang}
+            />
+          )}
           {registration?.jenjang === 'smp' && (
             <ValidatedSelect
               options={[
