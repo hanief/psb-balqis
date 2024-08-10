@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useContents } from "@/data/contents";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from 'rehype-raw'
-import { useRouter } from "next/router";
+import { useRouter } from "next/router"
 import {DateTime} from 'luxon'
 import NextImage from 'next/image'
 import { toPng } from 'html-to-image'
@@ -62,9 +62,9 @@ export default function Bayar({ registration, onUploadBukti }) {
   return (
     <Card>
       <CardBody>
-        <p><strong>Selamat</strong>, {registration.nama_lengkap} telah terdaftar di {registration.jenjang?.toUpperCase()} BALQIS.</p>
-        <p>Silakan menyimpan kartu pendaftaran di bawah ini:</p>
-        <div style={{width: '330px'}} className="mb-2">
+        <h1 className="text-center"><strong>Selamat</strong>, {registration.nama_lengkap} telah terdaftar di {registration.jenjang?.toUpperCase()} BALQIS.</h1>
+        <p className="text-center">Silakan menyimpan kartu pendaftaran di bawah ini:</p>
+        <div style={{width: '330px'}} className="mb-2 mx-auto">
           <Button block className="my-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>
           <Card id="kartu" >
             <CardBody>
@@ -114,7 +114,7 @@ export default function Bayar({ registration, onUploadBukti }) {
           <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
         </ul>
         <p className="card-text">
-          Setelah melakukan pembayaran, kirim bukti pembayaran via Whatsapp ke nomor seluler <strong>{router.query.jenjang === 'sd' ? '081228594844' : '087871956868'}</strong>.
+          Setelah melakukan pembayaran, kirim bukti pembayaran via Whatsapp ke nomor <Link className='link-secondary no-underline' href={`https://wa.me/${router.query.jenjang === 'sd' ? '+6287871956868' : '+6287871956868'}`}><strong>{router.query.jenjang === 'sd' ? '081228594844' : '087871956868'}</strong></Link>.
         </p>
         <p>
           Anda dapat mengunduh bukti pendaftaran di bawah ini:

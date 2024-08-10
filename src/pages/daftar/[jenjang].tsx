@@ -180,7 +180,7 @@ export default function DaftarPage() {
               color={isNextButtonDisabled() ? "secondary" : "success"}
               disabled={isNextButtonDisabled() }
               onClick={handleNextButtonPush}>
-              <span className='me-1'>Lanjutkan</span><i className='bi bi-chevron-right'></i>
+              <span className='me-1'>{activeStep == 2 ? 'Kirim' : 'Lanjutkan'}</span><i className='bi bi-chevron-right'></i>
             </Button>
           )}
         </Col>
@@ -229,7 +229,7 @@ export default function DaftarPage() {
               color={isNextButtonDisabled() ? "secondary" : "success"}
               disabled={isNextButtonDisabled() }
               onClick={handleNextButtonPush}>
-              <span className='me-1'>Lanjutkan</span><i className='bi bi-chevron-right'></i>
+              <span className='me-1'>{activeStep == 2 ? 'Kirim' : 'Lanjutkan'}</span><i className='bi bi-chevron-right'></i>
             </Button>
           )}
         </Col>
