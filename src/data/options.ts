@@ -8,7 +8,7 @@ export const jalurPendaftaranOptions = [
 export const jenjangOptions = [
   { value: 'sd', label: "SD Baitul Qur'an Ponjong" },
   { value: 'smp', label: "SMP Baitul Qur'an Ponjong" },
-  { value: 'sma', label: "SMA Baitul Qur'an Ponjong" },
+  { value: 'sma', label: "SMA Baitul Qur'an Yogyakarta" },
 ]
 
 export const jenisKelaminOptions = [

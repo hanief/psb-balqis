@@ -9,7 +9,7 @@ export const defaultContents = [
     type: 'konten',
     slug: 'beranda',
     title: 'Beranda',
-    content: `SDIT-SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2024/2025.`,
+    content: `SDIT-SMPIT-SMAIT Baitul Qur'an Islamic School (BALQIS) Yogyakarta Tahun Pelajaran 2025/2026.`,
     deleted_at: null
   },
   {
@@ -73,7 +73,7 @@ export const defaultContents = [
     type: 'konten',
     slug: 'status_terdaftar',
     title: 'Status - Terdaftar',
-    content : `<p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2024/2025.</p>
+    content : `<p>Anda telah terdaftar sebagai calon santri BALQIS Jogja periode 2025/2026.</p>
         <p>Selanjutnya, calon santri wajib mengikuti tes masuk pesantren.</p>`,
     deleted_at: null
   },
