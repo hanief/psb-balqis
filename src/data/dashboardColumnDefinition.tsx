@@ -25,7 +25,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nama_lengkap'),
       selector: row => row.nama_lengkap,
       sortable: true,
-      minWidth: '100px',
+      minWidth: '150px',
     },
     {
       id: 'nik',
@@ -33,15 +33,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nik'),
       selector: row => row.nik,
       sortable: true,
-      minWidth: '400px',
-    },
-    {
-      id: 'nik',
-      name: 'NIK',
-      omit: !displayedColumns.includes('nik'),
-      selector: row => row.nik,
-      sortable: true,
-      minWidth: '400px',
+      minWidth: '150px',
     },
     {
       id: 'jenjang',
