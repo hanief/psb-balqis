@@ -60,20 +60,6 @@ export default function useDashboardColumnDefinition(
       minWidth: '100px'
     },
     {
-      id: 'bukti_pembayaran',
-      name: 'Bukti',
-      omit: !displayedColumns.includes('pembayaran_diterima'),
-      cell: row => {
-        if (!row.bukti_pembayaran) return '-'
-
-        return (
-          <Button color="outline-success" onClick={() => downloadBukti(row)}>
-            <i className="bi bi-download"></i>
-          </Button>
-        )
-      }
-    },
-    {
       id: 'pembayaran_diterima',
       name: 'Konfirmasi',
       omit: !displayedColumns.includes('pembayaran_diterima'),
