@@ -11,6 +11,7 @@ import { toPng } from "html-to-image"
 import {DateTime} from 'luxon'
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { jenjangOptions } from "@/data/options"
 
 export default function Status() {
   const router = useRouter()
@@ -66,6 +67,16 @@ export default function Status() {
     })
   }
 
+  function getNamaSekolah() {
+    const jenjang = jenjangOptions.find(j => j.value === registration?.jenjang)
+
+    if (jenjang) {
+      return jenjang.label
+    }
+
+    return 'Pesantren BALQIS Yogyakarta'
+  }
+
   if (registration?.status_pendaftaran === 'diterima') {
     return (
       <Container>
@@ -103,7 +114,7 @@ export default function Status() {
             <Card>
               <CardBody>
               <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
-                {getKonten('status_menunggu_konfirmasi')}
+                {getKonten('status_ditolak')}
               </ReactMarkdown>
               </CardBody>
             </Card>
@@ -135,7 +146,6 @@ export default function Status() {
             <Card>
               <CardBody className="text-center">
                 <ReactMarkdown rehypePlugins={[rehypeRaw] as any}>
-
                   {getKonten('status_menunggu_konfirmasi')}
                 </ReactMarkdown>
                 </CardBody>
@@ -150,7 +160,7 @@ export default function Status() {
     return (
       <Card>
         <CardBody>
-          <h1 className="text-center"><strong>Selamat</strong>, {registration.nama_lengkap} telah terdaftar di {registration.jenjang?.toUpperCase()} BALQIS.</h1>
+          <h1 className="text-center"><strong>Selamat</strong>, {registration.nama_lengkap} telah terdaftar di {getNamaSekolah()}.</h1>
           <p className="text-center">Silakan menyimpan kartu pendaftaran di bawah ini:</p>
           <div style={{width: '330px'}} className="mb-2 mx-auto">
             <Button block className="my-2" color="primary" onClick={() => downloadKartu()}><i className="bi-download me-1"></i>Simpan</Button>
@@ -179,7 +189,7 @@ export default function Status() {
                         <th scope="row">Jenjang:</th>
                         {registration?.jenjang === 'sd' && <td>SD Baitul Quran Ponjong</td>}
                         {registration?.jenjang === 'smp' && <td>SMP Baitul Quran Ponjong</td>}
-                        {registration?.jenjang === 'sma' && <td>SMA Baitul Quran Ponjong</td>}
+                        {registration?.jenjang === 'sma' && <td>SMA Baitul Quran Yogyakarta</td>}
                       </tr>
                       <tr>
                         <th scope="row">Tempat Tanggal Lahir:</th>
@@ -203,9 +213,6 @@ export default function Status() {
           </ul>
           <p className="card-text">
             Setelah melakukan pembayaran, kirim bukti pembayaran via Whatsapp ke nomor <Link className='link-secondary no-underline' href={`https://wa.me/${router.query.jenjang === 'sd' ? '+6287871956868' : '+6287871956868'}`}><strong>{router.query.jenjang === 'sd' ? '081228594844' : '087871956868'}</strong></Link>.
-          </p>
-          <p>
-            Anda dapat mengunduh bukti pendaftaran di bawah ini:
           </p>
           <p>Anda dapat melihat status pendaftaran setiap saat dengan mengunjungi halaman di bawah ini:</p>
           <Link className="btn btn-balqis" href={'/status'}>Cek Status Pendaftaran</Link>
