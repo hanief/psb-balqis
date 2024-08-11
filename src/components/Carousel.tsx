@@ -29,7 +29,23 @@ export default function CarouselComponent() {
           />
         ))}
       </Carousel>
-      <div className="d-none d-sm-flex d-flex flex-column flex-sm-row row-gap-1 column-gap-5 position-absolute bottom-15 start-50 translate-middle-x">
+      <div className="d-block d-sm-none position-absolute top-50 start-50 translate-middle  w-75">
+        <h4 className="text-center ">
+          <strong>Penerimaan Santri Baru</strong>
+        </h4>
+        <p className="text-center">
+          Pesantren BALQIS Yogyakarta Tahun Pelajaran 2025/2026
+        </p>
+      </div>
+      <div className="d-none d-sm-block position-absolute top-50 start-50 translate-middle w-75">
+        <h1 className="display-1 text-center ">
+          <strong>Penerimaan Santri Baru</strong>
+        </h1>
+        <h5 className="text-center">
+          Pesantren BALQIS Yogyakarta Tahun Pelajaran 2025/2026
+        </h5>
+      </div>
+      <div className="d-none d-sm-flex flex-column flex-sm-row row-gap-1 column-gap-5 position-absolute bottom-15 start-50 translate-middle-x">
         <Button tag="a" href="/daftar/sd" className="btn btn-balqis">Daftar SD</Button>
         <Button tag="a" href="/daftar/smp" className="btn btn-balqis">Daftar SMP</Button>
         <Button tag="a" href="/daftar/sma" className="btn btn-balqis">Daftar SMA</Button>
