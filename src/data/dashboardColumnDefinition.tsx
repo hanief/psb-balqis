@@ -61,7 +61,7 @@ export default function useDashboardColumnDefinition(
     },
     {
       id: 'pembayaran_diterima',
-      name: 'Konfirmasi',
+      name: 'Registrasi',
       omit: !displayedColumns.includes('pembayaran_diterima'),
       cell: row => <Input
         type="checkbox" 
