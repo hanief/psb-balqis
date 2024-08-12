@@ -30,18 +30,18 @@ export default function CarouselComponent() {
         ))}
       </Carousel>
       <div className="d-block d-sm-none position-absolute top-50 start-50 translate-middle  w-75">
-        <h4 className="text-center ">
+        <h4 className="text-center text-white">
           <strong>Penerimaan Santri Baru</strong>
         </h4>
-        <p className="text-center">
+        <p className="text-center text-white">
           Pesantren BALQIS Yogyakarta Tahun Pelajaran 2025/2026
         </p>
       </div>
       <div className="d-none d-sm-block position-absolute top-50 start-50 translate-middle w-75">
-        <h1 className="display-1 text-center ">
+        <h1 className="display-1 text-center  text-white">
           <strong>Penerimaan Santri Baru</strong>
         </h1>
-        <h5 className="text-center">
+        <h5 className="text-center text-white">
           Pesantren BALQIS Yogyakarta Tahun Pelajaran 2025/2026
         </h5>
       </div>
