@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { title } from "process";
 
 export default function InfoPage() {
   const { artikels } = useContents()
@@ -33,6 +34,30 @@ export default function InfoPage() {
               <DropdownItem tag={Link} href="/status">Cek status</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
+          <div className="d-flex flex-column flex-md-row justify-content-between row-gap-1 column-gap-1">
+            <div className="ratio ratio-16x9">
+              <iframe 
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/lrfRVrzzPzM?si=EtddMNzCl4RztuWi" 
+                title="YouTube video player" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+              ></iframe>
+            </div>
+            <div className="ratio ratio-16x9">
+              <iframe 
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/8YDdqhCWXvs?si=Lt77ywrRGIPELBlp" 
+                title="YouTube video player" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
           <Nav className="justify-content-center flex-column flex-sm-row row-gap-1 column-gap-1" pills>
             {artikels?.map(artikel => (
               <NavItem key={artikel.id} active={artikel.id === active?.id} >
