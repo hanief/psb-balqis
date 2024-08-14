@@ -34,7 +34,7 @@ export default function InfoPage() {
               <DropdownItem tag={Link} href="/status">Cek status</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
-          <div className="d-flex flex-column flex-md-row justify-content-between row-gap-1 column-gap-1">
+          <div className="d-flex flex-column flex-md-row justify-content-between row-gap-1 column-gap-1 mb-1">
             <div className="ratio ratio-16x9">
               <iframe 
                 width="560" 
