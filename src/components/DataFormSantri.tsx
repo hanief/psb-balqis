@@ -5,6 +5,7 @@ import {
 } from '@/data/options'
 import ValidatedInput from "@/components/ValidatedInput"
 import ValidatedSelect from "@/components/ValidatedSelect"
+import { useEffect } from "react"
 
 
 export default function DataFormSantri({
@@ -14,7 +15,12 @@ export default function DataFormSantri({
   onChange,
   isEditing = false
 }) {
-
+  useEffect(() => {
+    if (registration?.jenis_kelamin === 'perempuan') {
+      onChange('program_jenjang', 'boarding')
+    }
+  }, [registration?.jenis_kelamin])
+  
   function getAsalSekolahPlaceholder() {
     if (registration?.jenjang === 'sd') {
       return 'contoh: TK Ibnu Abbas Rongkop'
@@ -23,6 +29,20 @@ export default function DataFormSantri({
     }
 
     return 'contoh: SMP Baitul Qur\'an Ponjong'
+  }
+
+  function getProgramOptions() {
+    if (registration?.jenis_kelamin === 'laki-laki') {
+      return [
+        {value: 'fullday', label: 'Kelas Fullday Putra'},
+        {value: 'boarding', label: 'Kelas Khusus Boarding Putra'},
+        {value: 'unggulan', label: 'Kelas Unggulan Putra (Al Bassam)'}
+      ]
+    } else {
+      return [
+        {value: 'boarding', label: 'Kelas Khusus Boarding Putri'},
+      ]
+    }
   }
 
   return (
@@ -70,23 +90,6 @@ export default function DataFormSantri({
               valid={validities?.jenjang}
             />
           )}
-          {registration?.jenjang === 'smp' && (
-            <ValidatedSelect
-              options={[
-                {value: 'fullday', label: 'Kelas Fullday'},
-                {value: 'boarding', label: 'Kelas Khusus (Boarding)'},
-                {value: 'unggulan', label: 'Kelas Unggulan (Al Bassam)'}
-              ]}
-              name="program_jenjang"
-              label="Program"
-              placeholder='Pilih Program'
-              required={rules?.program_jenjang}
-              isSearchable={false}
-              onChange={onChange}
-              value={registration?.program_jenjang}
-              valid={validities?.program_jenjang}
-            />
-          )}
           <ValidatedSelect
             options={jenisKelaminOptions}
             name="jenis_kelamin"
@@ -98,6 +101,19 @@ export default function DataFormSantri({
             onChange={onChange}
             value={registration?.jenis_kelamin}
           />
+          {registration?.jenjang === 'smp' && (
+            <ValidatedSelect
+              options={getProgramOptions()}
+              name="program_jenjang"
+              label="Program"
+              placeholder='Pilih Program'
+              required={rules?.program_jenjang}
+              isSearchable={false}
+              onChange={onChange}
+              value={registration?.program_jenjang}
+              valid={validities?.program_jenjang}
+            />
+          )}
           <div className='d-flex justify-content-between'>
             <ValidatedInput
               className='flex-grow-1 me-2'
