@@ -50,7 +50,7 @@ export default function InfoPage() {
               <iframe 
                 width="560" 
                 height="315" 
-                src="https://www.youtube.com/embed/8YDdqhCWXvs?si=Lt77ywrRGIPELBlp" 
+                src="https://www.youtube.com/embed/fotzkZEH2tA?si=afEmpRMx7WM20ZVp" 
                 title="YouTube video player" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                 referrerPolicy="strict-origin-when-cross-origin" 
