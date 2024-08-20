@@ -22,7 +22,7 @@ export default function InfoPage() {
     <Container>
       <Row className="my-2">
         <Col className="mb-2">
-          <UncontrolledDropdown className="d-grid d-sm-none mb-1" direction="up">
+          <UncontrolledDropdown className="d-grid d-sm-none mb-2" direction="up">
             <DropdownToggle caret className='btn btn-balqis px-3'>
               Daftar
             </DropdownToggle>
@@ -34,7 +34,7 @@ export default function InfoPage() {
               <DropdownItem tag={Link} href="/status">Cek status</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
-          <div className="d-flex flex-column flex-md-row justify-content-between row-gap-1 column-gap-1 mb-1">
+          <div className="d-flex flex-column flex-md-row justify-content-between row-gap-1 column-gap-1 mb-2">
             <div className="ratio ratio-16x9">
               <iframe 
                 width="560" 
@@ -58,7 +58,7 @@ export default function InfoPage() {
               ></iframe>
             </div>
           </div>
-          <Nav className="justify-content-center flex-column flex-sm-row row-gap-1 column-gap-1" pills>
+          <Nav className="justify-content-center flex-column flex-sm-row row-gap-1 column-gap-1 mb-2" pills>
             {artikels?.map(artikel => (
               <NavItem key={artikel.id} active={artikel.id === active?.id} >
                 <NavLink
