@@ -22,7 +22,7 @@ export default function InfoPage() {
     <Container>
       <Row className="my-2">
         <Col className="mb-2">
-          <UncontrolledDropdown className="d-grid d-sm-none mb-2" direction="up">
+          <UncontrolledDropdown className="d-grid d-md-none mb-2" direction="up">
             <DropdownToggle caret className='btn btn-balqis px-3'>
               Daftar
             </DropdownToggle>
