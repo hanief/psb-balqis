@@ -15,7 +15,7 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
   const [keyword, setKeyword] = useState('')
   const [selectedColumn, setSelectedColumn] = useState('nama_lengkap')
   const [showDeleted, setShowDeleted] = useState(false)
-  const [tableColumns, setTableColumns] = useState([
+  const tableColumns = [
     {
       name: 'nomor',
       show: true,
@@ -52,7 +52,7 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
       name: 'actions',
       show: true,
     },
-  ])
+  ]
   
   const customStyles = {
     head: {

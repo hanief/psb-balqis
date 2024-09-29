@@ -1,6 +1,6 @@
-import { Button, Input } from "reactstrap";
+import { Button, Input } from "reactstrap"
 import { DateTime } from 'luxon'
-import { convertToTitleCase } from "@/utils/utils";
+import { convertToTitleCase } from "@/utils/utils"
 
 export default function useDashboardColumnDefinition(
   downloadBukti, 
@@ -25,7 +25,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nama_lengkap'),
       selector: row => row.nama_lengkap,
       sortable: true,
-      minWidth: '150px',
+      width: '150px'
     },
     {
       id: 'nik',
@@ -33,7 +33,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nik'),
       selector: row => row.nik,
       sortable: true,
-      minWidth: '150px',
+      width: '150px'
     },
     {
       id: 'jenjang',
@@ -41,7 +41,8 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('jenjang'),
       format: row => row.jenjang?.toUpperCase(),
       selector: row => row.jenjang,
-      sortable: true
+      sortable: true,
+      width: '110px'
     },
     {
       id: 'jalur_pendaftaran',
@@ -49,6 +50,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('jalur_pendaftaran'),
       selector: row => convertToTitleCase(row.jalur_pendaftaran),
       sortable: true,
+      width: '100px'
     },
     {
       id: 'created_at',
@@ -57,11 +59,11 @@ export default function useDashboardColumnDefinition(
       format: row => DateTime.fromISO(row.created_at).toLocaleString(DateTime.DATE_SHORT),
       selector: row => row.created_at,
       sortable: true,
-      minWidth: '100px'
+      width: '150px'
     },
     {
       id: 'pembayaran_diterima',
-      name: 'Registrasi',
+      name: 'Reg',
       omit: !displayedColumns.includes('pembayaran_diterima'),
       cell: row => <Input
         type="checkbox" 
@@ -99,7 +101,7 @@ export default function useDashboardColumnDefinition(
           )}
         </>
       ),
-      minWidth: '150px',
+      width: '150px'
     }
   ];  
 
