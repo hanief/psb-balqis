@@ -43,3 +43,8 @@ export const statusPenerimaanOptions = [
   { value: 'diterima', label: 'Diterima' },
   { value: 'ditolak', label: 'Ditolak' },
 ]
+
+export const programKelasKhususSMPOptions = [
+  { value: '3 tahun', label: '3 tahun (SMP)' },
+  { value: '6 tahun', label: '6 tahun (SMP-SMA)' },
+]

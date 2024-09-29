@@ -12,6 +12,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
       'nik': true,
       'jenjang': true,
       'program_jenjang': localRegistration?.jenjang === 'smp',
+      'program_kelas_khusus_smp': localRegistration?.jenjang === 'smp',
       'jenis_kelamin': true,
       'tempat_lahir': true,
       'tanggal_lahir': true,

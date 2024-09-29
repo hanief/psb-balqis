@@ -36,6 +36,7 @@ export default function DataViewerModal({
       'asal_sekolah': true,
       'jenjang': true,
       'program_jenjang': localRegistration?.jenjang === 'smp',
+      'program_kelas_khusus_smp': localRegistration?.jenjang === 'smp',
       'jalur_pendaftaran': true,
       'nama_ayah': true,
       'nomor_hp_ayah': true,
