@@ -2,12 +2,13 @@ import { Button, Card, CardBody, CardTitle, Col, Container, FormGroup, Input, In
 import { 
   jenjangOptions,
   jenisKelaminOptions,
-  programKelasKhususSMPOptions
+  programKelasKhususSMPOptions,
+  referralOptions
 } from '@/data/options'
 import ValidatedInput from "@/components/ValidatedInput"
 import ValidatedSelect from "@/components/ValidatedSelect"
 import { useEffect } from "react"
-
+import ValidatedSelectCreatable from "@/components/ValidatedSelectCreatable"
 
 export default function DataFormSantri({
   registration,
@@ -162,6 +163,16 @@ export default function DataFormSantri({
             valid={validities?.asal_sekolah}
             required={rules?.asal_sekolah}
             onChange={onChange}
+          />
+          <ValidatedSelect
+            options={referralOptions}
+            name="referral"
+            label="Darimana anda mendapat info tentang BALQIS?"
+            placeholder='Pilih salah satu'
+            required={rules?.referral}
+            onChange={onChange}
+            value={registration?.referral}
+            valid={validities?.referral}
           />
         </CardBody>
       </Card>

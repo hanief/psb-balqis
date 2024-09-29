@@ -42,7 +42,8 @@ export default function DataViewerModal({
       'nomor_hp_ayah': true,
       'nama_ibu': true,
       'nomor_hp_ibu': true,
-      'alamat': true
+      'alamat': true,
+      'referral': true
     }
   }, [localRegistration])
 

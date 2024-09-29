@@ -37,7 +37,8 @@ export const columnsObject = {
   'status_terdaftar_text': '',
   'program_jenjang': '',
   'nik': '',
-  'program_kelas_khusus_smp': ''
+  'program_kelas_khusus_smp': '',
+  'referral': ''
 }
 
 export const columns = Object.keys(columnsObject)
@@ -81,5 +82,6 @@ export interface RegistrationColumn {
   'status_terdaftar_text': string,
   'program_jenjang': string,
   'nik': string,
-  'program_kelas_khusus_smp': string
+  'program_kelas_khusus_smp': string,
+  'referral': string
 }
