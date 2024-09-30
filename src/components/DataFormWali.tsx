@@ -7,7 +7,7 @@ import ValidatedSelect from "@/components/ValidatedSelect"
 
 const provinces = data as Wilayah[]
 
-export default function DataForm({
+export default function DataFormWali({
   registration,
   rules,
   validities,

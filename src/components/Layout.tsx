@@ -188,6 +188,13 @@ export default function Layout({children}) {
           </Row>
         </Container>
       </footer>
+      <Container fluid className='bg-secondary'>
+        <Row>
+          <Col>
+            <p className='text-white text-center pt-3'>© Baitul Qur&apos;an Islamic School Yogyakarta di bawah Yayasan Baitul Qur&apos;an Yogyakarta</p>
+          </Col>
+        </Row>
+      </Container>
       <ContactButton />
     </Fragment>  
   )

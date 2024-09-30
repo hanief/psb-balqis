@@ -230,12 +230,13 @@ export default function Status() {
             <CardBody>
               <p>Silakan masukkan NIK calon santri di bawah ini:</p>
               <FormGroup>
-                <Label for="nik">NIK (Nomor Induk Kependudukan</Label>
+                <Label for="nik">NIK (Nomor Induk Kependudukan)</Label>
                 <Input
                   type="text"
                   name="nik"
                   value={nik}
                   invalid={!nik}
+                  placeholder="contoh: 312312341234134234"
                   onChange={event => setNik(event.target.value)}
                 />
                 <FormFeedback>NIK harus diisi</FormFeedback>
