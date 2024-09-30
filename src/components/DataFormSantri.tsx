@@ -8,7 +8,6 @@ import {
 import ValidatedInput from "@/components/ValidatedInput"
 import ValidatedSelect from "@/components/ValidatedSelect"
 import { useEffect } from "react"
-import ValidatedSelectCreatable from "@/components/ValidatedSelectCreatable"
 
 export default function DataFormSantri({
   registration,

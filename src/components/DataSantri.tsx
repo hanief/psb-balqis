@@ -17,6 +17,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
       'tempat_lahir': true,
       'tanggal_lahir': true,
       'asal_sekolah': true,
+      'referral': true
     }
   }, [localRegistration])
 

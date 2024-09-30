@@ -98,6 +98,7 @@ export default function DaftarPage() {
 
     if (activeStep >= 2) {
       await create(localRegistration)
+      
     } 
   }
 
