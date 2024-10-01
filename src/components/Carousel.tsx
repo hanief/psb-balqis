@@ -45,7 +45,7 @@ export default function CarouselComponent() {
           Pesantren BALQIS Yogyakarta Tahun Pelajaran 2025/2026
         </h5>
       </div>
-      <div className="d-none d-sm-flex flex-column flex-sm-row row-gap-1 column-gap-5 position-absolute bottom-15 start-50 translate-middle-x">
+      <div className="d-none d-md-flex flex-column flex-md-row row-gap-1 column-gap-5 position-absolute bottom-15 start-50 translate-middle-x">
         <Button tag="a" href="/daftar/sd" className="btn btn-balqis">Daftar SD</Button>
         <Button tag="a" href="/daftar/smp" className="btn btn-balqis">Daftar SMP</Button>
         <Button tag="a" href="/daftar/sma" className="btn btn-balqis">Daftar SMA</Button>

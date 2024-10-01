@@ -319,7 +319,119 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
 
     setRegistration(data)
 
+    await sendWhatsappNotification(regData)
+
     return data
+  }
+
+  function formatNumber(number: string) {
+    let formattedNumber = number
+    if (formattedNumber.substring(0, 1) === '0') {
+      formattedNumber = formattedNumber.substring(1)
+      formattedNumber = `62${formattedNumber}`
+    }
+    if (formattedNumber.substring(0, 1) === '+') {
+      formattedNumber = formattedNumber.substring(1)
+    }
+    if (formattedNumber.substring(0, 1) === '8') {
+      formattedNumber = `62${formattedNumber}`
+    }
+
+    return formattedNumber
+  }
+
+  async function sendWhatsappNotification(regData) {
+    if (!regData) {
+      throw new Error('Registration data is required')
+    }
+
+    const qiscusAppId = process.env.NEXT_PUBLIC_QISCUS_APP_ID
+    const qiscusChannelId = process.env.NEXT_PUBLIC_QISCUS_CHANNEL_ID
+    const qiscusSecretKey = process.env.NEXT_PUBLIC_QISCUS_SECRET_KEY
+    const url = `https://omnichannel.qiscus.com/whatsapp/v1/${qiscusAppId}/${qiscusChannelId}/messages`
+    
+    let nomorHpPenerima = regData?.nomor_hp_ibu
+    if (!nomorHpPenerima) {
+      nomorHpPenerima = regData?.nomor_hp_ayah
+    }
+    const formattedNumber = formatNumber(nomorHpPenerima)
+    const jenisKelamin = regData?.nomor_hp_ibu ? 'Ibu' : 'Bapak'
+    const namaOrangtua = regData?.nomor_hp_ibu ? regData?.nama_ibu : regData?.nama_bapak
+    const namaSantri = regData?.nama_lengkap
+    const jenjang = regData?.jenjang.toUpperCase()
+    const namaSekolah = "Baitul Qur'an"
+    const tempatSekolah = regData?.jenjang === 'sma' ? 'Yogyakarta' : 'Ponjong'
+    const kontakSekolah = regData?.jenjang === 'sd' ? '+6281228594844' : '+6287871956868'
+
+    try {
+      const requestHeader = {
+        "Content-Type": "application/json",
+        "Qiscus-App-Id": qiscusAppId,
+        "Qiscus-Secret-Key": qiscusSecretKey
+      }
+      const requestBody = {
+        "to": formattedNumber,
+        "type": "template",
+        "template": {
+          "namespace": "7a0c1155_8c49_4bce_8054_86236fb1993a",
+          "name":"psb_daftar",
+          "language": {
+            "policy":"deterministic",
+            "code":"id"
+          },
+          "components": [
+            {
+              "type":"body",
+              "parameters": [
+                {
+                  "type": "text",
+                  "text": jenisKelamin
+                },
+                {
+                  "type": "text",
+                  "text": namaOrangtua
+                },
+                {
+                  "type": "text",
+                  "text": namaSantri
+                },
+                {
+                  "type": "text",
+                  "text": jenjang
+                },
+                {
+                  "type": "text",
+                  "text": namaSekolah
+                },
+                {
+                  "type": "text",
+                  "text": tempatSekolah
+                },
+                {
+                  "type": "text",
+                  "text": kontakSekolah
+                }
+              ]
+            }
+          ]
+        }
+      }
+      const requestBodyJSON = JSON.stringify(requestBody)
+      const response = await fetch(url, {
+        method: "POST",
+        body: requestBodyJSON,
+        headers: requestHeader
+      })
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 
   async function update(newData) {

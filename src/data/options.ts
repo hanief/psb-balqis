@@ -43,3 +43,16 @@ export const statusPenerimaanOptions = [
   { value: 'diterima', label: 'Diterima' },
   { value: 'ditolak', label: 'Ditolak' },
 ]
+
+export const programKelasKhususSMPOptions = [
+  { value: '3 tahun', label: '3 tahun (SMP)' },
+  { value: '6 tahun', label: '6 tahun (SMP-SMA)' },
+]
+
+export const referralOptions = [
+  { value: 'medsos', label: 'Media Sosial Balqis' },
+  { value: 'keluarga', label: 'Keluarga' },
+  { value: 'teman', label: 'Teman' },
+  { value: 'sosialisasi', label: 'Sosialisasi Langsung' },
+  { value: 'lainnya', label: 'Lainnya' },
+]
