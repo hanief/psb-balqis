@@ -12,7 +12,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
       'nik': true,
       'jenjang': true,
       'program_jenjang': localRegistration?.jenjang === 'smp',
-      'program_kelas_khusus_smp': localRegistration?.jenjang === 'smp',
+      'program_kelas_khusus_smp': localRegistration?.jenjang === 'smp' && localRegistration?.program_jenjang === 'boarding',
       'jenis_kelamin': true,
       'tempat_lahir': true,
       'tanggal_lahir': true,
@@ -22,7 +22,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
   }, [localRegistration])
 
   const validities = useMemo(() => {
-    return Object.keys(requiredRules).reduce((acc, field) => {
+    const valids = Object.keys(requiredRules).reduce((acc, field) => {
       if (requiredRules[field] === true) {
         if (localRegistration[field]) {
           acc[field] = localRegistration[field].length > 0
@@ -35,6 +35,10 @@ export default function DataSantri({ registration, onValidityChange, onChange })
 
       return acc
     }, {})
+
+    console.log('validities', valids)
+
+    return valids
   }, [requiredRules, localRegistration])
 
   const isValid = useMemo(() => {
