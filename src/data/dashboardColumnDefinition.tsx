@@ -25,7 +25,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('nama_lengkap'),
       selector: row => row.nama_lengkap,
       sortable: true,
-      width: '150px'
+      width: '300px'
     },
     {
       id: 'nik',
