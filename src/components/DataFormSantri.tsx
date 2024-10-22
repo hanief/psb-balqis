@@ -20,7 +20,15 @@ export default function DataFormSantri({
     if (registration?.jenis_kelamin === 'perempuan') {
       onChange('program_jenjang', 'boarding')
     }
-  }, [registration?.jenis_kelamin])
+  }, [registration?.jenis_kelamin, onChange])
+
+  useEffect(() => {
+    if (registration?.jenjang === 'sd') {
+      onChange('program_jenjang', 'fullday')
+    } else {
+      onChange('program_jenjang', null)
+    }
+  }, [registration?.jenjang, onChange])
   
   function getAsalSekolahPlaceholder() {
     if (registration?.jenjang === 'sd') {
@@ -33,6 +41,12 @@ export default function DataFormSantri({
   }
 
   function getProgramOptions() {
+    if (registration?.jenjang === 'sd') {
+      return [
+        {value: 'fullday', label: 'Kelas Fullday'},
+      ]
+    }
+
     if (registration?.jenis_kelamin === 'laki-laki') {
       return [
         {value: 'fullday', label: 'Kelas Fullday Putra'},
@@ -51,32 +65,26 @@ export default function DataFormSantri({
       <Card>
         <CardBody>
           <CardTitle tag="h5" className='mb-4'>Data Calon Santri {registration?.jenjang?.toUpperCase()} Baitul Quran Ponjong</CardTitle>
-            <Row>
-              <Col xs="12" sm="12" md="6">
-                <ValidatedInput
-                  type="text"
-                  name="nama_lengkap"
-                  label="Nama Lengkap" 
-                  placeholder="contoh: Ahmad Fulan"
-                  value={registration?.nama_lengkap}
-                  valid={validities?.nama_lengkap}
-                  required={rules?.nama_lengkap}
-                  onChange={onChange}
-                />
-              </Col>
-              <Col>
-                <ValidatedInput
-                  type="text"
-                  name="nik"
-                  label="NIK (Nomor Induk Kependudukan)" 
-                  placeholder="contoh: 31231241324879712"
-                  value={registration?.nik}
-                  valid={validities?.nik}
-                  required={rules?.nik}
-                  onChange={onChange}
-                />
-              </Col>
-            </Row>
+            <ValidatedInput
+              type="text"
+              name="nama_lengkap"
+              label="Nama Lengkap" 
+              placeholder="contoh: Ahmad Fulan"
+              value={registration?.nama_lengkap}
+              valid={validities?.nama_lengkap}
+              required={rules?.nama_lengkap}
+              onChange={onChange}
+            />
+            <ValidatedInput
+              type="text"
+              name="nik"
+              label="NIK (Nomor Induk Kependudukan)" 
+              placeholder="contoh: 31231241324879712"
+              value={registration?.nik}
+              valid={validities?.nik}
+              required={rules?.nik}
+              onChange={onChange}
+            />
           {process.env.NEXT_PUBLIC_IS_ADMIN == 'true' && (
             <ValidatedSelect
               options={jenjangOptions}
