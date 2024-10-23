@@ -427,8 +427,7 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      const json = await response.json();
-      console.log(json);
+      await response.json();
     } catch (error) {
       console.error(error.message);
     }

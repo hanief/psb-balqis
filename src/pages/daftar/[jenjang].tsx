@@ -42,7 +42,7 @@ export default function DaftarPage() {
   const [localRegistration, setLocalRegistration] = useState({...columnsObject, jenjang: router.query.jenjang})
 
   useEffect(() => {
-    setLocalRegistration({...localRegistration, jenjang: router.query.jenjang})
+    setLocalRegistration({...localRegistration, jenjang: router.query.jenjang, program_jenjang: router.query.jenjang === 'sd' ? 'fullday' : null })
   }, [router.query.jenjang])
   
   const steps = useMemo(() => [

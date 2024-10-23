@@ -21,14 +21,6 @@ export default function DataFormSantri({
       onChange('program_jenjang', 'boarding')
     }
   }, [registration?.jenis_kelamin, onChange])
-
-  useEffect(() => {
-    if (registration?.jenjang === 'sd') {
-      onChange('program_jenjang', 'fullday')
-    } else {
-      onChange('program_jenjang', null)
-    }
-  }, [registration?.jenjang, onChange])
   
   function getAsalSekolahPlaceholder() {
     if (registration?.jenjang === 'sd') {

@@ -36,8 +36,6 @@ export default function DataSantri({ registration, onValidityChange, onChange })
       return acc
     }, {})
 
-    console.log('validities', valids)
-
     return valids
   }, [requiredRules, localRegistration])
 
