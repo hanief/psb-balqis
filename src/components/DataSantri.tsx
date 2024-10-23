@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import DataFormSantri from './DataFormSantri'
+import { useRouter } from 'next/router'
 
 export default function DataSantri({ registration, onValidityChange, onChange }) {
+  const router = useRouter()
   const [showValiditiesWarning, setShowValiditiesWarning] = useState(false)
 
   const [localRegistration, setLocalRegistration] = useState(registration)
@@ -57,6 +59,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
   function handleChange(name, value) {
     const newData = {
       ...localRegistration,
+      jenjang: router.query.jenjang,
       [name]: value
     }
 

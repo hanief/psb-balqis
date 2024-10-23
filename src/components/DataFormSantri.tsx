@@ -17,10 +17,10 @@ export default function DataFormSantri({
   isEditing = false
 }) {
   useEffect(() => {
-    if (registration?.jenis_kelamin === 'perempuan') {
+    if (registration?.jenis_kelamin === 'perempuan' && registration?.program_jenjang !== 'boarding') {
       onChange('program_jenjang', 'boarding')
     }
-  }, [registration?.jenis_kelamin, onChange])
+  }, [registration?.jenis_kelamin, onChange, registration?.program_jenjang])
   
   function getAsalSekolahPlaceholder() {
     if (registration?.jenjang === 'sd') {
