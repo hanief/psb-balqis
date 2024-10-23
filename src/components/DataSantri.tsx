@@ -22,7 +22,7 @@ export default function DataSantri({ registration, onValidityChange, onChange })
   }, [localRegistration])
 
   const validities = useMemo(() => {
-    const valids = Object.keys(requiredRules).reduce((acc, field) => {
+    return Object.keys(requiredRules).reduce((acc, field) => {
       if (requiredRules[field] === true) {
         if (localRegistration[field]) {
           acc[field] = localRegistration[field].length > 0
@@ -35,10 +35,6 @@ export default function DataSantri({ registration, onValidityChange, onChange })
 
       return acc
     }, {})
-
-    console.log('validities', valids)
-
-    return valids
   }, [requiredRules, localRegistration])
 
   const isValid = useMemo(() => {
