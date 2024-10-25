@@ -45,7 +45,7 @@ export default function useDashboardColumnDefinition(
       omit: !displayedColumns.includes('provinsi'),
       selector: row => row.provinsi,
       sortable: true,
-      width: '150px'
+      width: '200px'
     },
     {
       id: 'jenjang',
