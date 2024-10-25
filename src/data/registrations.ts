@@ -56,9 +56,13 @@ export function useRegistrations() {
   }
 
   function formatData(data) {
+    if (!data) {
+      return []
+    }
     let formattedData = data
     formattedData = formatDataWithWilayahNames(data)
     formattedData = capitalizeData(formattedData)
+    
     return formattedData
   }
 
@@ -132,7 +136,7 @@ export function useRegistrations() {
   }
 
   return {
-    registrations: data,
+    registrations: formatData(data),
     update,
     downloadBukti,
     downloadAsXLSX,

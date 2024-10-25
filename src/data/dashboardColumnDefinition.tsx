@@ -1,6 +1,10 @@
 import { Button, Input } from "reactstrap"
 import { DateTime } from 'luxon'
 import { convertToTitleCase } from "@/utils/utils"
+import data from '@/data/wilayah.json'
+import { Wilayah } from '@/types'
+
+const provinces = data as Wilayah[]
 
 export default function useDashboardColumnDefinition(
   downloadBukti, 
@@ -32,6 +36,14 @@ export default function useDashboardColumnDefinition(
       name: 'NIK',
       omit: !displayedColumns.includes('nik'),
       selector: row => row.nik,
+      sortable: true,
+      width: '150px'
+    },
+    {
+      id: 'provinsi',
+      name: 'Provinsi',
+      omit: !displayedColumns.includes('provinsi'),
+      selector: row => row.provinsi,
       sortable: true,
       width: '150px'
     },

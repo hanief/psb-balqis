@@ -3,8 +3,6 @@ import { convertToTitleCase, formatDatumWithWilayahNames } from "@/utils/utils"
 import { Col, Row, Table } from "reactstrap"
 
 export default function ExpandedRow({data}) {
-  const formattedData = formatDatumWithWilayahNames(data, 1)
-
   return (
     <Row>
       <Col>
@@ -14,7 +12,7 @@ export default function ExpandedRow({data}) {
             <tr key={column}>
               <th scope="row">{convertToTitleCase(column)}</th>
               <td>:</td>
-              <td>{formattedData[column]}</td>
+              <td>{data[column]}</td>
             </tr>
           ))}
           </tbody>

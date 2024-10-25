@@ -1,5 +1,4 @@
 import { Button, Card, CardBody, Col, Container, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
-import MultiSelect from "./MultiSelect"
 import { useState } from "react"
 import dynamic from "next/dynamic"
 import { columns } from "@/data/columns"
@@ -26,6 +25,10 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
     },
     {
       name: 'nik',
+      show: true,
+    },
+    {
+      name: 'provinsi',
       show: true,
     },
     {
