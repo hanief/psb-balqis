@@ -101,7 +101,7 @@ export default function useDashboardColumnDefinition(
           </Button>
           {row.deleted_at ? (
             <>
-              <Button color="outline-success" onClick={() => update(row.id, {deleted_at: null})}>
+              <Button className="me-1" color="outline-success" onClick={() => update(row.id, {deleted_at: null})}>
                 <i className="bi bi-recycle"></i>
               </Button>
               <Button color="outline-danger" onClick={() => hide(row.id)}>
