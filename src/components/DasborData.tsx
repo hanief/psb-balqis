@@ -71,14 +71,14 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
     },
   };
 
-  const { registrations, update, remove, downloadBukti, downloadAsXLSX } = useRegistrations()
+  const { registrations, update, remove, hide, downloadAsXLSX } = useRegistrations()
   
   const { definitions } = useDashboardColumnDefinition(
-    downloadBukti, 
     setDataViewerProps,
     update,
     setDeleteConfirmationProps,
     remove,
+    hide,
     tableColumns.filter(column => column.show).map(column => column.name),
   )
 
@@ -145,7 +145,12 @@ export default function DasborData({setDataViewerProps, setDeleteConfirmationPro
               <DataTable
                 columns={definitions}
                 data={registrations?.filter(registration => {
-                  let shouldShow = showDeleted ? registration.deleted_at : !registration.deleted_at
+                  let shouldShow = false
+                  if (showDeleted) {
+                    shouldShow = registration.deleted_at && !registration.hidden_at
+                  } else {
+                    shouldShow = !registration.deleted_at
+                  }
 
                   if (selectedColumn && keyword) {
                     shouldShow = shouldShow && registration[selectedColumn]?.toLowerCase().includes(keyword.toLowerCase())
