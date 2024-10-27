@@ -31,7 +31,7 @@ export default function ContactButton() {
               </a>
             </div>
             <div className="wa__popup_content_item">
-              <a target="_blank" href="https://api.whatsapp.com/send?phone=6281228594844&amp;text=Assalamualaikum CS 2 Balqis Jogja, saya mau bertanya soal PSB Balqis Jogja, mohon dibantu.." rel="nofollow noopener noreferrer" className="wa__stt wa__stt_online">
+              <a target="_blank" href="https://api.whatsapp.com/send?phone=62‪87762007766‬&amp;text=Assalamualaikum CS 2 Balqis Jogja, saya mau bertanya soal PSB Balqis Jogja, mohon dibantu.." rel="nofollow noopener noreferrer" className="wa__stt wa__stt_online">
                 <div className="wa__popup_avatar">
                   <div className="wa__cs_img_wrap" style={{background: 'url("/contact-profile.png") center center / cover no-repeat'}}></div>
                 </div>

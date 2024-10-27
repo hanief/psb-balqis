@@ -114,7 +114,7 @@ export default function Bayar({ registration, onUploadBukti }) {
           <li><em>Yayasan Baitul Qur&apos;an Yogyakarta</em></li>
         </ul>
         <p className="card-text">
-          Setelah melakukan pembayaran, kirim bukti pembayaran via Whatsapp ke nomor <Link className='link-secondary no-underline' href={`https://wa.me/${router.query.jenjang === 'sd' ? '+6287871956868' : '+6287871956868'}`}><strong>{router.query.jenjang === 'sd' ? '081228594844' : '087871956868'}</strong></Link>.
+          Setelah melakukan pembayaran, kirim bukti pembayaran via Whatsapp ke nomor <Link className='link-secondary no-underline' href={`https://wa.me/${router.query.jenjang === 'sd' ? '+6287871956868' : '+6287871956868'}`}><strong>{router.query.jenjang === 'sd' ? '0‪87762007766‬' : '087871956868'}</strong></Link>.
         </p>
         <p>Anda dapat melihat status pendaftaran setiap saat dengan mengunjungi halaman di bawah ini:</p>
         <Link className="btn btn-balqis" href={'/status'}>Cek Status Pendaftaran</Link>

@@ -361,7 +361,7 @@ export function useRegistration(initialRegistration = null, onUpdate = null) {
     const jenjang = regData?.jenjang.toUpperCase()
     const namaSekolah = "Baitul Qur'an"
     const tempatSekolah = regData?.jenjang === 'sma' ? 'Yogyakarta' : 'Ponjong'
-    const kontakSekolah = regData?.jenjang === 'sd' ? '+6281228594844' : '+6287871956868'
+    const kontakSekolah = regData?.jenjang === 'sd' ? '+62‪87762007766‬' : '+6287871956868'
 
     try {
       const requestHeader = {

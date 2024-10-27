@@ -121,7 +121,7 @@ export default function Layout({children}) {
             <div className="d-flex flex-wrap align-items-center">
               <span className=''><i className='bi-whatsapp'></i></span>
               <Link className='btn btn-link no-underline text-light btn-sm me-1' href="https://wa.me/+6287871956868">087871956868</Link>/
-              <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+6281228594844">081228594844</Link>
+              <Link className='btn btn-link no-underline text-light btn-sm' href="https://wa.me/+62‪87762007766‬">0‪87762007766‬</Link>
             </div>
             <div>
               <Link className='btn btn-link no-underline text-light btn-sm' href="https://balqisjogja.com" target='_blank'>
@@ -172,7 +172,7 @@ export default function Layout({children}) {
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
                 <li><Link className='link-secondary no-underline' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>Admin PSB SMP SMA : 087871956868</Link></li>
-                <li><Link className='link-secondary no-underline' href="https://wa.me/+6281228594844"><i className='bi bi-whatsapp me-1'></i>Admin PSB SD : 081228594844</Link></li>
+                <li><Link className='link-secondary no-underline' href="https://wa.me/+62‪87762007766‬"><i className='bi bi-whatsapp me-1'></i>Admin PSB SD : 0‪87762007766‬</Link></li>
                 <li><Link className='link-secondary no-underline' href="https://balqisjogja.com"><i className='bi bi-box-arrow-up-right me-1'></i>https://balqisjogja.com</Link></li>
               </ul>
             </Col>
