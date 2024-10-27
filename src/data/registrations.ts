@@ -109,6 +109,20 @@ export function useRegistrations() {
     return promise
   }
 
+  async function hide(id) {
+    const updatedData = data?.filter(datum => datum.id !== id)
+
+    return mutate(async () => {
+      await supabase.from('registrations')
+        .update({hidden_at: new Date().toISOString()})
+        .eq('id', id)
+
+      return updatedData
+    }, {
+      optimisticData: updatedData
+    })
+  }
+
   async function remove(id) {
     const updatedData = data?.filter(datum => datum.id !== id)
 
@@ -141,6 +155,7 @@ export function useRegistrations() {
     downloadBukti,
     downloadAsXLSX,
     remove,
+    hide,
     columns,
     refreshData,
     ...rest

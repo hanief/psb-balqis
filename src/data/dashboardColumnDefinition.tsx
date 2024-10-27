@@ -7,13 +7,13 @@ import { Wilayah } from '@/types'
 const provinces = data as Wilayah[]
 
 export default function useDashboardColumnDefinition(
-  downloadBukti, 
   setDataViewerProps,
   update,
   setDeleteConfirmationProps,
   remove,
+  hide,
   displayedColumns,
-) { 
+) {
   const definitions = [
     {
       id: 'nomor',
@@ -97,12 +97,17 @@ export default function useDashboardColumnDefinition(
               registration: row,
             })  
           }}>
-            Ubah
+            <i className="bi bi-pencil"></i>
           </Button>
           {row.deleted_at ? (
-            <Button color="outline-success" onClick={() => update(row.id, {deleted_at: null})}>
-              <i className="bi bi-recycle"></i>
-            </Button>
+            <>
+              <Button className="me-1" color="outline-success" onClick={() => update(row.id, {deleted_at: null})}>
+                <i className="bi bi-recycle"></i>
+              </Button>
+              <Button color="outline-danger" onClick={() => hide(row.id)}>
+                <i className="bi bi-trash2"></i>
+              </Button>
+            </>
           ) : (
             <Button color="outline-danger" onClick={() => setDeleteConfirmationProps({
               isOpen: true,
