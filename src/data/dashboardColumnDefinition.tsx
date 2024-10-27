@@ -97,7 +97,7 @@ export default function useDashboardColumnDefinition(
               registration: row,
             })  
           }}>
-            Ubah
+            <i className="bi bi-pencil"></i>
           </Button>
           {row.deleted_at ? (
             <>
