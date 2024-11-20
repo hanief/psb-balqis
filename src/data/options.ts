@@ -33,9 +33,15 @@ export const jalurBeasiswaPrestasiSMAOptions = [
   { value: 'tiga besar lomba', label: 'Juara 1/2/3 Lomba MTQ/OSN/KSM/Olimpiade semua cabang minimal tingkat kabupaten' },
 ]
 
-export const jalurBeasiswaKhususOptions = [
+export const jalurBeasiswaKhususAllOptions = [
   { value: 'dhuafa', label: 'Dhuafa berprestasi' },
   { value: 'yatim', label: 'Yatim atau Piatu' },
+]
+
+export const jalurBeasiswaKhususSMAOptions = [
+  { value: 'dhuafa', label: 'Dhuafa berprestasi' },
+  { value: 'yatim', label: 'Yatim atau Piatu' },
+  { value: 'alumni', label: 'Alumni SMP Balqis' },
 ]
 
 export const statusPenerimaanOptions = [

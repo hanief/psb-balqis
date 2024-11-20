@@ -4,7 +4,8 @@ import { useMemo } from "react"
 import { 
   jalurPendaftaranOptions, 
   jenjangOptions, 
-  jalurBeasiswaKhususOptions,
+  jalurBeasiswaKhususAllOptions,
+  jalurBeasiswaKhususSMAOptions,
   jalurBeasiswaPrestasiSDOptions,
   jalurBeasiswaPrestasiSMPOptions,
   jalurBeasiswaPrestasiSMAOptions,
@@ -38,6 +39,14 @@ export default function DataFormJalur({
     }
 
     return jalurBeasiswaPrestasiSMAOptions
+  }
+
+  const jalurBeasiswaKhususOptions = () => {
+    if (registration?.jenjang === 'sma') {
+      return jalurBeasiswaKhususSMAOptions
+    }
+
+    return jalurBeasiswaKhususAllOptions
   }
 
   return (
@@ -170,7 +179,7 @@ export default function DataFormJalur({
             <>
               <FormGroup>
                 <ValidatedSelect
-                  options={jalurBeasiswaKhususOptions}
+                  options={jalurBeasiswaKhususOptions()}
                   name="jalur_beasiswa_khusus"
                   label="Jalur Beasiswa Afirmasi"
                   placeholder='Pilih Jalur Beasiswa Afirmasi'
