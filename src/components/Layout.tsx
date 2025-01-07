@@ -171,8 +171,8 @@ export default function Layout({children}) {
             <Col md="6" lg="4">
               <h5>Kontak</h5>
               <ul className="list-unstyled text-small">
-                <li><Link className='link-secondary no-underline' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>Admin PSB SMP SMA : 087871956868</Link></li>
-                <li><Link className='link-secondary no-underline' href="https://wa.me/+62‪87762007766‬"><i className='bi bi-whatsapp me-1'></i>Admin PSB SD : 0‪87762007766‬</Link></li>
+                <li><Link className='link-secondary no-underline' href="https://wa.me/+6287871956868"><i className='bi bi-whatsapp me-1'></i>Customer Service 1 : 087871956868</Link></li>
+                <li><Link className='link-secondary no-underline' href="https://wa.me/+62‪87762007766‬"><i className='bi bi-whatsapp me-1'></i>Customer Service 2 : 0‪87762007766‬</Link></li>
                 <li><Link className='link-secondary no-underline' href="https://balqisjogja.com"><i className='bi bi-box-arrow-up-right me-1'></i>https://balqisjogja.com</Link></li>
               </ul>
             </Col>
